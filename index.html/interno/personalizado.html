@@ -783,263 +783,11 @@ select:focus, input:focus, textarea:focus{
           </div>
 
           <div>
-            <label for="evento">Evento</label>
-            <select id="evento">
-              <option value="Cumpleaños" selected>Cumpleaños</option>
-              <option value="Quinceaños">Quinceaños</option>
-              <option value="Bautizo">Bautizo</option>
-              <option value="Boda">Boda</option>
-              <option value="Otro">Otro</option>
-            </select>
-          </div>
-        </div>
 
-
-        <div class="grid2" style="margin-top:12px;">
-          <div id="tier1Wrap">
-            <label for="t1">Piso 1 (abajo)</label>
-            <select id="t1"></select>
-          </div>
-
-          <div id="tier2Wrap">
-            <label for="t2">Piso 2 (medio)</label>
-            <select id="t2"></select>
-          </div>
-
-          <div id="tier3Wrap" style="display:none;">
-            <label for="t3">Piso 3 (arriba)</label>
-            <select id="t3"></select>
-          </div>
-        </div>
-
-        <div class="warn" id="warnSizes">
-          Recomendación: el piso de arriba debe ser más pequeño que el de abajo.
-        </div>
-
-        <div class="rowInfo">
-          <div>
-            <div class="k">Rinde aprox</div>
-            <div class="small">Suma de porciones por piso (si es Alto, x2)</div>
-          </div>
-          <div class="v"><span id="porcionesTxt">—</span></div>
-        </div>
-      </div>
-
-      <!-- 2) ALTURA -->
-      <div class="section">
-        <div class="sectionTitle">
-          <h2>Altura</h2>
-          <div class="helper">Normal / Alto</div>
-        </div>
-
-        <div class="grid2">
-          <div>
-            <label for="altura">Altura</label>
-            <select id="altura">
-              <option value="normal" selected>Normal</option>
-              <option value="alta">CAKE ALTO</option>
-            </select>
-            <div class="small">Capas por piso: <b><span id="capasTxt">3</span></b> bizcochos.</div>
-          <div id="alturaPisosWrap" class="alturaPisos" style="display:none;">
-            <div class="small" style="margin-bottom:6px;">Selecciona qué piso(s) llevan <b>Altura x2</b>:</div>
-            <div class="chips" id="alturaPisosChips"></div>
-            <div class="small">Si marcas un piso, sus porciones se duplican y el precio sube proporcionalmente.</div>
-          </div>
-
-          </div>
-
-          <div>
-            <label for="acabadoCake">Estilo del cake</label>
-            <select id="acabadoCake">
-              <option value="liso" selected>Liso</option>
-              <option value="naked">Naked</option>
-              <option value="seminaked">Semi-Naked</option>
-            </select>
-            <div class="small">Afecta la vista 3D y la descripción.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 3) HARINA -->
-      <div class="section">
-        <div class="sectionTitle">
-          <h2>Harina</h2>
-          <div class="helper">Avena / Almendra</div>
-        </div>
-
-        <div class="grid2">
-          <div>
-            <label for="harina">Harina</label>
-            <select id="harina">
-              <option value="Avena" selected>Avena</option>
-              <option value="Almendra">Almendra (+)</option>
-            </select>
-            <div class="small">Almendra suma por piso según tamaño.</div>
-          </div>
-          <div>
-           
-            <div class="small">Regla lácteos (igual a tu personalizado).</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 4) SABORES (BIZCOCHO) -->
-      <div class="section" id="saboresSection">
-        <div class="sectionTitle">
-          <h2>Sabores de bizcocho</h2>
-          <div class="helper">Por piso (2–3 pisos)</div>
-        </div>
-
-        <div class="switchRow" id="rowMismoSabor">
-          <input type="checkbox" id="mismoSabor" checked />
-          <span>Mantener el mismo sabor en todos los pisos</span>
-        </div>
-
-        <div class="grid2" style="margin-top:12px;">
-          <div id="sabor1Wrap">
-            <label for="sabor1">Sabor piso 1</label>
-            <select id="sabor1"></select>
-          </div>
-          <div id="sabor2Wrap">
-            <label for="sabor2">Sabor piso 2</label>
-            <select id="sabor2"></select>
-          </div>
-          <div id="sabor3Wrap" style="display:none;">
-            <label for="sabor3">Sabor piso 3</label>
-            <select id="sabor3"></select>
-          </div>
-          <div>
-            <label for="notaSabores">Nota sabores (opcional)</label>
-            <input id="notaSabores" type="text" placeholder="Ej: arriba vainilla, abajo chocolate" />
-          </div>
-        </div>
-      </div>
-
-      <!-- SABOR ÚNICO (1 piso) -->
-      <div class="section" id="saborUnicoSection" style="display:none;">
-        <div class="sectionTitle">
-          <h2>Sabor de bizcocho</h2>
-          <div class="helper">1 piso</div>
-        </div>
-        <div class="grid2">
-          <div>
-            <label for="saborUnico">Sabor</label>
-            <select id="saborUnico"></select>
-          </div>
-          <div>
-            <label for="notaSabores2">Nota (opcional)</label>
-            <input id="notaSabores2" type="text" placeholder="Ej: extra intenso / con chispas" />
-          </div>
-        </div>
-      </div>
-
-      <!-- 5) RELLENOS (ahora también por piso si 2–3) -->
-      <div class="section" id="rellenosSection">
-        <div class="sectionTitle">
-          <h2>Rellenos</h2>
-          <div class="helper">Variedad por piso</div>
-        </div>
-
-        <div class="switchRow" id="rowMismoRelleno">
-          <input type="checkbox" id="mismoRelleno" checked />
-          <span>Mantener el mismo relleno en todos los pisos</span>
-        </div>
-
-        <div class="grid2" style="margin-top:12px;">
-          <div id="rell1Wrap">
-            <label for="relleno1">Relleno piso 1</label>
-            <select id="relleno1"></select>
-          </div>
-          <div id="rell2Wrap">
-            <label for="relleno2">Relleno piso 2</label>
-            <select id="relleno2"></select>
-          </div>
-          <div id="rell3Wrap" style="display:none;">
-            <label for="relleno3">Relleno piso 3</label>
-            <select id="relleno3"></select>
-          </div>
-          <div>
-            <label for="notaRelleno">Nota rellenos (opcional)</label>
-            <input id="notaRelleno" type="text" placeholder="Ej: relleno más intenso / menos dulce" />
-          </div>
-        </div>
-
-        <div class="small">Los costos del relleno se calculan por tamaño de cada piso.</div>
-      </div>
-
-      <!-- 6) COBERTURA (COLOR 3D) -->
-      <div class="section">
-        <div class="sectionTitle">
-          <h2>Cobertura</h2>
-          <div class="helper">Define el color del cake</div>
-        </div>
-
-        <div class="grid2" style="margin-top:0;">
-            <div>
-              <label>Color principal (pastel)</label>
-              
-               <div class="warn" id="payColorWarn" style="margin-top:10px;">
-              Si deseas que el pastel tenga <b>color</b>, la crema debe ser <b>base blanca</b>:
-              <b>Yogurt griego</b> o <b>Dulce de leche de coco</b>.
-
-            </div>
-
-              <!-- Barra de tonos (muchos colores) -->
-              <div class="toneWrap" style="margin-top:10px;">
-                <label class="small" style="font-weight:900; color:var(--gris); display:block; margin-bottom:6px;">Barra de tonos</label>
-                <div class="toneRow">
-                  <input id="hueBar" type="range" min="0" max="360" value="0" aria-label="Barra de tonos">
-                  <div class="toneSwatch" id="toneSwatch" title="Color seleccionado"></div>
-                  <div class="toneHex" id="toneHex">—</div>
-                  <button class="toneBtn" id="toneClear" type="button" title="Quitar color">Quitar</button>
-                </div>
-                <div class="small" id="toneTxt">Mueve la barra para elegir un color. Recuerda: el color solo aplica sobre crema blanca (Yogurt griego o Dulce de leche de coco).</div>
-              </div>
-              <input type="hidden" id="colorPastel" value="">
-              <div class="small" id="colorPastelTxt">Opcional · Para colocar color, la crema debe ser base blanca: <b>Yogurt griego</b> o <b>Dulce de leche de coco</b>. Si eliges un color, quedará como <b>POR CONFIRMAR</b>.</div>
-            </div>
-            <div>
-              <label for="tema">Tema (texto)</label>
-              <input id="tema" type="text" placeholder="Ej: Blanco + dorado elegante" />
-            </div>
-          </div>
-
-          
-<div class="grid2">
-          <div>
-            <label for="cobertura">Cobertura</label>
-            <select id="cobertura"></select>
-            <div class="small">El color de la vista 3D cambia automáticamente.</div>
-          </div>
-
-          <div>
-            <label for="decoracion">Decoración</label>
-            <select id="decoracion">
-              <option value="">Sin decoración</option>
-              <option value="flores">Flores</option>
-              <option value="frutas">Frutas</option>
-              <option value="frutasflores">Frutas y flores</option>
-              <option value="frutosrojos">Frutos rojos</option>
-                          <option value="personalizado">Personalizado</option>
-</select>
-            <div class="small">Costo según tamaño del piso MÁS GRANDE.</div>
-          </div>
-        </div>
-
-        
-          <div class="grid2" style="margin-top:12px;">
-            <div>
-              <label for="notaGeneral">Nota general (opcional)</label>
-              <input id="notaGeneral" type="text" placeholder="Ej: entrega 3pm / sin frutos rojos" />
-            </div>
-            <div></div>
-          </div>
-
-
-        <div class="badges" aria-live="polite">
-          <span class="badge" id="bSinGluten">Sin Gluten</span>
           <span class="badge" id="bSinAzucar">Sin Azúcar</span>
+             
           <span class="badge" id="lacteoBadge">Sin Lácteos</span>
+           
         </div>
       </div>
 
@@ -1159,11 +907,18 @@ select:focus, input:focus, textarea:focus{
       </div>
 
 
-      <div class="actions">
-        <button class="btn btnPrimary" id="btnPDF">Generar PDF</button>
-        <button class="btn btnGhost" id="btnPDF80" type="button">PDF Factura 80mm</button>
-        <button class="btn btnPrimary" id="btnEnviar">Enviar por WhatsApp</button>
-       <button class="btn btnGhost" onclick="location.href='../index.html'">Volver</button>
+      <div class="actions" style="display: flex; flex-wrap: wrap; gap: 10px;">
+        <div style="flex: 1 1 45%; min-width: 180px; display: flex; gap: 10px;">
+          <button class="btn btnPrimary" id="btnPDF">Generar PDF</button>
+          <button class="btn btnGhost" id="btnPDF80" type="button">PDF Factura 80mm</button>
+        </div>
+        <div style="flex: 1 1 45%; min-width: 180px; display: flex; gap: 10px;">
+          <button class="btn btnPrimary" id="btnEnviar">Enviar por WhatsApp</button>
+          <button class="btn btnPrimary" id="btnEnviarCliente">Cliente</button>
+        </div>
+      </div>
+      <div class="actions" style="margin-top: 10px;">
+        <button class="btn btnGhost" onclick="location.href='../index.html'">Volver</button>
       </div>
 
       <div class="small" style="margin-top:10px;">
@@ -3053,10 +2808,24 @@ function initBlankSelections(){
 }
 // Inicializa en blanco al cargar
 try{ initBlankSelections(); }catch(e){}
-/* ===========================
-   WHATSAPP (sin emojis, con negritas + cliente + teléfono)
-   =========================== */
+
+// Botón WhatsApp fijo
 document.getElementById("btnEnviar").addEventListener("click", ()=>{
+  enviarWhatsapp("50768636913");
+});
+
+// Botón WhatsApp cliente
+document.getElementById("btnEnviarCliente").addEventListener("click", ()=>{
+  let tel = (clienteTel.value || "").replace(/[^\d]/g, "");
+  if(tel.length < 8){
+    alert("Por favor ingresa un teléfono válido de 8 dígitos para el cliente.");
+    return;
+  }
+  if(!tel.startsWith("507")) tel = "507" + tel;
+  enviarWhatsapp(tel);
+});
+
+function enviarWhatsapp(numeroDestino){
   const n = Number(pisos.value) || 1;
   const sizesArr = getSizesArray();
   const sizesTxt = sizesArr.map(s=>`${s}”`).join(" / ");
@@ -3093,46 +2862,46 @@ document.getElementById("btnEnviar").addEventListener("click", ()=>{
     saboresMsg += `Relleno P2: ${safeText(getRellenoPiso(2), "Sin relleno")}%0A`;
     if(n===3) saboresMsg += `Relleno P3: ${safeText(getRellenoPiso(3), "Sin relleno")}%0A`;
   }
-const pago = getPagoData();
+  const pago = getPagoData();
 
-const msg =
-  `*COTIZACIÓN CAKE FIT*%0A%0A` +
-  `*Cliente:* ${encodeURIComponent(nombreCliente)}%0A` +
-  `*Teléfono:* ${encodeURIComponent(telCliente)}%0A` +
-  `*Entrega:* ${encodeURIComponent(entregaTxt)}%0A%0A` +
-  `*Evento:* ${encodeURIComponent(evento.value)}%0A` +
-  `*Pisos:* ${n}%0A` +
-  `*Tamaño:* ${encodeURIComponent(sizesTxt || "—")}%0A` +
-  `*Altura:* ${encodeURIComponent(alturaTxt)}%0A` +
-  `*Rinde aprox:* ${encodeURIComponent(rindeTxt)}%0A` +
-  `*Estilo:* ${encodeURIComponent(styleTxt)}%0A` +
-  `*Cobertura:* ${encodeURIComponent(cobertura.value || "Sencilla")}%0A` +
-  `*Decoración:* ${encodeURIComponent(decoTxt)}%0A` +
-  (tema.value.trim() ? `*Tema:* ${encodeURIComponent(tema.value.trim())}%0A` : ``) +
-  `%0A` +
-  `*Sabores y rellenos*%0A` +
-  saboresMsg +
-  (notaSab ? `%0A*Nota sabores:* ${encodeURIComponent(notaSab)}%0A` : ``) +
-  (notaR ? `*Nota rellenos:* ${encodeURIComponent(notaR)}%0A` : ``) +
-  (notaG ? `*Nota general:* ${encodeURIComponent(notaG)}%0A` : ``) +
-  `%0A` +
-  `*Características*%0A` +
-  `Sin gluten: Sí%0A` +
-  `Sin azúcar: Sí%0A` +
-  `lácteos: ${encodeURIComponent(sinLact)}%0A%0A` +
-  `*Totales*%0A` +
-  `*Total del cake:* $${money(totals.totalCake)}%0A` +
-  `*Delivery:* $${money(totals.delivery)}%0A` +
-  `*Total general:* $${money(totals.totalGeneral)}%0A%0A` +
-  `*Método de pago:* ${encodeURIComponent(pago.metodo)}%0A` +
-  (pago.metodo === "Pago con tarjeta"
-    ? `*Link de pago:* ${encodeURIComponent(pago.link || "Pendiente")}%0A`
-    : ``) +
-  `%0A` +
-  `Quedo atento para confirmar disponibilidad y fecha de entrega.`;
+  const msg =
+    `*COTIZACIÓN CAKE FIT*%0A%0A` +
+    `*Cliente:* ${encodeURIComponent(nombreCliente)}%0A` +
+    `*Teléfono:* ${encodeURIComponent(telCliente)}%0A` +
+    `*Entrega:* ${encodeURIComponent(entregaTxt)}%0A%0A` +
+    `*Evento:* ${encodeURIComponent(evento.value)}%0A` +
+    `*Pisos:* ${n}%0A` +
+    `*Tamaño:* ${encodeURIComponent(sizesTxt || "—")}%0A` +
+    `*Altura:* ${encodeURIComponent(alturaTxt)}%0A` +
+    `*Rinde aprox:* ${encodeURIComponent(rindeTxt)}%0A` +
+    `*Estilo:* ${encodeURIComponent(styleTxt)}%0A` +
+    `*Cobertura:* ${encodeURIComponent(cobertura.value || "Sencilla")}%0A` +
+    `*Decoración:* ${encodeURIComponent(decoTxt)}%0A` +
+    (tema.value.trim() ? `*Tema:* ${encodeURIComponent(tema.value.trim())}%0A` : ``) +
+    `%0A` +
+    `*Sabores y rellenos*%0A` +
+    saboresMsg +
+    (notaSab ? `%0A*Nota sabores:* ${encodeURIComponent(notaSab)}%0A` : ``) +
+    (notaR ? `*Nota rellenos:* ${encodeURIComponent(notaR)}%0A` : ``) +
+    (notaG ? `*Nota general:* ${encodeURIComponent(notaG)}%0A` : ``) +
+    `%0A` +
+    `*Características*%0A` +
+    `Sin gluten: Sí%0A` +
+    `Sin azúcar: Sí%0A` +
+    `lácteos: ${encodeURIComponent(sinLact)}%0A%0A` +
+    `*Totales*%0A` +
+    `*Total del cake:* $${money(totals.totalCake)}%0A` +
+    `*Delivery:* $${money(totals.delivery)}%0A` +
+    `*Total general:* $${money(totals.totalGeneral)}%0A%0A` +
+    `*Método de pago:* ${encodeURIComponent(pago.metodo)}%0A` +
+    (pago.metodo === "Pago con tarjeta"
+      ? `*Link de pago:* ${encodeURIComponent(pago.link || "Pendiente")}%0A`
+      : ``) +
+    `%0A` +
+    `Quedo atento para confirmar disponibilidad y fecha de entrega.`;
 
-window.open(`https://wa.me/50768636913?text=${msg}`, "_blank");
-});
+  window.open(`https://wa.me/${numeroDestino}?text=${msg}`, "_blank");
+}
 
 // --- Helper: fetch image URL as DataURL (for QR PNG) ---
 async function fetchAsDataURL(url){
