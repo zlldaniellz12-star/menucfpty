@@ -1,0 +1,991 @@
+<!-- ===========================
+     delivery.html (COMPLETO)
+     Cake Fit · Delivery
+     ✅ Link abajo del mapa abre RUTA (directions):
+        ORIGEN = sucursal (San Francisco / Altaplaza)
+        DESTINO = dirección escrita (o sucursal si está vacío)
+     ✅ Botón COPIAR link (directions)
+     ✅ Botón COPIAR dirección (destino)
+     ✅ Si NO detecta zona: permite monto manual o por KM ($/km) y altera el total final
+     ✅ Si SÍ detecta zona: tarifa normal + (recargo km opcional >20) + (manual opcional)
+     =========================== -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cake Fit | Delivery</title>
+
+<style>
+:root{
+  --verde:#2f7d57;
+  --verde-oscuro:#245f43;
+  --dorado:#c9a24d;
+
+  --fondo:#f4faf7;
+  --texto:#122018;
+  --gris:#5b6b62;
+  --borde:#dfe8e2;
+
+  --blanco: rgba(255,255,255,.96);
+  --sombra: 0 18px 45px rgba(16, 26, 20, .10);
+  --sombra2: 0 10px 25px rgba(16, 26, 20, .08);
+
+  --radio: 18px;
+  --verde-claro:#e9f5ef;
+  --focus: rgba(47,125,87,.14);
+  --danger-bg: rgba(255,231,231,.85);
+  --danger-bd: rgba(215,120,120,.45);
+  --danger-tx: #7a2d2d;
+}
+
+*{box-sizing:border-box}
+html, body{height:100%}
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color:var(--texto);
+  background:
+    radial-gradient(950px 520px at 12% 8%, rgba(47,125,87,.16), transparent 60%),
+    radial-gradient(950px 520px at 88% 14%, rgba(201,162,77,.17), transparent 60%),
+    linear-gradient(180deg,var(--fondo),#ffffff 55%);
+  min-height:100vh;
+  padding:24px 16px 44px;
+}
+
+.wrapper{
+  max-width:1140px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns: 1.15fr .85fr;
+  gap:18px;
+}
+@media (max-width: 980px){ .wrapper{grid-template-columns:1fr} }
+
+.card{
+  background: var(--blanco);
+  border:1px solid var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  overflow:hidden;
+}
+
+.header{
+  padding:18px 20px 14px;
+  background: linear-gradient(135deg, rgba(47,125,87,.14), rgba(201,162,77,.12));
+  border-bottom:1px solid var(--borde);
+  display:flex;
+  gap:14px;
+  align-items:flex-start;
+}
+.brandIcon{
+  width:44px;height:44px;border-radius:14px;
+  background: linear-gradient(135deg, rgba(47,125,87,.20), rgba(201,162,77,.16));
+  border:1px solid rgba(47,125,87,.16);
+  box-shadow: var(--sombra2);
+  display:grid;place-items:center;
+  flex: 0 0 auto;
+}
+.brandIcon span{
+  font-weight:1000;
+  letter-spacing:.2px;
+  color: var(--verde-oscuro);
+}
+.header h1{
+  margin:0;
+  font-size:18px;
+  color:var(--verde-oscuro);
+  letter-spacing:.2px;
+}
+.header p{
+  margin:6px 0 0;
+  color:var(--gris);
+  font-size:13px;
+  line-height:1.45;
+}
+
+.content{ padding:18px 20px 20px; }
+
+.section{
+  border:1px solid var(--borde);
+  background:#fff;
+  border-radius:16px;
+  padding:14px;
+  margin-bottom:14px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.03);
+}
+
+.sectionTitle{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:flex-end;
+  margin-bottom:10px;
+}
+.sectionTitle h2{
+  margin:0;
+  font-size:14px;
+  color:var(--verde-oscuro);
+  letter-spacing:.2px;
+}
+.helper{ font-size:12px; color:var(--gris); }
+
+.grid2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+@media (max-width: 560px){ .grid2{grid-template-columns:1fr} }
+
+label{
+  display:block;
+  font-weight:900;
+  font-size:12.8px;
+  margin-bottom:6px;
+  color: rgba(18,32,24,.92);
+}
+
+select, input[type="text"], input[type="number"], textarea{
+  width:100%;
+  padding:12px 12px;
+  border-radius:14px;
+  border:1px solid var(--borde);
+  background:#fff;
+  font-size:14px;
+  outline:none;
+  transition: box-shadow .15s ease, border-color .15s ease, transform .05s ease;
+}
+textarea{ min-height:92px; resize:vertical; }
+select:focus, input:focus, textarea:focus{
+  border-color: rgba(47,125,87,.55);
+  box-shadow: 0 0 0 4px var(--focus);
+}
+
+.small{
+  font-size:12px;
+  color:var(--gris);
+  margin-top:8px;
+  line-height:1.45;
+}
+
+/* KM */
+.kmRow{
+  display:grid;
+  grid-template-columns: 1fr auto;
+  gap:10px;
+  align-items:center;
+  margin-top:10px;
+}
+@media (max-width: 560px){ .kmRow{ grid-template-columns: 1fr; } }
+.kmToggle{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:999px;
+  border:1px solid var(--borde);
+  background: #fbfdfc;
+  box-shadow: 0 6px 14px rgba(0,0,0,.03);
+  user-select:none;
+}
+.kmToggle input{ width:18px; height:18px; accent-color: var(--verde); }
+.kmToggle span{ font-size:12.5px; font-weight:900; color: var(--verde-oscuro); }
+
+/* KPI */
+.kpi{
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px solid var(--borde);
+  background:#fbfdfc;
+  color:var(--gris);
+  font-size:12.5px;
+  line-height:1.45;
+}
+.kpi b{ color:var(--verde-oscuro); }
+.kpi.danger{
+  background: var(--danger-bg);
+  border-color: var(--danger-bd);
+  color: var(--danger-tx);
+}
+.kpi.danger b{ color: var(--danger-tx); }
+
+/* Badges */
+.badges{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:10px;
+}
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:9px 12px;
+  border-radius:999px;
+  background: var(--verde-claro);
+  border:1px solid rgba(47,125,87,.18);
+  color: var(--verde-oscuro);
+  font-weight:900;
+  font-size:12px;
+}
+.badge.muted{
+  background:#f6faf7;
+  border-color: var(--borde);
+  color: var(--gris);
+}
+
+/* Total */
+.totalBox{
+  margin-top:12px;
+  border-radius: 16px;
+  padding:14px;
+  background: linear-gradient(135deg, var(--verde), var(--dorado));
+  color:white;
+  box-shadow: 0 14px 26px rgba(47,125,87,.14);
+  position: relative;
+  overflow:hidden;
+}
+.totalBox:before{
+  content:"";
+  position:absolute; inset:-40px -60px auto auto;
+  width:200px;height:200px;border-radius:50%;
+  background: rgba(255,255,255,.12);
+}
+.totalBox .label{ font-size:12px; opacity:.92; }
+.totalBox .value{ font-size:26px; font-weight:1000; margin-top:6px; letter-spacing:.2px; }
+
+/* Acciones */
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:12px;
+  flex-wrap:wrap;
+}
+.btn{
+  flex:1;
+  min-width:200px;
+  appearance:none;
+  border:0;
+  border-radius:14px;
+  padding:13px 14px;
+  font-weight:1000;
+  font-size:14px;
+  cursor:pointer;
+  transition: transform .05s ease, box-shadow .2s ease, filter .2s ease, background .2s ease;
+}
+.btn:active{ transform: translateY(1px); }
+.btnPrimary{
+  background: var(--verde);
+  color:#fff;
+  box-shadow: 0 12px 22px rgba(47,125,87,.18);
+}
+.btnPrimary:hover{ background: var(--verde-oscuro); }
+.btnGold{
+  background: var(--dorado);
+  color:#2b2413;
+  box-shadow: 0 12px 22px rgba(201,162,77,.18);
+}
+.btnGold:hover{ filter: brightness(.98); }
+.btnGhost{
+  background:#fff;
+  border:1px solid var(--borde);
+  color: var(--texto);
+}
+.btnGhost:hover{ box-shadow: 0 12px 22px rgba(0,0,0,.06); }
+
+/* Mapa */
+.mapWrap{
+  border:1px solid var(--borde);
+  border-radius: var(--radio);
+  overflow:hidden;
+  background:#fff;
+  box-shadow: var(--sombra);
+}
+.mapHead{
+  padding:14px 14px 12px;
+  border-bottom:1px solid var(--borde);
+  background: linear-gradient(180deg, #fbfdfc, #ffffff);
+  color:var(--verde-oscuro);
+  font-weight:1000;
+  font-size:14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.mapHead small{ color: var(--gris); font-weight:800; font-size:12px; }
+iframe{ width:100%; height:520px; border:0; }
+
+/* Link de maps */
+.mapLinks{
+  padding:12px 14px 14px;
+  border-top:1px solid var(--borde);
+  background:#fff;
+}
+.mapLinks .row{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.mapLinks a{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px solid var(--borde);
+  background:#fbfdfc;
+  text-decoration:none;
+  color:var(--verde-oscuro);
+  font-weight:1000;
+  font-size:13px;
+}
+.mapLinks a:hover{ box-shadow: 0 10px 18px rgba(0,0,0,.06); }
+.mapLinks .miniBtn{
+  border:1px solid var(--borde);
+  background:#fff;
+  color:var(--texto);
+  font-weight:1000;
+  padding:10px 12px;
+  border-radius:14px;
+  cursor:pointer;
+}
+.mapLinks .miniBtn:hover{ box-shadow: 0 10px 18px rgba(0,0,0,.06); }
+.toast{
+  margin-top:10px;
+  font-size:12px;
+  color:var(--gris);
+  display:none;
+}
+.toast.show{ display:block; }
+
+/* Manual calc box */
+.manualBox{
+  margin-top:12px;
+  border:1px dashed rgba(47,125,87,.35);
+  background: rgba(233,245,239,.55);
+  border-radius:16px;
+  padding:12px;
+}
+.manualBox .title{
+  font-weight:1000;
+  color: var(--verde-oscuro);
+  font-size:13px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.manualBox .hint{ font-size:12px; color:var(--gris); margin-top:6px; line-height:1.35; }
+.manualGrid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:10px;
+  margin-top:10px;
+}
+@media (max-width:560px){ .manualGrid{ grid-template-columns: 1fr; } }
+.pillRow{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+.pill{
+  display:flex; align-items:center; gap:10px;
+  padding:10px 12px;
+  border-radius:999px;
+  border:1px solid var(--borde);
+  background:#fff;
+}
+.pill input{ width:18px; height:18px; accent-color: var(--verde); }
+.pill span{ font-weight:1000; font-size:12.5px; color:var(--verde-oscuro); }
+</style>
+</head>
+
+<body>
+<div class="wrapper">
+
+  <div class="card">
+    <div class="header">
+      <div class="brandIcon"><span>CF</span></div>
+      <div>
+        <h1>🚚 Delivery Cake Fit</h1>
+        <p>Escribe la dirección y el sistema detecta la <b>zona</b>. Abajo del mapa tendrás un <b>link de ruta</b> (sucursal → destino) para copiar y compartir.</p>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="section">
+        <div class="sectionTitle">
+          <h2>📍 Datos</h2>
+          <div class="helper">Sucursal + tipo + dirección</div>
+        </div>
+
+        <div class="grid2">
+          <div>
+            <label for="sucursal">Sucursal</label>
+            <select id="sucursal">
+              <option value="SF" selected>San Francisco (Calle 74)</option>
+              <option value="AP">Altaplaza</option>
+            </select>
+          </div>
+          <div>
+            <label for="tipo">Tipo de delivery</label>
+            <select id="tipo">
+              <option value="moto" selected>Moto</option>
+              <option value="auto">Auto</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-top:12px;">
+          <label for="direccion">Dirección de entrega</label>
+          <input id="direccion" type="text" placeholder="Ej: PH, torre, apto, barrio o sector..." />
+          <div class="small">Tip: mientras más claro (zona, barrio, sector), más rápido detecta.</div>
+        </div>
+
+        <div class="kmRow">
+          <div>
+            <label for="kmInput">KM (opcional)</label>
+            <input id="kmInput" type="number" min="0" step="0.1" placeholder="Ej: 18.5" />
+            <div class="small">
+              Si activas el recargo y el recorrido es mayor a <b>20 km</b>, se suma <b>$1</b> por cada km extra.
+            </div>
+          </div>
+          <label class="kmToggle" title="Aplica $1 por cada km extra SOLO si KM > 20">
+            <input id="kmExtraToggle" type="checkbox" />
+            <span>Aplicar recargo por KM</span>
+          </label>
+        </div>
+
+        <!-- ✅ NUEVO: cuando no detecta zona, permitir monto manual / por km -->
+        <div class="manualBox" id="manualBox" style="display:none;">
+          <div class="title">
+            <span>🧮 Cálculo manual (solo si NO detecta zona)</span>
+            <span class="small" style="margin:0;">Opcional</span>
+          </div>
+
+          <div class="pillRow" role="group" aria-label="Modo de cálculo manual">
+            <label class="pill">
+              <input type="radio" name="manualMode" id="manualOff" value="off" checked>
+              <span>Desactivado</span>
+            </label>
+            <label class="pill">
+              <input type="radio" name="manualMode" id="manualFixed" value="fixed">
+              <span>Monto fijo</span>
+            </label>
+            <label class="pill">
+              <input type="radio" name="manualMode" id="manualPerKm" value="perkm">
+              <span>Por KM ($/km)</span>
+            </label>
+          </div>
+
+          <div class="manualGrid">
+            <div>
+              <label for="manualAmount">Monto fijo</label>
+              <input id="manualAmount" type="number" min="0" step="0.01" placeholder="Ej: 8.00" disabled>
+              <div class="hint">Se usa como total si eliges <b>Monto fijo</b>.</div>
+            </div>
+            <div>
+              <label for="manualRate">Tarifa por KM</label>
+              <input id="manualRate" type="number" min="0" step="0.01" placeholder="Ej: 1.00" disabled>
+              <div class="hint">Se calcula: <b>KM</b> × <b>$/km</b> si eliges <b>Por KM</b>.</div>
+            </div>
+          </div>
+
+          <div class="hint">
+            Si el modo está activo y hay KM, el valor final cambiará automáticamente.
+          </div>
+        </div>
+
+        <div style="margin-top:12px;">
+          <label for="nota">Nota (opcional)</label>
+          <textarea id="nota" placeholder="Ej: punto de referencia, horario, etc."></textarea>
+        </div>
+
+        <div class="kpi" id="detectorInfo">
+          <b>Detector:</b> Escribe una dirección para detectar zona automáticamente.
+        </div>
+
+        <div class="badges">
+          <span class="badge" id="bSucursal">Sucursal: —</span>
+          <span class="badge" id="bTipo">Tipo: —</span>
+          <span class="badge" id="bZona">Zona: —</span>
+          <span class="badge muted" id="bMatch">Match: —</span>
+          <span class="badge muted" id="bKm">KM extra: —</span>
+        </div>
+
+        <div class="totalBox">
+          <div class="label">Costo de delivery</div>
+          <div class="value" id="costoTxt">$<span id="costo">0.00</span></div>
+        </div>
+
+        <div class="small">
+          Máximo tarifario: <b>$17.00</b>. Si el destino supera $17 o no se detecta: <b>CONSULTAR</b> (o usa cálculo manual).
+        </div>
+
+        <div class="actions">
+          <button class="btn btnPrimary" id="btnPdf">📄 Imprimir / Guardar PDF</button>
+          <button class="btn btnGold" id="btnWsp">📲 Enviar por WhatsApp</button>
+          <button class="btn btnGhost" onclick="location.href='index.html'">⬅️ Volver</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="sectionTitle">
+          <h2>💳 Métodos de pago</h2>
+          <div class="helper">Aparecen al final del PDF</div>
+        </div>
+        <div class="small" style="margin-top:0">
+          <b>📲 Yappy:</b> 6863-6913<br>
+          YAPPY PERSONAL – Titular: Ronny Colmenares<br><br>
+
+          <b>💳 Pago con tarjeta:</b><br>
+          - link de pago<br><br>
+
+          <b>🏦 Banco General</b><br>
+          Cuenta de Ahorros: 04-05-98-312161-7<br>
+          Titular: Ronny Colmenares<br><br>
+
+          Únicamente Tipo Express<br><br>  <b>🚫 NO REALIZAMOS DEDICATORIAS 🚫</b>
+
+          <b>⚠ IMPORTANTE ⚠</b><br>
+          <b>🔹 EL PAGO DEBE SER COMPLETO</b><br>
+          <b>🔹 El pedido será procesado al recibir el comprobante de pago</b><br><br>
+
+         
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="mapWrap">
+      <div class="mapHead">
+        <div>🗺️ Vista previa del destino</div>
+        <small>Map auto-update</small>
+      </div>
+
+      <iframe id="mapa" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+      <!-- ✅ LINK GOOGLE MAPS (RUTA) + COPIAR -->
+      <div class="mapLinks">
+        <div class="row">
+          <a id="mapsLink" href="#" target="_blank" rel="noopener">📍 Abrir ruta en Google Maps</a>
+          <button class="miniBtn" id="copyMaps">📋 Copiar link</button>
+          <button class="miniBtn" id="copyAddr">📝 Copiar dirección</button>
+        </div>
+        <div class="toast" id="toast">Copiado ✅</div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+const MAX_TARIFA = 17.00;
+
+const tarifario = {
+  SF: {
+    nombre: "San Francisco (Calle 74)",
+    direccionSucursal: "Cake Fit San Francisco Calle 74, Panamá",
+    zonas: [
+      { zona:"Zona 1", auto:5.00, moto:3.75,
+        sectores:["Marbella","Vía Israel","Via Israel","Paitilla","Punta Pacífica","Punta Pacifica","El Cangrejo","Vía Argentina","Via Argentina","Carrasquilla","Calle 50","San Francisco","Vía Porras","Via Porras","Obarrio","Vía Brasil","Via Brasil","Coco del Mar","El Carmen","Iglesia del Carmen","Fernández de Córdoba","Fernandez de Cordoba"]
+      },
+      { zona:"Zona 2", auto:6.00, moto:4.35,
+        sectores:["12 de Octubre","Transístmica","Transistmica","Pueblo Nuevo","Hato Pintado","El Ingenio","Los Ángeles","Los Angeles","Plaza Edison","Bethania","Vista Hermosa","Locería","Loceria","Parque Lefevre","Panamá Viejo","Panama Viejo"]
+      },
+      { zona:"Zona 3", auto:7.00, moto:5.00,
+        sectores:["Av. Balboa","Avenida Balboa","Bella Vista","Ave. Cuba","Avenida Cuba","La Cresta","Cincuentenario","5 de Mayo","Av. La Paz","Avenida La Paz","San Miguelito","Río Abajo","Rio Abajo","Casco Antiguo","Villa Lorena"]
+      },
+      { zona:"Zona 4", auto:8.00, moto:7.81,
+        sectores:["Dorado","Altos de Chese","Altos de Chase","Condado del Rey","El Bosque","Tumba Muerto","Costa del Este","Chanis","Campo Limberg"]
+      },
+      { zona:"Zona 5", auto:9.00, moto:8.00,
+        sectores:["Amador","Albrook","Diablo","Ancón","Ancon","Balboa","Santa María","Santa Maria","Llano Bonito"]
+      },
+      { zona:"Zona 6", auto:10.00, moto:9.25,
+        sectores:["Juan Díaz","Juan Diaz","Los Pueblos","Los Andes","Clayton","Villa Lucre","El Crisol","San Antonio"]
+      },
+      { zona:"Zona 7", auto:12.00, moto:10.75,
+        sectores:["Dorasol","Brisas del Golf","Brisas Norte","Cerro Viento","Don Bosco","Versalles","Las Acacias","Plaza Tocumen","Villa Zaita"]
+      },
+      { zona:"Zona 8", auto:17.00, moto:17.00,
+        sectores:["Panamá Pacífico","Panama Pacifico","La 24","La Doña","La Dona","Mañanitas","Mananitas","Las Cumbres"]
+      },
+      { zona:"Zona 9", auto:25.00, moto:25.00,
+        sectores:["Arraijan","Arraiján","Burunga","Pacora","Monte Madero"]
+      },
+      { zona:"Zona 10", auto:40.00, moto:40.00,
+        sectores:["Chorrera","La Chorrera","Parque Feuillet","Capira"]
+      }
+    ]
+  },
+
+  AP: {
+    nombre: "Altaplaza",
+    direccionSucursal: "Cake Fit Altaplaza Panamá",
+    zonas: [
+      { zona:"Zona 1", auto:5.00, moto:3.75,
+        sectores:["Condado del Rey","El Dorado","Altos de Chase","Altos de Chese","El Bosque","Tumba Muerto","USMA","Bethania"]
+      },
+      { zona:"Zona 2", auto:6.00, moto:4.35,
+        sectores:["Los Ángeles","Los Angeles","Plaza Edison","Locería","Loceria","Vista Hermosa","Pueblo Nuevo","El Ingenio","Transístmica","Transistmica","12 de Octubre"]
+      },
+      { zona:"Zona 3", auto:7.00, moto:5.00,
+        sectores:["El Cangrejo","Vía Argentina","Via Argentina","El Carmen","Iglesia del Carmen","Fernández de Córdoba","Fernandez de Cordoba","San Miguelito","Los Andes"]
+      },
+      { zona:"Zona 4", auto:8.00, moto:7.05,
+        sectores:["Carrasquilla","Hato Pintado","Vía Porras","Via Porras","Vía Brasil","Via Brasil","Obarrio","Bella Vista","La Cresta","Albrook"]
+      },
+      { zona:"Zona 5", auto:9.00, moto:8.00,
+        sectores:["San Francisco","Calle 50","Marbella","Paitilla","Punta Pacífica","Punta Pacifica","Vía Israel","Via Israel","Coco del Mar","Av. Balboa","Avenida Balboa","Casco Antiguo","Ancón","Ancon"]
+      },
+      { zona:"Zona 6", auto:10.00, moto:9.25,
+        sectores:["Parque Lefevre","Río Abajo","Rio Abajo","Panamá Viejo","Panama Viejo","Cincuentenario","Villa Lucre","El Crisol","Villa Zaita"]
+      },
+      { zona:"Zona 7", auto:12.00, moto:10.75,
+        sectores:["Costa del Este","Santa María","Santa Maria","Juan Díaz","Juan Diaz","Brisas del Golf","San Antonio","Cerro Viento","Las Cumbres"]
+      },
+      { zona:"Zona 8", auto:17.00, moto:17.00,
+        sectores:["Versalles","Don Bosco","Tocumen","Mañanitas","Mananitas","Panamá Pacífico","Panama Pacifico","La 24"]
+      },
+      { zona:"Zona 9", auto:25.00, moto:25.00,
+        sectores:["Arraijan","Arraiján","Burunga","Pacora","Monte Madero"]
+      },
+      { zona:"Zona 10", auto:40.00, moto:40.00,
+        sectores:["Chorrera","La Chorrera","Parque Feuillet","Capira"]
+      }
+    ]
+  }
+};
+
+function normalize(str){
+  return (str || "")
+    .toString()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function buildIndexForBranch(branchKey){
+  const branch = tarifario[branchKey];
+  const index = [];
+  branch.zonas.forEach((z, zoneIdx)=>{
+    z.sectores.forEach((sector)=>{
+      const key = normalize(sector);
+      if(!key) return;
+      index.push({ sectorOriginal: sector, key, zoneIdx, zona: z.zona, score: key.length });
+    });
+  });
+  index.sort((a,b)=> b.score - a.score);
+  return index;
+}
+
+let currentIndex = buildIndexForBranch("SF");
+
+function detectZoneFromAddress(addressText){
+  const text = normalize(addressText);
+  if(!text) return null;
+  for(const item of currentIndex){
+    if(text.includes(item.key)){
+      return { zoneIdx: item.zoneIdx, zona: item.zona, match: item.sectorOriginal };
+    }
+  }
+  return null;
+}
+
+const $ = (id)=>document.getElementById(id);
+const sucursalEl = $("sucursal");
+const tipoEl = $("tipo");
+const direccionEl = $("direccion");
+const notaEl = $("nota");
+
+const kmInput = $("kmInput");
+const kmExtraToggle = $("kmExtraToggle");
+
+const bSucursal = $("bSucursal");
+const bTipo = $("bTipo");
+const bZona = $("bZona");
+const bMatch = $("bMatch");
+const bKm = $("bKm");
+
+const costoTxt = $("costoTxt");
+const detectorInfo = $("detectorInfo");
+const mapa = $("mapa");
+
+// maps UI
+const mapsLink = $("mapsLink");
+const copyMaps = $("copyMaps");
+const copyAddr = $("copyAddr");
+const toast = $("toast");
+
+// manual UI
+const manualBox = $("manualBox");
+const manualOff = $("manualOff");
+const manualFixed = $("manualFixed");
+const manualPerKm = $("manualPerKm");
+const manualAmount = $("manualAmount");
+const manualRate = $("manualRate");
+
+function money(n){ return Number(n).toFixed(2); }
+
+/* ✅ recargo por KM > 20 ($1 por km extra) */
+function getKmRecargo(){
+  const enabled = !!kmExtraToggle.checked;
+  const km = parseFloat(kmInput.value || "0");
+  if(!enabled || !isFinite(km) || km <= 20) return 0;
+  return (km - 20) * 1;
+}
+
+/* ✅ cálculo manual (solo si NO detecta zona) */
+function getManualTotal(){
+  const mode = manualFixed.checked ? "fixed" : manualPerKm.checked ? "perkm" : "off";
+  const km = parseFloat(kmInput.value || "0");
+
+  if(mode === "fixed"){
+    const val = parseFloat(manualAmount.value || "0");
+    return isFinite(val) ? val : 0;
+  }
+  if(mode === "perkm"){
+    const rate = parseFloat(manualRate.value || "0");
+    if(!isFinite(km) || km <= 0 || !isFinite(rate)) return 0;
+    return km * rate;
+  }
+  return 0;
+}
+
+function updateManualInputs(){
+  const onFixed = manualFixed.checked;
+  const onPerKm = manualPerKm.checked;
+
+  manualAmount.disabled = !onFixed;
+  manualRate.disabled = !onPerKm;
+}
+
+/* ✅ URLs:
+   - EMBED: muestra destino
+   - OPEN: abre DIRECTIONS con ORIGEN = sucursal, DESTINO = dirección
+*/
+function buildMapsUrls(){
+  const suc = tarifario[sucursalEl.value];
+  const dir = direccionEl.value.trim();
+
+  const originText = `${suc.direccionSucursal}, Panama`;
+  const destText   = `${(dir ? dir : suc.direccionSucursal)}, Panama`;
+
+  const embedQ = encodeURIComponent(destText);
+  const embedUrl = `https://www.google.com/maps?q=${embedQ}&output=embed`;
+
+  const originQ = encodeURIComponent(originText);
+  const destQ   = encodeURIComponent(destText);
+  const openUrl = `https://www.google.com/maps/dir/?api=1&origin=${originQ}&destination=${destQ}&travelmode=driving`;
+
+  return { queryText: destText, embedUrl, openUrl };
+}
+
+function updateMapAndLink(){
+  const { queryText, embedUrl, openUrl } = buildMapsUrls();
+  mapa.src = embedUrl;
+
+  mapsLink.href = openUrl;
+  mapsLink.textContent = `📍 Abrir ruta en Google Maps`;
+  mapsLink.setAttribute("data-url", openUrl);
+  mapsLink.setAttribute("data-addr", queryText);
+}
+
+function getPriceForZone(zoneIdx){
+  const suc = tarifario[sucursalEl.value];
+  const z = suc.zonas[zoneIdx];
+  const price = (tipoEl.value === "moto") ? z.moto : z.auto;
+  if(price > MAX_TARIFA || Number.isNaN(price)) return { tipo:"consultar", price:null, zona:z.zona };
+  return { tipo:"ok", price, zona:z.zona };
+}
+
+function showToast(msg){
+  toast.textContent = msg;
+  toast.classList.add("show");
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(()=> toast.classList.remove("show"), 1400);
+}
+
+async function copyText(txt){
+  try{
+    await navigator.clipboard.writeText(txt);
+    return true;
+  }catch(e){
+    const ta = document.createElement("textarea");
+    ta.value = txt;
+    ta.style.position = "fixed";
+    ta.style.left = "-9999px";
+    document.body.appendChild(ta);
+    ta.select();
+    try{ document.execCommand("copy"); }catch(err){}
+    document.body.removeChild(ta);
+    return true;
+  }
+}
+
+function recalc(){
+  const suc = tarifario[sucursalEl.value];
+  bSucursal.textContent = `Sucursal: ${suc.nombre}`;
+  bTipo.textContent = `Tipo: ${tipoEl.value === "moto" ? "Moto" : "Auto"}`;
+
+  const addr = direccionEl.value.trim();
+  const detection = detectZoneFromAddress(addr);
+
+  // KM badge
+  const km = parseFloat(kmInput.value || "0");
+  const recKm = getKmRecargo();
+  if(kmExtraToggle.checked && isFinite(km) && km > 0){
+    bKm.textContent = (km > 20) ? `KM extra: +$${money(recKm)}` : `KM extra: $0.00`;
+  }else{
+    bKm.textContent = `KM extra: —`;
+  }
+
+  if(!addr){
+    detectorInfo.classList.remove("danger");
+    detectorInfo.innerHTML = `<b>Detector:</b> Escribe una dirección para detectar zona automáticamente.`;
+    bZona.textContent = "Zona: —";
+    bMatch.textContent = "Match: —";
+    manualBox.style.display = "none";
+    costoTxt.innerHTML = `$<span id="costo">0.00</span>`;
+    return;
+  }
+
+  if(!detection){
+    // ❌ No detecta zona -> habilitar manual
+    detectorInfo.classList.add("danger");
+    detectorInfo.innerHTML = `<b>Detector:</b> No se encontró una zona con el texto escrito. Puedes usar <b>cálculo manual</b>.`;
+    bZona.textContent = "Zona: —";
+    bMatch.textContent = "Match: —";
+
+    manualBox.style.display = "block";
+    updateManualInputs();
+
+    const manualTotal = getManualTotal();
+    if(manualFixed.checked || manualPerKm.checked){
+      costoTxt.innerHTML = `$<span id="costo">${money(manualTotal)}</span>`;
+    }else{
+      costoTxt.textContent = "CONSULTAR";
+    }
+    return;
+  }
+
+  // ✅ Sí detecta zona -> tarifa normal
+  detectorInfo.classList.remove("danger");
+  const result = getPriceForZone(detection.zoneIdx);
+
+  detectorInfo.innerHTML =
+    `<b>Detector:</b> Zona detectada → <b>${detection.zona}</b> por coincidencia: <b>${detection.match}</b>.`;
+
+  bZona.textContent = `Zona: ${detection.zona}`;
+  bMatch.textContent = `Match: ${detection.match}`;
+
+  // cuando detecta zona, ocultamos el manual (para no confundir)
+  manualBox.style.display = "none";
+
+  if(result.tipo === "consultar"){
+    costoTxt.textContent = "CONSULTAR";
+  }else{
+    // tarifa zona + recargo km
+    const total = result.price + getKmRecargo();
+    costoTxt.innerHTML = `$<span id="costo">${money(total)}</span>`;
+  }
+}
+
+/* ===== Eventos ===== */
+sucursalEl.addEventListener("change", ()=>{
+  currentIndex = buildIndexForBranch(sucursalEl.value);
+  recalc();
+  updateMapAndLink();
+});
+tipoEl.addEventListener("change", recalc);
+
+let mapTimer = null;
+direccionEl.addEventListener("input", ()=>{
+  recalc();
+  clearTimeout(mapTimer);
+  mapTimer = setTimeout(updateMapAndLink, 250);
+});
+
+kmInput.addEventListener("input", ()=>{
+  recalc();
+  updateMapAndLink();
+});
+kmExtraToggle.addEventListener("change", recalc);
+
+/* Manual listeners */
+[manualOff, manualFixed, manualPerKm].forEach(r=>{
+  r.addEventListener("change", ()=>{
+    updateManualInputs();
+    recalc();
+  });
+});
+manualAmount.addEventListener("input", recalc);
+manualRate.addEventListener("input", recalc);
+
+/* Copiar link / dirección */
+copyMaps.addEventListener("click", async ()=>{
+  const url = mapsLink.getAttribute("data-url") || mapsLink.href;
+  await copyText(url);
+  showToast("Link de ruta copiado ✅");
+});
+
+copyAddr.addEventListener("click", async ()=>{
+  const addr = (mapsLink.getAttribute("data-addr") || "").trim();
+  if(!addr){
+    showToast("Escribe una dirección primero 🙂");
+    return;
+  }
+  await copyText(addr);
+  showToast("Dirección copiada ✅");
+});
+
+/* init */
+currentIndex = buildIndexForBranch(sucursalEl.value);
+recalc();
+updateMapAndLink();
+</script>
+
+<!-- jsPDF (si lo vas a integrar luego) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+document.getElementById("btnPdf").addEventListener("click", ()=>{
+  alert("Si quieres, integro el PDF formal (con costo, zona/ manual, nota y métodos de pago) igual que tus otras cotizaciones.");
+});
+
+document.getElementById("btnWsp").addEventListener("click", ()=>{
+  const sucVal = document.getElementById("sucursal").value;
+  const tipoVal = document.getElementById("tipo").value;
+  const sucNombre = (tarifario[sucVal]||{}).nombre || sucVal;
+
+  const dir = document.getElementById("direccion").value.trim();
+  const nota = document.getElementById("nota").value.trim();
+  const url = document.getElementById("mapsLink").href;
+
+  const costoTxt2 = document.getElementById("costoTxt").innerText.trim();
+
+  const msg =
+    `Hola 👋%0A` +
+    `🚚 *Delivery Cake Fit*%0A%0A` +
+    `Sucursal: ${encodeURIComponent(sucNombre)}%0A` +
+    `Tipo: ${encodeURIComponent(tipoVal)}%0A` +
+    `Dirección: ${encodeURIComponent(dir || "—")}%0A` +
+    `Costo: ${encodeURIComponent(costoTxt2)}%0A` +
+    (nota ? `Nota: ${encodeURIComponent(nota)}%0A` : ``) +
+    `%0A📍 Ruta (Maps): ${encodeURIComponent(url)}`;
+
+  window.open(`https://wa.me/50768636913?text=${msg}`, "_blank");
+});
+</script>
+
+</body>
+</html>

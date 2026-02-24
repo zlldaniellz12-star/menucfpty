@@ -1,0 +1,1158 @@
+<!doctype html>
+<html lang="es">
+<head>
+  
+  <script src="config.default.js"></script>
+<script>
+  const LSKEY = "cakefit_config_v1";
+  function loadConfig(){
+    const saved = localStorage.getItem(LSKEY);
+    return saved ? JSON.parse(saved) : window.CAKEFIT_DEFAULT;
+  }
+  window.CAKEFIT_CONFIG = loadConfig();
+</script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cake Fit | Solo Crema</title>
+
+  <style>
+    :root{
+      --verde:#2f7d57;
+      --verde-oscuro:#245f43;
+      --dorado:#c9a24d;
+      --fondo:#f4faf7;
+      --texto:#1f2a24;
+      --gris:#5b6b62;
+      --borde:#dfe8e2;
+      --sombra:0 18px 40px rgba(0,0,0,.10);
+      --radio:18px;
+    }
+    *{ box-sizing:border-box; }
+    body{
+
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--texto);
+      background:
+        radial-gradient(1000px 520px at 10% 5%, rgba(47,125,87,.14), transparent 60%),
+        radial-gradient(900px 480px at 90% 0%, rgba(201,162,77,.12), transparent 55%),
+        linear-gradient(180deg, var(--fondo), #ffffff);
+      padding:28px;
+    }
+     
+
+    .wrap{ max-width:1220px; margin:0 auto; }
+
+    .topbar{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:18px;
+      margin-bottom:18px;
+    }
+    .title{
+      font-size:56px;
+      line-height:1;
+      margin:0;
+      letter-spacing:.5px;
+      color:#51620a; /* similar al ejemplo */
+      font-weight:900;
+      text-transform:uppercase;
+    }
+    .hint{
+      margin:0 0 8px 0;
+      color:var(--gris);
+      font-size:14px;
+    }
+
+    .controls{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .pill{
+      border:1px solid var(--borde);
+      background:white;
+      border-radius:999px;
+      padding:9px 12px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      box-shadow:0 10px 24px rgba(0,0,0,.06);
+    }
+    .pill label{ font-size:12px; color:var(--gris); }
+    select{
+      border:0;
+      outline:none;
+      font-weight:700;
+      color:var(--texto);
+      background:transparent;
+      cursor:pointer;
+    }
+    input[type="search"]{
+      border:0;
+      outline:none;
+      font-weight:600;
+      width:min(280px, 56vw);
+      background:transparent;
+    }
+
+    .section{
+      margin-top:18px;
+    }
+    .section h2{
+      margin:14px 0 10px;
+      font-size:16px;
+      color:var(--verde-oscuro);
+      letter-spacing:.4px;
+      text-transform:uppercase;
+    }
+
+    /* GRID tipo vitrina */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap:18px;
+    }
+    @media (max-width:1200px){
+      .grid{ grid-template-columns: repeat(4, 1fr); }
+    }
+    @media (max-width:960px){
+      .grid{ grid-template-columns: repeat(3, 1fr); }
+      .title{ font-size:44px; }
+    }
+    @media (max-width:680px){
+      .grid{ grid-template-columns: repeat(2, 1fr); }
+      .title{ font-size:36px; }
+    }
+
+    .card{
+      background:rgba(255,255,255,.85);
+      border:1px solid var(--borde);
+      border-radius:18px;
+      overflow:hidden;
+      box-shadow:0 14px 30px rgba(0,0,0,.08);
+      cursor:pointer;
+      transition: transform .14s ease, box-shadow .14s ease;
+      position:relative;
+    }
+    .card:hover{
+      transform: translateY(-2px);
+      box-shadow:0 18px 40px rgba(0,0,0,.12);
+    }
+
+    .card .name{
+      padding:10px 12px 8px;
+      font-weight:800;
+      font-size:14px;
+      color:#222;
+    }
+
+    .thumb{
+      width:100%;
+      aspect-ratio: 4/5;
+      background: #f3f6f4;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+    }
+    .thumb img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .badge{
+      position:absolute;
+      top:10px;
+      left:10px;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:800;
+      border:1px solid rgba(255,255,255,.65);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .badge.sin{ background: rgba(47,125,87,.14); color: var(--verde-oscuro); }
+    .badge.lac{ background: rgba(201,162,77,.16); color: #6a5219; }
+
+    /* PANEL inferior (resumen) */
+    .summary{
+      margin-top:18px;
+      border:1px solid var(--borde);
+      border-radius:18px;
+      background:rgba(255,255,255,.92);
+      box-shadow:0 14px 30px rgba(0,0,0,.08);
+      padding:16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .summary .left{
+      display:flex; flex-direction:column; gap:4px;
+    }
+    .summary .left .line1{
+      font-weight:900;
+      color:var(--verde-oscuro);
+    }
+    .summary .left .line2{
+      color:var(--gris);
+      font-size:13px;
+    }
+    .summary .right{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .priceTag{
+      background:linear-gradient(180deg, rgba(47,125,87,.12), rgba(47,125,87,.06));
+      border:1px solid rgba(47,125,87,.20);
+      padding:10px 14px;
+      border-radius:14px;
+      font-weight:900;
+      font-size:18px;
+      color:var(--verde-oscuro);
+      min-width:150px;
+      text-align:center;
+    }
+    .btn{
+      border:0;
+      border-radius:14px;
+      padding:10px 14px;
+      font-weight:900;
+      cursor:pointer;
+      background:var(--verde);
+      color:white;
+      box-shadow:0 12px 26px rgba(47,125,87,.25);
+    }
+    .btn:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+      box-shadow:none;
+    }
+
+    /* Link volver (ahora sí con estilo) */
+    .volver{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:14px;
+      border:1px solid var(--borde);
+      background:#fff;
+      font-weight:900;
+      color:var(--texto);
+      text-decoration:none;
+      box-shadow:0 10px 24px rgba(0,0,0,.06);
+    }
+
+    .chkLabel{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--texto);cursor:pointer}
+.chkLabel input{width:18px;height:18px;accent-color:var(--verde)}
+.smallNote{margin-top:6px;color:var(--gris);font-size:.85rem}
+
+    /* MODAL */
+    .modalBack{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.45);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:50;
+    }
+    .modal{
+      width:min(960px, 96vw);
+      background:white;
+      border-radius:22px;
+      box-shadow:0 28px 60px rgba(0,0,0,.25);
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.5);
+    }
+    .modalTop{
+      display:flex;
+      gap:16px;
+      padding:16px;
+      align-items:stretch;
+      background:
+        radial-gradient(900px 360px at 10% 0%, rgba(47,125,87,.10), transparent 55%),
+        radial-gradient(900px 360px at 90% 0%, rgba(201,162,77,.10), transparent 55%),
+        #ffffff;
+      border-bottom:1px solid var(--borde);
+    }
+    .modalImg{
+      width: 280px;
+      aspect-ratio: 4/5;
+      border-radius:18px;
+      overflow:hidden;
+      background:#f3f6f4;
+      flex:0 0 auto;
+      border:1px solid var(--borde);
+    }
+    .modalImg img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+    .modalInfo{
+      flex:1 1 auto;
+      min-width:240px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      padding:2px 2px 2px 0;
+    }
+    .modalHeader{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .modalHeader h3{
+      margin:0;
+      font-size:22px;
+      font-weight:950;
+      color:var(--texto);
+    }
+    .close{
+      border:0;
+      background:rgba(0,0,0,.06);
+      border:1px solid rgba(0,0,0,.08);
+      border-radius:12px;
+      width:42px;
+      height:42px;
+      cursor:pointer;
+      font-size:18px;
+      font-weight:900;
+    }
+
+    .modalMeta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+    }
+    .chip{
+      font-size:12px;
+      font-weight:900;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid var(--borde);
+      background:#fff;
+      color:var(--gris);
+    }
+    .chip strong{ color:var(--texto); }
+
+    .sizeRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      margin-top:6px;
+    }
+    .sizeRow .pill{
+      padding:9px 12px;
+    }
+
+    .desc{
+      margin:0;
+      color:#3a463f;
+      line-height:1.45;
+      font-size:14px;
+      white-space:pre-line;
+    }
+
+    .modalBottom{
+      padding:14px 16px 16px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .modalPrice{
+      font-size:22px;
+      font-weight:950;
+      color:var(--verde-oscuro);
+    }
+    .copyBtn{
+      background:var(--dorado);
+      color:#1f1a0b;
+      box-shadow:0 12px 26px rgba(201,162,77,.22);
+    }
+
+    .footnote{
+      font-size:12px;
+      color:var(--gris);
+      margin-top:10px;
+    }
+
+    /* ===========================
+       MOBILE TUNING (teléfono)
+       =========================== */
+    @media (max-width: 560px){
+      body{ padding:16px; }
+      .wrap{ max-width: 100%; }
+
+      /* Topbar: apilar */
+      .topbar{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:12px;
+      }
+
+      /* Título más manejable */
+      .title{
+        font-size:34px;
+        letter-spacing:.3px;
+      }
+      .hint{ margin-bottom:4px; }
+
+      /* Controles: ancho completo y cómodos */
+      .controls{
+        width:100%;
+        justify-content:flex-start;
+        gap:10px;
+      }
+      .pill{
+        width:100%;
+        padding:10px 12px;
+        justify-content:space-between;
+      }
+      input[type="search"]{
+        width:100%;
+      }
+
+      /* Grid: 2 columnas en móvil */
+      .grid{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap:12px;
+      }
+
+      /* Cards: menos peso visual */
+      .card{ box-shadow:0 10px 22px rgba(0,0,0,.08); }
+      .card:hover{ transform:none; }
+
+      /* Summary: apilar y que todo quepa */
+      .summary{
+        padding:14px;
+        gap:10px;
+      }
+      .summary .right{
+        width:100%;
+        justify-content:space-between;
+        flex-wrap:wrap;
+        gap:10px;
+      }
+      .priceTag{
+        flex:1 1 auto;
+        min-width:140px;
+      }
+      .btn{
+        flex:1 1 auto;
+        min-width:140px;
+        min-height:44px;
+      }
+      .volver{
+        flex:1 1 auto;
+        min-width:140px;
+        min-height:44px;
+        justify-content:center;
+      }
+
+      /* Modal: apilar imagen arriba, info abajo */
+      .modal{
+        width:100%;
+        border-radius:18px;
+      }
+      .modalTop{
+        flex-direction:column;
+        align-items:stretch;
+      }
+      .modalImg{
+        width:100%;
+        max-height:320px;
+        aspect-ratio: 16/11;
+      }
+      .modalInfo{
+        padding:0;
+      }
+
+      .modalBottom{
+        flex-direction:column;
+        align-items:stretch;
+      }
+      .modalPrice{
+        text-align:left;
+      }
+      .copyBtn{
+        width:100%;
+        min-height:44px;
+      }
+
+      /* Chips: que no se apretujen */
+      .modalMeta{ gap:8px; }
+      .chip{ width:100%; }
+    }
+
+    /* Extra: feel "app" (tap friendly) */
+    .card, .btn, .volver, .pill, select, input{
+      -webkit-tap-highlight-color: transparent;
+    }
+  
+    /* Availability (admin-driven) */
+    .availBox{
+      margin-top:10px;
+      padding:10px 12px;
+      border:1px dashed rgba(47,125,87,.28);
+      background:linear-gradient(180deg, rgba(47,125,87,.08), rgba(255,255,255,.7));
+      border-radius:14px;
+    }
+    .availTitle{
+      font-weight:950;
+      color:var(--verde-oscuro);
+      font-size:12px;
+      letter-spacing:.35px;
+      text-transform:uppercase;
+      margin:0 0 8px 0;
+    }
+    .availList{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin:0;
+      padding:0;
+      list-style:none;
+    }
+    .availItem{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+      border:1px solid var(--borde);
+      background:#fff;
+      color:var(--texto);
+      white-space:nowrap;
+    }
+    .dot{ width:8px; height:8px; border-radius:999px; display:inline-block; }
+    .st-disponible .dot{ background: rgba(47,125,87,.95); }
+    .st-bajo_pedido .dot{ background: rgba(201,162,77,.95); }
+    .st-no_disponible .dot{ background: rgba(100,115,102,.75); }
+    .availHint{
+      margin:8px 0 0 0;
+      font-size:12px;
+      color:var(--gris);
+    }
+
+  </style>
+</head>
+
+<body>
+  
+  <div class="wrap">
+    <div class="topbar">
+      <div>
+        <p class="hint">Toca un cake para ver descripción y elegir tamaño.</p>
+        <p class="hint">
+          - SIN GLUTEN 
+          - SIN AZUCAR
+        </p>
+        <h1 class="title">SOLO CREMA</h1>
+      </div>
+
+      <div class="controls">
+        <div class="pill">
+          <label for="filtro">Filtro</label>
+          <select id="filtro">
+            <option value="todos">Todos</option>
+            <option value="sin">Sin lácteos</option>
+            <option value="lac">Con lácteos</option>
+            <option value="keto">Keto</option>
+          </select>
+        </div>
+
+        <div class="pill">
+          <label for="buscar">Buscar</label>
+          <input id="buscar" type="search" placeholder="Ej: zanahoria, velvet, piña..." />
+        </div>
+
+        <div class="pill">
+          <label for="tamanoGlobal">Tamaño</label>
+          <select id="tamanoGlobal">
+            <option value="6">6” (6-8)</option>
+            <option value="7">7” (8-10)</option>
+            <option value="8">8” (12-15)</option>
+            <option value="9">9” (16-20)</option>
+          </select>
+        </div>
+      
+        <div class="pill">
+          <label class="chkLabel">
+            <input id="almendra" type="checkbox" />
+            <span>Harina de almendra</span>
+          </label>
+          <div class="smallNote">+ $6 / $8 / $10 / $12 según tamaño</div>
+        </div>
+
+        <a class="volver" href="admin.html" style="background:linear-gradient(180deg, rgba(201,162,77,.16), rgba(255,255,255,.9)); border-color:rgba(201,162,77,.35);">⚙ Admin</a>
+
+</div>
+    </div>
+
+    <div class="section">
+      <h2>Catálogo</h2>
+      <div id="grid" class="grid"></div>
+
+      <div class="summary" id="summary">
+        <div class="left">
+          <div class="line1" id="sumTitle">Selecciona un cake</div>
+          <div class="line2" id="sumSubtitle">Luego elige tamaño y verás el precio.</div>
+        </div>
+        <div class="right">
+          <div class="priceTag" id="sumPrice">$0.00</div>
+          <button class="btn" id="openBtn" disabled>Ver detalles</button>
+          <a class='volver' href='/'>← Volver al inicio</a>
+        </div>
+      </div>
+
+      <div class="footnote">Las imágenes se cargan desde la carpeta <strong>img/</strong>. Si alguna no existe, se verá un cuadro vacío.</div>
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div class="modalBack" id="modalBack" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modalTop">
+        <div class="modalImg"><img id="mImg" alt="Cake"></div>
+
+        <div class="modalInfo">
+          <div class="modalHeader">
+            <h3 id="modalTitle">Cake</h3>
+            <button class="close" id="closeBtn" aria-label="Cerrar">✕</button>
+          </div>
+
+          <div class="modalMeta">
+            <div class="chip" id="mCat">Categoría: <strong>-</strong></div>
+            <div class="chip" id="mEnd">Endulzado con: <strong>-</strong></div>
+            <div class="chip" id="mHar">Harina: <strong>-</strong></div>
+          </div>
+
+          <div class="sizeRow">
+            <div class="pill">
+              <label for="mSize">Tamaño</label>
+              <select id="mSize">
+                <option value="6">6” (6-8 porciones)</option>
+                <option value="7">7” (8-10 porciones)</option>
+                <option value="8">8” (12-15 porciones)</option>
+                <option value="9">9” (16-20 porciones)</option>
+              </select>
+            </div>
+          </div>
+
+          
+          <p class="desc" id="mDesc"></p>
+
+          <div class="availBox" id="mAvail" aria-live="polite">
+            <p class="availTitle">Tamaños disponibles</p>
+            <ul class="availList" id="mAvailList"></ul>
+            <p class="availHint">* Estados: Disponible / Bajo pedido / No disponible</p>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="modalBottom">
+        <div class="modalPrice" id="mPrice">$0.00</div>
+        <button class="btn copyBtn" id="copyBtn">Copiar para WhatsApp</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* ===========================
+   DATA (con tus descripciones)
+   =========================== */
+
+const sizes = [
+  { key:"6", label:'6” (6-8 porciones)' },
+  { key:"7", label:'7” (8-10 porciones)' },
+  { key:"8", label:'8” (12-15 porciones)' },
+  { key:"9", label:'9” (16-20 porciones)' },
+];
+
+
+/* ===========================
+   AVAILABILITY (Admin)
+   =========================== */
+const INVKEY = "cakefit_inventory_v1";
+
+const AVAIL_STATES = [
+  { key:"disponible", label:"Disponible" },
+  { key:"bajo_pedido", label:"Bajo pedido" },
+  { key:"no_disponible", label:"No disponible" },
+];
+
+function loadInventory(){
+  try{
+    const raw = localStorage.getItem(INVKEY);
+    return raw ? JSON.parse(raw) : {};
+  }catch(e){
+    return {};
+  }
+}
+
+function getSizeState(inv, cakeId, sizeKey){
+  // default: disponible
+  const c = inv?.[cakeId];
+  const s = c?.sizes?.[sizeKey];
+  return (s && typeof s === "string") ? s : "disponible";
+}
+
+function stateLabel(key){
+  return (AVAIL_STATES.find(s=>s.key===key)?.label) || "Disponible";
+}
+
+function renderAvailabilityForCake(cakeId){
+  const inv = loadInventory();
+  const listEl = document.querySelector("#mAvailList");
+  if(!listEl) return;
+
+  listEl.innerHTML = "";
+  sizes.forEach(sz=>{
+    const st = getSizeState(inv, cakeId, sz.key);
+    const li = document.createElement("li");
+    li.className = `availItem st-${st}`;
+    li.innerHTML = `<span class="dot"></span><span><strong>${sz.key}”</strong> · ${stateLabel(st)}</span>`;
+    listEl.appendChild(li);
+  });
+}
+
+
+const cakes = [
+  // SIN LACTEOS
+ 
+  {
+    id:"triple-chocolate",
+    name:"Triple Chocolate",
+    category:"sin",
+    prices:{ "6":44.99, "7":59.99, "8":74.98, "9":89.98 },
+    desc:`Un cake húmedo hecho con cacao sin azúcar, relleno
+y cubierto con un delicioso ganache de chocolate 70%.
+Endulzado con: Stevia
+Elaborado con Harina de: Avena libre de gluten.`,
+    sweetener:"Stevia",
+    flour:"Avena libre de gluten",
+    img:"triple-chocolate.png"
+  },
+  {
+    id:"guineo",
+    name:"Guineo",
+    category:"sin",
+    prices:{ "6":37.99, "7":50.99, "8":63.99, "9":75.99 },
+    desc:`Cake de Guineo, relleno con guineo flameado en aceite de coco y nueces caramelizadas
+sin azúcar, una explosión de sabores.
+Endulzado con: Monk Fruit
+Elaborado con Harina de: Avena libre de gluten`,
+    sweetener:"Monk Fruit",
+    flour:"Avena libre de gluten",
+    img:"guineo-nuez.png"
+  },
+  {
+    id:"choco-maracuya",
+    name:"Choco-maracuyá",
+    category:"sin",
+    prices:{ "6":44.99, "7":59.99, "8":74.98, "9":89.98 },
+    desc:`Bizcocho de chocolate relleno de crema pastelera de maracuyá.
+Endulzado con: Stevia
+Elaborado con Harina de: Avena`,
+    sweetener:"Stevia",
+    flour:"Avena",
+    img:"choco-maracuya.png"
+  },
+  {
+    id:"zanahoria-almendra",
+    name:"Zanahoria Almendra",
+    category:"sin",
+    prices:{ "6":46.00, "7":62.00, "8":76.99, "9":91.99 },
+    desc:`Zanahoria, con nueces troceadas para darle un toque crujiente,
+acompañado con una cubierta de dulce de leche vegano de almendras.
+Endulzado con: Monk Fruit
+Elaborado con Harina de: Almendras`,
+    sweetener:"Monk Fruit",
+    flour:"Almendras",
+    img:"zanahoria-almendra.png"
+  },
+   {
+    id:"chocolate-pistacho",
+    name:"ChocoPistacho (DUBAI)",
+    category:"sin",
+    prices:{ "6":48.99, "7":67.99, "8":82.99, "9":99.99 },
+    desc:`Cake de chocolate en harina de avena,
+relleno de pistacho, cubierto con un delicioso ganache de chocolate 70%`,
+    sweetener:"MONK FRUIT",
+    flour:"avena",
+    img:"chocolate-pistacho.png"
+  },
+   {
+    id:"zanahoria-pistacho",
+    name:"Zanahoria Pistacho",
+    category:"sin",
+    prices:{ "6":48.99, "7":67.99, "8":82.99, "9":105.99 },
+    desc:`Cake de Zanahoria en harina de avena,
+relleno de pistacho, cubierto de dulce de leche de almendra
+y frutas mixtas.`,
+    sweetener:"MONK FRUIT",
+    flour:"Avena",
+    img:"zanahoria-pistacho.png"
+  },
+{
+  id:"pina",
+    name:"Piña",
+    category:"sin",
+    prices:{ "6":37.99, "7":50.99, "8":63.99, "9":75.99 },
+    desc:`Hecho con piñas panameñas consideradas como “Las más dulces del mundo”.
+Se caracteriza por su increíble sabor y su sutil olor a canela,
+acompañada con una capa de piña caramelizadas SIN AZÚCAR.
+Endulzado con: Monk Fruit
+Elaborado con Harina de: Avena libre de gluten`,
+    sweetener:"Monk Fruit",
+    flour:"Avena libre de gluten",
+    img:"pina.png"
+  },
+
+
+  // CON LACTEOS
+  {
+    id:"selva-negra-keto",
+    name:"Selva Negra Keto",
+    category:"lac",
+    prices:{ "6":45.99, "7":61.99, "8":76.99, "9":91.99 },
+    desc:`Bizcocho de chocolate elaborado con harina de almendra.
+Relleno de yogurt griego y queso crema,
+mermelada de frutos rojos y chispas 70%.
+Endulzado con Monk Fruit`,
+    sweetener:"Monk Fruit",
+    flour:"Almendras",
+    img:"selva-negra.png"
+  },
+  {
+    id:"zanahoria-avena",
+    name:"Zanahoria en Avena",
+    category:"lac",
+    prices:{ "6":39.99, "7":53.99, "8":66.99, "9":79.98 },
+    desc:`Cake de Zanahoria ahora relleno de yogurt griego y queso crema,
+manteniéndolo en nuestra línea sin azúcar y sin gluten. Deliciosamente saludable.
+Endulzado con: Stevia
+Elaborado con Harina de: Avena libre de gluten`,
+    sweetener:"Stevia",
+    flour:"Avena libre de gluten",
+    img:"zanahoria-avena.png"
+  },
+  {
+    id:"vainilla-keto",
+    name:"Vainilla Keto",
+    category:"lac",
+    prices:{ "6":42.99, "7":57.99, "8":71.99, "9":85.98 },
+    desc:`Cake de vainilla, hecho con harina de almendras.
+Especial para aquellos que llevan un estilo de alimentación Keto.
+Relleno y cubierto con una suave crema de queso con yogurt griego,
+y mermelada sin azúcar.
+Endulzado con: Monk Fruit`,
+    sweetener:"Monk Fruit",
+    flour:"Almendras",
+    img:"vainilla-keto.png"
+  },
+  {
+    id:"red-velvet-keto",
+    name:"Red Velvet Keto",
+    category:"lac",
+    prices:{ "6":43.00, "7":57.99, "8":71.99, "9":86.00 },
+    desc:`Bizcocho de color rojo profundo o vinotinto y su suave textura,
+combinado con su característico sabor,
+relleno con una crema de yogurt griego con queso crema y chispas de chocolate,
+darán el sabor y la textura ideal a este delicado cake.
+Endulzado con Monk Fruit
+Elaborado con Harina de Almendras.`,
+    sweetener:"Monk Fruit",
+    flour:"Almendras",
+    img:"red-velvet-keto.png"
+  },
+  {
+    id:"red-velvet-avena",
+    name:"Red Velvet Avena",
+    category:"lac",
+    prices:{ "6":37.99, "7":50.99, "8":63.99, "9":75.99 },
+    desc:`Bizcocho de color rojo profundo o vinotinto y su suave textura,
+combinado con su característico sabor, relleno con una crema de yogurt griego con queso crema
+y chispas de chocolate, darán el sabor y la textura ideal a este delicado cake.
+Endulzado con Monk Fruit
+Elaborado con Harina de Avena.`,
+    sweetener:"Monk Fruit",
+    flour:"Avena",
+    img: "red-velvet-keto.png"
+  },
+];
+
+/* ===========================
+   HELPERS
+   =========================== */
+const $ = (s)=>document.querySelector(s);
+const fmt = (n)=> Number(n).toFixed(2);
+
+function categoryLabel(cat){
+  return cat === "sin" ? "SIN LÁCTEOS" : "CON LÁCTEOS";
+}
+
+function niceValue(v){
+  if(!v || v.trim()==="") return "-";
+  if(v.includes("(no indicado)")) return "No indicado";
+  return v;
+}
+
+/* ===========================
+   STATE
+   =========================== */
+let selectedId = null;
+let selectedSize = "6";
+let almendraOn = false;
+
+// Extras por harina de almendra (según tamaño)
+const almendraExtra = { "6":6, "7":8, "8":10, "9":12 };
+
+// Keto (según tus reglas)
+const ketoIds = new Set(["selva-negra-keto","red-velvet-keto","vainilla-keto"]);
+
+function hasAlmendraBase(cake){
+  const f = String(cake.flour||"").toLowerCase();
+  return f.includes("almendra");
+}
+function priceWithAlmendra(cake, sizeKey){
+  const basePrice = Number((cake.prices||{})[sizeKey] || 0);
+  if(!almendraOn) return basePrice;
+  // si ya es de almendra, no sumamos extra
+  const extra = hasAlmendraBase(cake) ? 0 : Number(almendraExtra[sizeKey] || 0);
+  return basePrice + extra;
+}
+function flourLabel(cake){
+  return almendraOn ? "Almendras" : (cake.flour || "-");
+}
+
+/* ===========================
+   RENDER GRID
+   =========================== */
+function buildCard(cake){
+  const div = document.createElement("div");
+  div.className = "card";
+  div.dataset.id = cake.id;
+
+  const badge = document.createElement("div");
+  badge.className = `badge ${cake.category}`;
+  badge.classList.add(cake.category === "sin" ? "sin" : "lac");
+  badge.textContent = categoryLabel(cake.category);
+
+  const thumb = document.createElement("div");
+  thumb.className = "thumb";
+
+  const img = document.createElement("img");
+  img.loading = "lazy";
+  img.alt = cake.name;
+  img.src = `img/${cake.img}`;
+  img.onerror = () => { img.style.display = "none"; thumb.style.background = "#eef3f0"; };
+
+  thumb.appendChild(img);
+
+  const name = document.createElement("div");
+  name.className = "name";
+  name.textContent = cake.name;
+
+  div.appendChild(badge);
+  div.appendChild(thumb);
+  div.appendChild(name);
+
+  div.addEventListener("click", ()=> {
+    selectCake(cake.id);
+    openModal();
+  });
+
+  return div;
+}
+
+function applyFilters(){
+  const filtro = $("#filtro").value;
+  const q = $("#buscar").value.trim().toLowerCase();
+
+  return cakes.filter(c=>{
+    const okCat = (filtro === "todos") ? true : (filtro === "keto" ? ketoIds.has(c.id) : (c.category === filtro));
+    const okQ = q ? (c.name.toLowerCase().includes(q)) : true;
+    return okCat && okQ;
+  });
+}
+
+function renderGrid(){
+  const grid = $("#grid");
+  grid.innerHTML = "";
+  const list = applyFilters();
+
+  list.forEach(c => grid.appendChild(buildCard(c)));
+
+  if(selectedId && !list.some(x=>x.id===selectedId)){
+    selectedId = null;
+    updateSummary();
+  }
+}
+
+/* ===========================
+   SUMMARY PANEL
+   =========================== */
+function getCakeById(id){
+  return cakes.find(c=>c.id===id) || null;
+}
+
+function selectCake(id){
+  selectedId = id;
+  updateSummary();
+}
+
+function updateSummary(){
+  const openBtn = $("#openBtn");
+  const title = $("#sumTitle");
+  const sub = $("#sumSubtitle");
+  const price = $("#sumPrice");
+
+  if(!selectedId){
+    title.textContent = "Selecciona un cake";
+    sub.textContent = "Luego elige tamaño y verás el precio.";
+    price.textContent = "$0.00";
+    openBtn.disabled = true;
+    return;
+  }
+
+  const cake = getCakeById(selectedId);
+  const sizeKey = $("#tamanoGlobal").value;
+  selectedSize = sizeKey;
+
+  title.textContent = `${cake.name} · ${sizes.find(s=>s.key===sizeKey).label}`;
+  sub.textContent = `${categoryLabel(cake.category)} · Toca “Ver detalles” para descripción.`;
+  price.textContent = `$${fmt(priceWithAlmendra(cake, sizeKey))}`;
+  openBtn.disabled = false;
+}
+
+/* ===========================
+   MODAL
+   =========================== */
+function openModal(){
+  if(!selectedId) return;
+  const cake = getCakeById(selectedId);
+
+  $("#modalBack").style.display = "flex";
+  $("#modalBack").setAttribute("aria-hidden","false");
+
+  $("#modalTitle").textContent = cake.name;
+  $("#mImg").style.display = "block";
+  $("#mImg").src = `img/${cake.img}`;
+  $("#mImg").onerror = () => { $("#mImg").style.display="none"; };
+
+  $("#mCat").innerHTML = `Categoría: <strong>${categoryLabel(cake.category)}</strong>`;
+  $("#mEnd").innerHTML = `Endulzado con: <strong>${niceValue(cake.sweetener)}</strong>`;
+  $("#mHar").innerHTML = `Harina: <strong>${niceValue(flourLabel(cake))}</strong>`;
+  $("#mDesc").textContent = cake.desc;
+
+  
+  renderAvailabilityForCake(cake.id);
+$("#mSize").value = $("#tamanoGlobal").value;
+  updateModalPrice();
+}
+
+function closeModal(){
+  $("#modalBack").style.display = "none";
+  $("#modalBack").setAttribute("aria-hidden","true");
+}
+
+function updateModalPrice(){
+  const cake = getCakeById(selectedId);
+  const sizeKey = $("#mSize").value;
+  $("#mPrice").textContent = `$${fmt(priceWithAlmendra(cake, sizeKey))}`;
+}
+
+function whatsappText(){
+  const cake = getCakeById(selectedId);
+  const sizeKey = $("#mSize").value;
+  const sizeLabel = sizes.find(s=>s.key===sizeKey).label;
+  const price = fmt(priceWithAlmendra(cake, sizeKey));
+  const harinaTxt = flourLabel(cake);
+  const extraTxt = (almendraOn && !hasAlmendraBase(cake)) ? ` (+$${fmt(almendraExtra[sizeKey]||0)} harina de almendra)` : "";
+
+  return `Cake Fit | Solo Crema
+Sabor: ${cake.name}
+Tamaño: ${sizeLabel}
+Categoría: ${categoryLabel(cake.category)}
+Precio: $${price}
+
+Descripción:
+${cake.desc}`;
+}
+
+/* ===========================
+   EVENTS
+   =========================== */
+$("#filtro").addEventListener("change", renderGrid);
+$("#buscar").addEventListener("input", renderGrid);
+
+$("#tamanoGlobal").addEventListener("change", ()=>{
+  selectedSize = $("#tamanoGlobal").value;
+  updateSummary();
+});
+
+$("#openBtn").addEventListener("click", openModal);
+$("#closeBtn").addEventListener("click", closeModal);
+$("#modalBack").addEventListener("click", (e)=>{
+  if(e.target.id === "modalBack") closeModal();
+});
+$("#mSize").addEventListener("change", updateModalPrice);
+
+$("#copyBtn").addEventListener("click", async ()=>{
+  try{
+    await navigator.clipboard.writeText(whatsappText());
+    $("#copyBtn").textContent = "¡Copiado!";
+    setTimeout(()=> $("#copyBtn").textContent = "Copiar para WhatsApp", 1200);
+  }catch{
+    alert("No se pudo copiar. Copia manualmente el texto.");
+  }
+});
+
+document.addEventListener("keydown", (e)=>{
+  if(e.key === "Escape") closeModal();
+});
+
+/* INIT */
+renderGrid();
+updateSummary();
+
+// Harina de almendra (extra por tamaño)
+const almendraChk = $("#almendra");
+if(almendraChk){
+  almendraChk.addEventListener("change", ()=>{
+    almendraOn = !!almendraChk.checked;
+    // refresca flour en modal si está abierto
+    if(selectedId){
+      try{
+        const cake = getCakeById(selectedId);
+        $("#mHar").innerHTML = `Harina: <strong>${niceValue(flourLabel(cake))}</strong>`;
+        updateModalPrice();
+      }catch(e){}
+    }
+    renderGrid();
+    updateSummary();
+  });
+}
+
+</script>
+</body>
+</html>

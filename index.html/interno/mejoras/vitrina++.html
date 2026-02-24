@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cake Fit | Cakes de Vitrina</title>
+
+<style>
+:root{
+  --verde:#2f7d57;
+  --verde-oscuro:#245f43;
+  --dorado:#c9a24d;
+  --fondo:#f4faf7;
+  --texto:#1f2a24;
+  --gris:#5b6b62;
+  --borde:#dfe8e2;
+  --sombra:0 18px 40px rgba(0,0,0,.10);
+  --radio:18px;
+  --verde-claro:#e9f5ef;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  color:var(--texto);
+  background:
+    radial-gradient(900px 450px at 15% 8%, rgba(47,125,87,.14), transparent 60%),
+    radial-gradient(900px 450px at 90% 12%, rgba(201,162,77,.15), transparent 60%),
+    linear-gradient(180deg,var(--fondo),#ffffff 55%);
+  min-height:100vh;
+  padding:24px 16px 40px;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+}
+.wrapper{
+  width:100%;
+  max-width:980px;
+  display:grid;
+  grid-template-columns: 1.25fr .85fr;
+  gap:18px;
+}
+@media (max-width: 980px){
+  .wrapper{grid-template-columns:1fr}
+}
+.card{
+  background:rgba(255,255,255,.93);
+  border:1px solid var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  overflow:hidden;
+}
+.header{
+  padding:20px 22px 16px;
+  background: linear-gradient(135deg, rgba(47,125,87,.13), rgba(201,162,77,.10));
+  border-bottom:1px solid var(--borde);
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+.logoBox{
+  width:52px;height:52px;
+  border-radius:16px;
+  background: linear-gradient(135deg, var(--verde), var(--dorado));
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;
+  font-weight:900;
+  letter-spacing:.6px;
+  box-shadow: 0 10px 20px rgba(47,125,87,.18);
+}
+.brand h1{
+  margin:0;
+  font-size:18px;
+  color:var(--verde-oscuro);
+  line-height:1.15;
+}
+.brand p{
+  margin:4px 0 0;
+  color:var(--gris);
+  font-size:13px;
+}
+.content{ padding:18px 22px 22px; }
+
+.note{
+  background: rgba(201,162,77,.16);
+  border:1px solid rgba(201,162,77,.28);
+  border-left:5px solid var(--dorado);
+  color:#6a521f;
+  padding:10px 12px;
+  border-radius:14px;
+  font-size:13px;
+  line-height:1.4;
+  margin-bottom:14px;
+}
+.grid2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+@media (max-width: 640px){
+  .grid2{grid-template-columns:1fr}
+}
+.section{
+  border:1px solid var(--borde);
+  background:#fff;
+  border-radius:16px;
+  padding:14px;
+}
+.sectionTitle{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:10px;
+}
+.sectionTitle h2{
+  margin:0;
+  font-size:14px;
+  color:var(--verde-oscuro);
+}
+.helper{
+  font-size:12px;
+  color:var(--gris);
+}
+label{
+  display:block;
+  font-weight:800;
+  color:var(--texto);
+  font-size:13px;
+  margin-bottom:6px;
+}
+select{
+  width:100%;
+  padding:12px 12px;
+  border-radius:14px;
+  border:1px solid var(--borde);
+  background:#fff;
+  font-size:14px;
+  outline:none;
+  transition: box-shadow .2s ease, border-color .2s ease;
+}
+select:focus{
+  border-color: rgba(47,125,87,.55);
+  box-shadow: 0 0 0 4px rgba(47,125,87,.12);
+}
+
+.preview{
+  display:none;
+  margin-top:12px;
+  border:1px solid var(--borde);
+  border-radius:16px;
+  overflow:hidden;
+  background:#fff;
+}
+.previewTop{
+  padding:10px 12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  border-bottom:1px solid var(--borde);
+  background: #fbfdfc;
+}
+.previewTop b{ color:var(--verde-oscuro); font-size:13px; }
+.pill{
+  font-size:12px;
+  font-weight:800;
+  color: var(--verde-oscuro);
+  background: var(--verde-claro);
+  border:1px solid rgba(47,125,87,.20);
+  padding:6px 10px;
+  border-radius:999px;
+}
+.preview img{
+  width:100%;
+  display:block;
+  max-height:280px;
+  object-fit:cover;
+}
+.previewBottom{
+  padding:10px 12px;
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:center;
+}
+.previewBottom span{
+  color:var(--gris);
+  font-size:12px;
+}
+.previewBottom strong{
+  color:var(--texto);
+}
+
+.aside{
+  position:sticky;
+  top:14px;
+  height:fit-content;
+}
+.totalBox{
+  border-radius:18px;
+  padding:16px;
+  background: linear-gradient(135deg, var(--verde), var(--dorado));
+  color:#fff;
+  box-shadow: 0 10px 22px rgba(0,0,0,.12);
+}
+.totalBox .label{ font-size:12px; opacity:.92; }
+.totalBox .value{
+  margin-top:6px;
+  font-size:30px;
+  font-weight:900;
+  letter-spacing:.2px;
+}
+
+.summaryList{
+  margin-top:14px;
+  border:1px solid var(--borde);
+  border-radius:16px;
+  overflow:hidden;
+  background:#fff;
+}
+.summaryItem{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:10px 12px;
+  border-bottom:1px solid var(--borde);
+  font-size:13px;
+}
+.summaryItem:last-child{border-bottom:none}
+.summaryItem span:first-child{color:var(--gris)}
+.summaryItem span:last-child{font-weight:900}
+
+.actions{
+  margin-top:14px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.btn{
+  appearance:none;
+  border:0;
+  border-radius:14px;
+  padding:13px 14px;
+  font-weight:900;
+  font-size:14px;
+  cursor:pointer;
+  transition: transform .05s ease, box-shadow .2s ease, background .2s ease;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+}
+.btn:active{ transform: translateY(1px); }
+.btnPrimary{
+  background: var(--verde);
+  color:#fff;
+  box-shadow: 0 10px 18px rgba(47,125,87,.18);
+}
+.btnPrimary:hover{ background: var(--verde-oscuro); }
+
+.btnGold{
+  background: var(--dorado);
+  color:#fff;
+  box-shadow: 0 10px 18px rgba(201,162,77,.22);
+}
+.btnGold:hover{ filter: brightness(.95); }
+
+.btnGhost{
+  background:#fff;
+  border:1px solid var(--borde);
+  color: var(--texto);
+}
+.btnGhost:hover{ box-shadow: 0 10px 18px rgba(0,0,0,.06); }
+
+.small{
+  margin-top:8px;
+  font-size:12px;
+  color:var(--gris);
+  line-height:1.4;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+  <!-- MAIN -->
+  <div class="card">
+    <div class="header">
+      <div class="brand">
+        <div class="logoBox">CF</div>
+        <div>
+          <h1>🍰 Cakes de Vitrina</h1>
+          <p>Elige tamaño y sabor. Verás foto, porciones y cotización lista para WhatsApp o PDF.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="note">
+        📦 <b>6” y 9”</b> → Bajo disponibilidad<br>
+        📝 <b>7” y 8”</b> → Bajo pedido
+      </div>
+
+      <div class="grid2">
+        <div class="section">
+          <div class="sectionTitle">
+            <h2>📏 Selección</h2>
+            <div class="helper">Tamaño + sabor</div>
+          </div>
+
+          <label for="tamano">Tamaño</label>
+          <select id="tamano">
+            <option value="">Selecciona tamaño</option>
+            <option value="6">6”</option>
+            <option value="7">7”</option>
+            <option value="8">8”</option>
+            <option value="9">9”</option>
+          </select>
+
+          <div id="porcionesBox" class="note" style="display:none; margin-top:12px;"></div>
+
+          <label for="sabor" style="margin-top:12px;">Sabor</label>
+          <select id="sabor">
+            <option value="">Selecciona sabor</option>
+          </select>
+
+          <div class="small">
+            Tip: selecciona un sabor para ver la foto del cake (si está disponible).
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="sectionTitle">
+            <h2>🖼️ Vista previa</h2>
+            <div class="helper">Foto + info</div>
+          </div>
+
+          <div id="preview" class="preview">
+            <div class="previewTop">
+              <b id="nombreCake">—</b>
+              <span class="pill" id="pillSize">—</span>
+            </div>
+            <img id="fotoCake" alt="Foto del cake seleccionado" />
+            <div class="previewBottom">
+              <span id="porcionesText">—</span>
+              <strong>$<span id="precioPreview">0.00</span></strong>
+            </div>
+          </div>
+
+          <div class="small">
+            Si no aparece foto, revisa que exista el archivo en tu carpeta <b>/img</b>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ASIDE -->
+  <div class="card aside">
+    <div class="content">
+      <div class="totalBox" role="status" aria-live="polite">
+        <div class="label">Total estimado</div>
+        <div class="value">$<span id="total">0.00</span></div>
+      </div>
+
+      <div class="summaryList">
+        <div class="summaryItem"><span>Tipo</span><span>Cake de vitrina</span></div>
+        <div class="summaryItem"><span>Tamaño</span><span id="sTam">—</span></div>
+        <div class="summaryItem"><span>Porciones</span><span id="sPor">—</span></div>
+        <div class="summaryItem"><span>Sabor</span><span id="sSab">—</span></div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btnPrimary" id="btnWhats">📲 Pedir por WhatsApp</button>
+        <button class="btn btnGold" id="btnPDF">📄 Generar cotización PDF</button>
+        <button class="btn btnGhost" onclick="location.href='index.html'">⬅️ Volver</button>
+      </div>
+
+      <div class="small">
+        *Cotización estimada. Puede variar según disponibilidad del día.*
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// =====================
+// DATA
+// =====================
+const precios = {
+  6:{ "Piña":37.99,"Guineo":37.99,"Red Velvet":37.99,"Vainilla keto":42.99,"Red Velvet keto":43.00,"Triple Chocolate":44.99,"Selva Negra keto":45.99,"Zanahoria Avena":39.99,"ChocoMaracuyá":44.99,"Zanahoria Almendra":46.00 },
+  7:{ "Piña":50.99,"Guineo":50.99,"Red Velvet":50.99,"Vainilla keto":57.99,"Red Velvet keto":57.99,"Triple Chocolate":59.99,"Selva Negra keto":61.99,"Zanahoria Avena":53.99,"ChocoMaracuyá":59.99,"Zanahoria Almendra":62.00 },
+  8:{ "Piña":63.99,"Guineo":63.99,"Red Velvet":63.99,"Vainilla keto":71.99,"Red Velvet keto":71.99,"Triple Chocolate":74.98,"Selva Negra keto":76.99,"Zanahoria Avena":66.99,"ChocoMaracuyá":74.98,"Zanahoria Almendra":76.99 },
+  9:{ "Piña":75.99,"Guineo":75.99,"Red Velvet":75.99,"Vainilla keto":85.98,"Red Velvet keto":86.00,"Triple Chocolate":89.98,"Selva Negra keto":91.99,"Zanahoria Avena":79.98,"ChocoMaracuyá":89.98,"Zanahoria Almendra":91.99 }
+};
+
+const imagenes = {
+  "Piña":"img/pina.png",
+  "Guineo":"img/guineo-nuez.png",
+  "Red Velvet":"img/red-velvet.png",
+  "Red Velvet keto":"img/red-velvet-keto.png",
+  "Zanahoria Almendra":"img/zanahoria-almendra.png",
+  "Zanahoria Avena":"img/zanahoria-avena.png",
+  "Triple Chocolate":"img/triple-chocolate.png",
+  "ChocoMaracuyá":"img/choco-maracuya.png",
+  "Vainilla keto":"img/vainilla-keto.png",
+  "Selva Negra keto":"img/selva-negra.png"
+};
+
+const porcionesTxt = { 6:"6–8 porciones", 7:"8–10 porciones", 8:"12–15 porciones", 9:"16–20 porciones" };
+
+// Logo en carpeta img (ajusta nombres si los tuyos son distintos)
+const LOGO_CANDIDATOS = [
+  "img/logo.png",
+  "img/logo.jpg",
+  "img/logo.jpeg",
+  "img/logo.webp",
+  "img/cakefit-logo.png",
+  "img/cakefit.png"
+];
+
+// =====================
+// DOM
+// =====================
+const $ = (id) => document.getElementById(id);
+
+const tamano = $("tamano");
+const sabor = $("sabor");
+const totalEl = $("total");
+
+const porcionesBox = $("porcionesBox");
+const preview = $("preview");
+const fotoCake = $("fotoCake");
+const nombreCake = $("nombreCake");
+const pillSize = $("pillSize");
+const porcionesText = $("porcionesText");
+const precioPreview = $("precioPreview");
+
+const sTam = $("sTam");
+const sPor = $("sPor");
+const sSab = $("sSab");
+
+// Para WhatsApp (solo útil si la web está publicada)
+let imagenPublica = "";
+
+// Para PDF: DataURL de la imagen del producto
+let productoDataUrl = null;
+
+// Para PDF: DataURL del logo (auto desde /img)
+let logoDataUrl = null;
+
+// =====================
+// HELPERS
+// =====================
+function money(n){ return Number(n).toFixed(2); }
+
+function actualizarResumen(){
+  sTam.textContent = tamano.value ? `${tamano.value}”` : "—";
+  sPor.textContent = tamano.value ? porcionesTxt[tamano.value] : "—";
+  sSab.textContent = sabor.value || "—";
+}
+
+function actualizarSabores(){
+  sabor.innerHTML = '<option value="">Selecciona sabor</option>';
+  if(!tamano.value){
+    totalEl.textContent = "0.00";
+    preview.style.display = "none";
+    actualizarResumen();
+    return;
+  }
+
+  Object.keys(precios[tamano.value]).forEach(k=>{
+    const o=document.createElement("option");
+    o.value = k;
+    o.textContent = k;
+    sabor.appendChild(o);
+  });
+
+  totalEl.textContent = "0.00";
+  precioPreview.textContent = "0.00";
+  preview.style.display = "none";
+  actualizarResumen();
+}
+
+function mostrarPorciones(){
+  const t = tamano.value;
+  if(porcionesTxt[t]){
+    porcionesBox.style.display = "block";
+    porcionesBox.innerHTML = `👥 <b>Rinde</b> ${porcionesTxt[t]}`;
+  }else{
+    porcionesBox.style.display = "none";
+  }
+  actualizarResumen();
+}
+
+function calcularPrecio(){
+  if(tamano.value && sabor.value){
+    const p = precios[tamano.value][sabor.value];
+    totalEl.textContent = money(p);
+    precioPreview.textContent = money(p);
+  }else{
+    totalEl.textContent = "0.00";
+    precioPreview.textContent = "0.00";
+  }
+  actualizarResumen();
+}
+
+function validarSeleccion(){
+  if(!tamano.value || !sabor.value){
+    alert("Selecciona tamaño y sabor para continuar.");
+    return false;
+  }
+  return true;
+}
+
+// Convierte una imagen a DataURL para usarla en PDF
+async function imgToDataURL(src){
+  return new Promise((resolve)=>{
+    try{
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        resolve(canvas.toDataURL("image/jpeg", 0.92));
+      };
+      img.onerror = () => resolve(null);
+      img.src = src;
+    }catch(e){
+      resolve(null);
+    }
+  });
+}
+
+async function prepararImagenProducto(){
+  if(!fotoCake || !fotoCake.src){ productoDataUrl = null; return; }
+  productoDataUrl = await imgToDataURL(fotoCake.src);
+}
+
+async function cargarLogoDesdeCarpetaImg(){
+  // Intenta con varios nombres comunes de logo sin romper si no existe
+  for(const path of LOGO_CANDIDATOS){
+    const data = await imgToDataURL(path);
+    if(data){
+      logoDataUrl = data;
+      return true;
+    }
+  }
+  logoDataUrl = null;
+  return false;
+}
+
+async function mostrarImagen(){
+  const sab = sabor.value;
+  const t = tamano.value;
+  if(!sab || !t){
+    preview.style.display = "none";
+    productoDataUrl = null;
+    return;
+  }
+
+  const ruta = imagenes[sab];
+  if(!ruta){
+    preview.style.display = "none";
+    productoDataUrl = null;
+    return;
+  }
+
+  preview.style.display = "block";
+  nombreCake.textContent = sab;
+  pillSize.textContent = `${t}”`;
+  porcionesText.textContent = `👥 ${porcionesTxt[t] || "—"}`;
+
+  fotoCake.src = ruta;
+
+  imagenPublica = window.location.origin + "/" + ruta;
+
+  setTimeout(async ()=>{ await prepararImagenProducto(); }, 180);
+}
+
+// =====================
+// WHATSAPP
+// =====================
+function enviarWhatsApp(){
+  if(!validarSeleccion()) return;
+
+  const p = totalEl.textContent;
+  const t = tamano.value;
+  const s = sabor.value;
+  const por = porcionesTxt[t] || "-";
+
+  const foto = imagenPublica
+    ? `%0A📸 Foto (si está disponible):%0A${encodeURIComponent(imagenPublica)}`
+    : "";
+
+  const mensaje =
+    `Hola 👋✨%0A` +
+    `Vi esta opción en el menú de *Cake Fit* y me gustaría pedirla 🎂💚%0A%0A` +
+    `📌 *Cake de vitrina*%0A` +
+    `📏 Tamaño: ${t}”%0A` +
+    `👥 Porciones: ${por}%0A` +
+    `🎂 Sabor: ${encodeURIComponent(s)}%0A` +
+    `💵 Precio: $${p}` +
+    foto;
+
+  window.open(`https://wa.me/50768636913?text=${mensaje}`, "_blank");
+}
+
+// =====================
+// EVENTOS
+// =====================
+tamano.addEventListener("change", async ()=>{
+  actualizarSabores();
+  mostrarPorciones();
+  calcularPrecio();
+  await mostrarImagen();
+});
+
+sabor.addEventListener("change", async ()=>{
+  calcularPrecio();
+  await mostrarImagen();
+});
+
+$("btnWhats").addEventListener("click", enviarWhatsApp);
+
+// init
+actualizarResumen();
+
+// Cargar logo automáticamente (no bloquea si no existe)
+cargarLogoDesdeCarpetaImg();
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+// =====================
+// PDF COTIZACIÓN (CON FOTO + MÉTODOS DE PAGO AL FINAL SUAVE)
+// =====================
+document.getElementById("btnPDF").addEventListener("click", async ()=>{
+  if(!validarSeleccion()) return;
+
+  // Asegura imagen producto y logo
+  if(!productoDataUrl) await prepararImagenProducto();
+  if(!logoDataUrl) { try{ await cargarLogoDesdeCarpetaImg(); }catch(e){} }
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({orientation:"portrait", unit:"mm", format:"a4"});
+
+  const pageW = 210;
+  const margen = 18;
+
+  const verde = [47,125,87];
+  const dorado = [201,162,77];
+  const gris = [90,105,98];
+
+  const today = new Date();
+  const fecha = today.toLocaleDateString("es-PA", {year:"numeric", month:"2-digit", day:"2-digit"});
+
+  // HEADER
+  doc.setFillColor(...verde);
+  doc.rect(0, 0, pageW, 38, "F");
+
+  // Logo desde /img (automático)
+  if(logoDataUrl){
+    try{ doc.addImage(logoDataUrl, "JPEG", margen, 6, 28, 28); }catch(e){}
+  }else{
+    doc.setTextColor(255,255,255);
+    doc.setFont("helvetica","bold");
+    doc.setFontSize(14);
+    doc.text("CF", margen+5, 22);
+  }
+
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(18);
+  doc.setTextColor(...dorado);
+  doc.text("COTIZACIÓN", pageW/2, 16, {align:"center"});
+
+  doc.setFont("helvetica","normal");
+  doc.setFontSize(11);
+  doc.setTextColor(255,255,255);
+  doc.text("Cake Fit · Cakes de vitrina", pageW/2, 26, {align:"center"});
+
+  doc.setTextColor(...gris);
+  doc.setFontSize(10);
+  doc.text(`Fecha: ${fecha}`, pageW - margen, 46, {align:"right"});
+
+  // PANEL DETALLES
+  let y = 54;
+  doc.setDrawColor(...verde);
+  doc.setFillColor(233,245,239);
+  doc.roundedRect(margen, y, pageW - margen*2, 128, 4, 4, "F");
+
+  doc.setFont("helvetica","bold");
+  doc.setTextColor(...verde);
+  doc.setFontSize(12);
+  doc.text("Detalles del pedido", margen+6, y+10);
+
+  doc.setFont("helvetica","normal");
+  doc.setTextColor(30,30,30);
+  doc.setFontSize(11);
+
+  const t = document.getElementById("tamano").value;
+  const s = document.getElementById("sabor").value;
+  const por = ({"6":"6–8","7":"8–10","8":"12–15","9":"16–20"}[t] || "-") + " porciones";
+  const total = document.getElementById("total").textContent;
+
+  const leftX = margen + 10;
+  let lineY = y + 24;
+  const lineH = 8;
+
+  const rows = [
+    ["Tipo", "Cake de vitrina"],
+    ["Tamaño", `${t}”`],
+    ["Porciones", por],
+    ["Sabor", s]
+  ];
+
+  rows.forEach(([k,v])=>{
+    doc.setTextColor(...gris);
+    doc.text(`${k}:`, leftX, lineY);
+    doc.setTextColor(20,20,20);
+    doc.text(String(v), leftX + 32, lineY);
+    lineY += lineH;
+  });
+
+  // FOTO DEL PRODUCTO
+  if(productoDataUrl){
+    try{
+      doc.setFont("helvetica","bold");
+      doc.setTextColor(...verde);
+      doc.setFontSize(11);
+      doc.text("Foto referencial", margen+6, y+74);
+
+      doc.setDrawColor(220,220,220);
+      doc.setFillColor(255,255,255);
+      doc.roundedRect(margen+6, y+78, 90, 60, 4, 4, "FD");
+
+      doc.addImage(productoDataUrl, "JPEG", margen+8, y+80, 86, 56);
+    }catch(e){}
+  }
+
+  // TOTAL
+  const boxY = y + 142;
+  doc.setFillColor(...verde);
+  doc.roundedRect(margen, boxY, pageW - margen*2, 26, 5, 5, "F");
+  doc.setTextColor(255,255,255);
+  doc.setFont("helvetica","normal");
+  doc.setFontSize(11);
+  doc.text("Total estimado", margen+10, boxY+11);
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(18);
+  doc.text(`$${total}`, pageW - margen - 10, boxY+17, {align:"right"});
+
+  // ==========================
+  // MÉTODOS DE PAGO (SUAVE, NO INVASIVO)
+  // ==========================
+  let payY = boxY + 36;
+
+  // Línea divisoria
+  doc.setDrawColor(220,220,220);
+  doc.line(margen, payY, pageW - margen, payY);
+  payY += 8;
+
+  // Título suave
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(10.5);
+  doc.setTextColor(...gris);
+  doc.text("Métodos de pago (Cake Fit)", margen, payY);
+  payY += 6;
+
+  doc.setFont("helvetica","normal");
+  doc.setFontSize(9.5);
+  doc.setTextColor(90,90,90);
+
+  const lines = [
+    "Yappy: 6863-6913 (Yappy Personal) – Titular: Ronny Colmenares",
+    "Pago con tarjeta: link de pago",
+    "Banco General (Cuenta de Ahorros): 04-05-98-312161-7 – Titular: Ronny Colmenares",
+    "Únicamente Tipo Express",
+  ];
+
+  lines.forEach((txt)=>{
+    doc.text("• " + txt, margen, payY, {maxWidth: pageW - margen*2});
+    payY += 5.5;
+  });
+
+  payY += 2;
+
+  // Importante (en recuadro suave)
+  doc.setFillColor(250, 247, 236); // fondo suave
+  doc.setDrawColor(209, 162, 61);  // dorado
+  doc.roundedRect(margen, payY, pageW - margen*2, 18, 4, 4, "FD");
+
+  doc.setFont("helvetica","bold");
+  doc.setTextColor(110, 80, 20);
+  doc.setFontSize(9.5);
+  doc.text("IMPORTANTE", margen + 6, payY + 6);
+
+  doc.setFont("helvetica","normal");
+  doc.setTextColor(90,90,90);
+  doc.setFontSize(9);
+  doc.text("• El pago debe ser completo.", margen + 6, payY + 12);
+  doc.text("• El pedido será procesado al recibir el comprobante de pago.", margen + 6, payY + 16);
+
+  payY += 24;
+
+  // Nota final (suave)
+  doc.setFont("helvetica","bold");
+  doc.setTextColor(120,60,60);
+  doc.setFontSize(9.5);
+  doc.text("NO REALIZAMOS DEDICATORIAS", margen, payY);
+
+  // FOOTER
+  doc.setDrawColor(220,220,220);
+  doc.line(margen, 282, pageW - margen, 282);
+  doc.setTextColor(...gris);
+  doc.setFontSize(9);
+  doc.setFont("helvetica","normal");
+  doc.text("Cake Fit · Gracias por preferirnos 🎂", pageW/2, 290, {align:"center"});
+
+  doc.save("Cotizacion_CakeFit_Vitrina.pdf");
+});
+</script>
+
+</body>
+</html>

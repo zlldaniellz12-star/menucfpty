@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cake Fit | Admin</title>
+  <style>
+    :root{
+      --verde:#2f7d57;
+      --verde-oscuro:#245f43;
+      --dorado:#c9a24d;
+      --fondo:#f4faf7;
+      --texto:#1f2a24;
+      --gris:#5b6b62;
+      --borde:#dfe8e2;
+      --sombra:0 18px 40px rgba(0,0,0,.10);
+      --radio:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--texto);
+      background:
+        radial-gradient(1000px 520px at 10% 5%, rgba(47,125,87,.14), transparent 60%),
+        radial-gradient(900px 480px at 90% 0%, rgba(201,162,77,.12), transparent 55%),
+        linear-gradient(180deg, var(--fondo), #ffffff);
+      padding:22px;
+    }
+    .wrap{max-width:1100px;margin:0 auto}
+    .top{
+      display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;
+      margin-bottom:16px;
+    }
+    h1{
+      margin:0;
+      font-size:38px;
+      font-weight:950;
+      color:var(--verde-oscuro);
+    }
+    .sub{margin:6px 0 0;color:var(--gris);font-size:14px}
+    .btn{
+      border:0;border-radius:14px;padding:10px 14px;font-weight:950;cursor:pointer;
+      background:var(--verde);color:#fff;box-shadow:0 12px 26px rgba(47,125,87,.25);
+    }
+    .btnGhost{
+      background:#fff;color:var(--texto);border:1px solid var(--borde);box-shadow:0 10px 24px rgba(0,0,0,.06);
+    }
+    .layout{
+      display:grid;
+      grid-template-columns: 330px 1fr;
+      gap:16px;
+    }
+    @media (max-width: 900px){
+      .layout{grid-template-columns:1fr}
+    }
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid var(--borde);
+      border-radius:18px;
+      box-shadow:0 14px 30px rgba(0,0,0,.08);
+      overflow:hidden;
+    }
+    .panelHead{
+      padding:14px 14px 12px;
+      border-bottom:1px solid var(--borde);
+      background:linear-gradient(180deg, rgba(47,125,87,.08), rgba(255,255,255,.92));
+      font-weight:950;
+      color:var(--verde-oscuro);
+      display:flex;justify-content:space-between;align-items:center;gap:10px;
+    }
+    .list{padding:8px;display:flex;flex-direction:column;gap:8px}
+    .item{
+      padding:10px 12px;border-radius:14px;border:1px solid var(--borde);background:#fff;
+      cursor:pointer;font-weight:900;
+      display:flex;justify-content:space-between;gap:10px;align-items:center;
+    }
+    .item small{color:var(--gris);font-weight:800}
+    .item.active{border-color:rgba(47,125,87,.45);box-shadow:0 10px 18px rgba(47,125,87,.10)}
+    .editor{padding:14px}
+    .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:10px}
+    .pill{
+      border:1px solid var(--borde);
+      background:white;
+      border-radius:14px;
+      padding:10px 12px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .pill label{font-size:12px;color:var(--gris);font-weight:900;text-transform:uppercase;letter-spacing:.35px}
+    select{
+      border:0;outline:none;background:transparent;
+      font-weight:900;color:var(--texto);cursor:pointer;
+    }
+    .help{
+      margin-top:10px;
+      color:var(--gris);
+      font-size:13px;
+      line-height:1.45;
+    }
+    .toast{
+      position:fixed;left:50%;bottom:16px;transform:translateX(-50%);
+      background:#1f2a24;color:#fff;padding:10px 12px;border-radius:12px;
+      display:none;font-weight:900;box-shadow:0 16px 40px rgba(0,0,0,.2);
+    }
+    .backLink{ text-decoration:none; }
+  </style>
+</head>
+<body>
+  <script>
+  const PASSWORD = "danielg"; // ← cambia aquí tu contraseña
+
+  const userPass = prompt("🔐 Área privada\nIngresa la contraseña:");
+
+  if (userPass !== PASSWORD) {
+    alert("Contraseña incorrecta");
+    window.location.href = "menu.html"; // redirige al menú
+  }
+</script>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <h1>Admin · Disponibilidad</h1>
+        <p class="sub">Marca por tamaño si está <strong>Disponible</strong>, <strong>Bajo pedido</strong> o <strong>No disponible</strong>. Se guarda en tu navegador (localStorage).</p>
+      </div>
+      <div class="row">
+        <a class="btn btnGhost backLink" href="menu.html">← Volver al menú</a>
+        <button class="btn btnGhost" id="resetBtn">Reiniciar</button>
+        <button class="btn" id="saveBtn">Guardar</button>
+      </div>
+    </div>
+
+    <div class="layout">
+      <div class="panel">
+        <div class="panelHead">
+          <span>Cakes</span>
+          <small id="countLbl"></small>
+        </div>
+        <div class="list" id="cakeList"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panelHead">
+          <span id="editorTitle">Selecciona un cake</span>
+          <small id="editorId"></small>
+        </div>
+        <div class="editor">
+          <div id="editorBody" style="display:none;">
+            <div class="row" id="sizeRows"></div>
+
+            <div class="help">
+              Tip: “Bajo pedido” es ideal para sabores que puedes hacer con tiempo.
+              “No disponible” lo oculta como opción para ese tamaño (igual se muestra el estado en el menú).
+            </div>
+          </div>
+
+          <div id="emptyState" class="help">
+            Selecciona un producto a la izquierda para editar sus tamaños.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Guardado ✅</div>
+
+<script>
+  const INVKEY = "cakefit_inventory_v1";
+
+  // Lista tomada de menu.html (id + name)
+  const CAKES = [
+    { id:"triple-chocolate", name:"Triple Chocolate" },
+    { id:"guineo", name:"Guineo" },
+    { id:"choco-maracuya", name:"Choco-maracuyá" },
+    { id:"zanahoria-almendra", name:"Zanahoria Almendra" },
+    { id:"chocolate-pistacho", name:"ChocoPistacho (DUBAI)" },
+    { id:"zanahoria-pistacho", name:"Zanahoria Pistacho" },
+    { id:"pina", name:"Piña" },
+    { id:"selva-negra-keto", name:"Selva Negra Keto" },
+    { id:"zanahoria-avena", name:"Zanahoria en Avena" },
+    { id:"vainilla-keto", name:"Vainilla Keto" },
+    { id:"red-velvet-keto", name:"Red Velvet Keto" },
+    { id:"red-velvet-avena", name:"Red Velvet Avena" },
+  ];
+
+  const SIZES = ["6","7","8","9"];
+  const STATES = [
+    { key:"disponible", label:"Disponible" },
+    { key:"bajo_pedido", label:"Bajo pedido" },
+    { key:"no_disponible", label:"No disponible" },
+  ];
+
+  const $ = (s)=>document.querySelector(s);
+
+  function loadInventory(){
+    try{
+      const raw = localStorage.getItem(INVKEY);
+      return raw ? JSON.parse(raw) : {};
+    }catch(e){ return {}; }
+  }
+  function saveInventory(inv){
+    localStorage.setItem(INVKEY, JSON.stringify(inv));
+  }
+
+  let inv = loadInventory();
+  let activeId = null;
+
+  function toast(msg){
+    const t = $("#toast");
+    t.textContent = msg;
+    t.style.display = "block";
+    clearTimeout(window.__t);
+    window.__t = setTimeout(()=> t.style.display="none", 1200);
+  }
+
+  function stateFor(cakeId, sizeKey){
+    return inv?.[cakeId]?.sizes?.[sizeKey] || "disponible";
+  }
+
+  function setState(cakeId, sizeKey, stateKey){
+    if(!inv[cakeId]) inv[cakeId] = { sizes:{} };
+    if(!inv[cakeId].sizes) inv[cakeId].sizes = {};
+    inv[cakeId].sizes[sizeKey] = stateKey;
+  }
+
+  function renderList(){
+    const list = $("#cakeList");
+    list.innerHTML = "";
+    CAKES.forEach(c=>{
+      const div = document.createElement("div");
+      div.className = "item" + (c.id===activeId ? " active": "");
+      div.innerHTML = `<span>${c.name}</span><small>${c.id}</small>`;
+      div.addEventListener("click", ()=> selectCake(c.id));
+      list.appendChild(div);
+    });
+    $("#countLbl").textContent = `${CAKES.length} items`;
+  }
+
+  function renderEditor(){
+    const cake = CAKES.find(c=>c.id===activeId);
+    if(!cake){
+      $("#editorTitle").textContent = "Selecciona un cake";
+      $("#editorId").textContent = "";
+      $("#editorBody").style.display = "none";
+      $("#emptyState").style.display = "block";
+      return;
+    }
+
+    $("#editorTitle").textContent = cake.name;
+    $("#editorId").textContent = cake.id;
+    $("#editorBody").style.display = "block";
+    $("#emptyState").style.display = "none";
+
+    const sizeRows = $("#sizeRows");
+    sizeRows.innerHTML = "";
+
+    SIZES.forEach(sz=>{
+      const wrap = document.createElement("div");
+      wrap.className = "pill";
+      const sel = document.createElement("select");
+
+      STATES.forEach(st=>{
+        const opt = document.createElement("option");
+        opt.value = st.key;
+        opt.textContent = st.label;
+        sel.appendChild(opt);
+      });
+
+      sel.value = stateFor(cake.id, sz);
+      sel.addEventListener("change", ()=> setState(cake.id, sz, sel.value));
+
+      wrap.innerHTML = `<label>${sz}”</label>`;
+      wrap.appendChild(sel);
+      sizeRows.appendChild(wrap);
+    });
+  }
+
+  function selectCake(id){
+    activeId = id;
+    renderList();
+    renderEditor();
+  }
+
+  // Buttons
+  $("#saveBtn").addEventListener("click", ()=>{
+    saveInventory(inv);
+    toast("Guardado ✅");
+  });
+
+  $("#resetBtn").addEventListener("click", ()=>{
+    if(confirm("¿Reiniciar disponibilidad? Esto borrará lo guardado en este navegador.")){
+      inv = {};
+      saveInventory(inv);
+      activeId = null;
+      renderList();
+      renderEditor();
+      toast("Reiniciado");
+    }
+  });
+
+  // Init
+  renderList();
+  renderEditor();
+</script>
+</body>
+</html>

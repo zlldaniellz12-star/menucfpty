@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Admin | Cake Fit</title>
+  <style>
+    body{font-family:system-ui;margin:0;padding:16px;background:#f6fbf8}
+    .wrap{max-width:1100px;margin:auto}
+    .top{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+    .card{background:#fff;border:1px solid #dfe8e2;border-radius:16px;padding:14px;margin-top:12px}
+    .grid{display:grid;grid-template-columns:1.2fr 1fr;gap:12px}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}}
+    input,select,button{padding:10px;border-radius:12px;border:1px solid #dfe8e2}
+    button{cursor:pointer;font-weight:800}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .list{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    @media(max-width:900px){.list{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:600px){.list{grid-template-columns:1fr}}
+    .item{border:1px solid #dfe8e2;border-radius:14px;padding:10px}
+    .item h3{margin:0 0 8px}
+    .small{font-size:.9rem;color:#5b6b62}
+    .sizes{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
+    .pill{display:flex;align-items:center;gap:8px;border:1px solid #dfe8e2;border-radius:999px;padding:8px 10px}
+    .pill input{margin:0}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div>
+      <h2 style="margin:0">Admin Cake Fit</h2>
+      <div class="small">Edita productos, tamaños, precios e imágenes. Guarda en este navegador.</div>
+    </div>
+    <div class="row">
+      <button id="btnSave">Guardar</button>
+      <button id="btnReset">Restaurar default</button>
+      <button id="btnExport">Exportar JSON</button>
+      <label class="pill">
+        <input type="file" id="importFile" accept="application/json"/>
+        Importar JSON
+      </label>
+      <button onclick="location.href='index.html'">Volver</button>
+    </div>
+  </div>
+
+  <div class="card grid">
+    <div>
+      <h3 style="margin:0 0 8px">Extras</h3>
+      <label class="pill">
+        <input type="checkbox" id="almondEnabled"> Harina de almendras (activar)
+      </label>
+      <div class="row" style="margin-top:8px">
+        <div class="small">Extra por tamaño:</div>
+        <input id="a6" type="number" step="0.01" placeholder="6”">
+        <input id="a7" type="number" step="0.01" placeholder="7”">
+        <input id="a8" type="number" step="0.01" placeholder="8”">
+        <input id="a9" type="number" step="0.01" placeholder="9”">
+      </div>
+    </div>
+    <div>
+      <h3 style="margin:0 0 8px">Agregar nuevo producto</h3>
+      <div class="row">
+        <input id="newName" placeholder="Nombre (ej: Choco Pistacho)" style="flex:1">
+        <input id="newImg" placeholder="Ruta imagen (ej: img/choco.png)" style="flex:1">
+        <button id="btnAdd">Agregar</button>
+      </div>
+      <div class="small" style="margin-top:8px">
+        Tip: para cambiar imagen, solo pon el nombre correcto (ej: <b>img/choco-maracuya.png</b>)
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 10px">Productos</h3>
+    <div class="list" id="list"></div>
+  </div>
+</div>
+
+<script src="config.default.js"></script>
+<script>
+const LS_KEY = "cakefit_config_v1";
+
+function loadConfig(){
+  const saved = localStorage.getItem(LS_KEY);
+  return saved ? JSON.parse(saved) : structuredClone(window.CAKEFIT_DEFAULT);
+}
+function saveConfig(cfg){
+  cfg.updatedAt = new Date().toISOString();
+  localStorage.setItem(LS_KEY, JSON.stringify(cfg));
+}
+function resetConfig(){
+  localStorage.removeItem(LS_KEY);
+  location.reload();
+}
+
+let cfg = loadConfig();
+
+const list = document.getElementById("list");
+const almondEnabled = document.getElementById("almondEnabled");
+const a6=document.getElementById("a6"), a7=document.getElementById("a7"), a8=document.getElementById("a8"), a9=document.getElementById("a9");
+
+function renderExtras(){
+  almondEnabled.checked = !!cfg.extras.almondFlour.enabled;
+  a6.value = cfg.extras.almondFlour.bySize["6"] ?? "";
+  a7.value = cfg.extras.almondFlour.bySize["7"] ?? "";
+  a8.value = cfg.extras.almondFlour.bySize["8"] ?? "";
+  a9.value = cfg.extras.almondFlour.bySize["9"] ?? "";
+}
+
+function renderItems(){
+  list.innerHTML = "";
+  cfg.items.forEach((it, idx)=>{
+    const el = document.createElement("div");
+    el.className = "item";
+    el.innerHTML = `
+      <h3 contenteditable="true" data-k="name">${it.name}</h3>
+      <div class="small">ID: <b>${it.id}</b></div>
+      <div class="row" style="margin-top:8px">
+        <label class="pill"><input type="checkbox" data-k="available" ${it.available?"checked":""}> Disponible</label>
+        <label class="pill"><input type="checkbox" data-tag="dairyFree" ${it.tags?.dairyFree?"checked":""}> Sin Lácteos</label>
+        <label class="pill"><input type="checkbox" data-tag="glutenFree" checked disabled> Sin Gluten (TODOS)</label>
+        <label class="pill"><input type="checkbox" data-tag="sugarFree" checked disabled> Sin Azúcar (TODOS)</label>
+      </div>
+
+      <div class="row" style="margin-top:8px">
+        <input data-k="img" value="${it.img}" style="flex:1" />
+        <button data-act="del" style="background:#fff;border:1px solid #ffd7d7">Eliminar</button>
+      </div>
+
+      <div class="sizes">
+        ${["6","7","8","9"].map(sz=>{
+          const s = it.sizes?.[sz] || {enabled:false, price:null, pax:""};
+          return `
+            <div style="border:1px solid #dfe8e2;border-radius:14px;padding:10px">
+              <div class="row" style="justify-content:space-between">
+                <b>${sz}”</b>
+                <label class="pill"><input type="checkbox" data-size="${sz}" ${s.enabled?"checked":""}> Activo</label>
+              </div>
+              <div class="row" style="margin-top:8px">
+                <input type="number" step="0.01" data-price="${sz}" placeholder="Precio" value="${s.price ?? ""}" style="width:120px">
+                <input data-pax="${sz}" placeholder="Pax (ej: 17–20 pax)" value="${s.pax ?? ""}" style="flex:1">
+              </div>
+            </div>
+          `;
+        }).join("")}
+      </div>
+    `;
+
+    // listeners
+    el.addEventListener("input", (e)=>{
+      const t = e.target;
+      if(t.matches("[data-k='img']")) it.img = t.value.trim();
+      if(t.matches("[data-pax]")){
+        const sz = t.getAttribute("data-pax");
+        it.sizes[sz].pax = t.value;
+      }
+      if(t.matches("[data-price]")){
+        const sz = t.getAttribute("data-price");
+        const v = t.value.trim();
+        it.sizes[sz].price = v==="" ? null : Number(v);
+      }
+      if(t.matches("[contenteditable][data-k='name']")){
+        it.name = t.textContent.trim();
+      }
+    });
+
+    el.addEventListener("change",(e)=>{
+      const t=e.target;
+      if(t.matches("[data-k='available']")) it.available = t.checked;
+      if(t.matches("[data-tag='dairyFree']")){
+        it.tags = it.tags || {};
+        it.tags.dairyFree = t.checked;
+      }
+      if(t.matches("[data-size]")){
+        const sz=t.getAttribute("data-size");
+        it.sizes[sz].enabled = t.checked;
+      }
+    });
+
+    el.querySelector("[data-act='del']").addEventListener("click",()=>{
+      cfg.items.splice(idx,1);
+      renderItems();
+    });
+
+    list.appendChild(el);
+  });
+}
+
+function slug(s){ return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,""); }
+
+document.getElementById("btnAdd").addEventListener("click",()=>{
+  const name = document.getElementById("newName").value.trim();
+  const img = document.getElementById("newImg").value.trim();
+  if(!name) return;
+
+  const id = slug(name);
+  cfg.items.push({
+    id, name,
+    img: img || "img/logo.jpg",
+    tags:{ glutenFree:true, sugarFree:true, dairyFree:false },
+    available:true,
+    sizes:{
+      "6":{enabled:false,price:null,pax:"6–9 pax"},
+      "7":{enabled:false,price:null,pax:"10–12 pax"},
+      "8":{enabled:false,price:null,pax:"13–16 pax"},
+      "9":{enabled:false,price:null,pax:"17–20 pax"},
+    }
+  });
+
+  document.getElementById("newName").value="";
+  document.getElementById("newImg").value="";
+  renderItems();
+});
+
+document.getElementById("btnSave").addEventListener("click",()=>{
+  cfg.extras.almondFlour.enabled = almondEnabled.checked;
+  cfg.extras.almondFlour.bySize["6"] = Number(a6.value||0);
+  cfg.extras.almondFlour.bySize["7"] = Number(a7.value||0);
+  cfg.extras.almondFlour.bySize["8"] = Number(a8.value||0);
+  cfg.extras.almondFlour.bySize["9"] = Number(a9.value||0);
+  saveConfig(cfg);
+  alert("Guardado ✅");
+});
+
+document.getElementById("btnReset").addEventListener("click", resetConfig);
+
+document.getElementById("btnExport").addEventListener("click",()=>{
+  const blob = new Blob([JSON.stringify(cfg,null,2)], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "cakefit-config.json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+
+document.getElementById("importFile").addEventListener("change",(e)=>{
+  const f = e.target.files?.[0];
+  if(!f) return;
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    try{
+      cfg = JSON.parse(reader.result);
+      saveConfig(cfg);
+      location.reload();
+    }catch(err){
+      alert("JSON inválido");
+    }
+  };
+  reader.readAsText(f);
+});
+
+almondEnabled.addEventListener("change",()=>{ /* se guarda al guardar */ });
+
+renderExtras();
+renderItems();
+</script>
+</body>
+</html>

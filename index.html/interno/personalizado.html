@@ -1,0 +1,3158 @@
+<!-- ===========================
+     eventos.html (COMPLETO)
+     Cake Fit · Cake 1–3 pisos (Eventos)
+
+     ✅ Orden solicitado: Pisos -> Altura -> Harina -> Bizcocho -> Relleno/Cobertura -> Foto -> (resto)
+     ✅ Si es 1 piso: NO sabores por piso (solo 1 sabor) + NO rellenos por piso (solo 1 relleno)
+     ✅ Si es 2–3 pisos: opción "mismo sabor" y "mismo relleno" o por piso
+     ✅ Altura: Normal / Alto
+        - Alto: Total = total * 1.5
+        - Alto: Porciones x2
+     ✅ Estilo: Liso / Naked / Semi-Naked (afecta el 3D)
+     ✅ Cobertura cambia el color del cake 3D (maracuyá amarillo, yogurt/coco blanco, chocolate, pistacho verde, limón hueso, vainilla crema, dulce de leche caramelo)
+     ✅ Foto referencia: se muestra en vista previa + en PDF (pequeña al lado de sabores)
+     ✅ PDF más “factura”: muestra SOLO
+        - Total del cake
+        - Delivery (monto asesor)
+        - Total general
+        + Cliente / Teléfono / Fecha / Detalles
+     ✅ Pagos en PDF: SOLO Yappy + "ACH" (título) + "Link de pago"
+     ✅ WhatsApp: SIN EMOJIS, con negritas importantes + # y nombre cliente
+     ✅ “Ver imágenes de referencia” (usa img/…; puedes cambiar la lista de archivos)
+
+     NOTA: No borro tu lógica base, pero sí la reorganicé y mejoré el 3D.
+     =========================== -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  
+  <script src="config.default.js"></script>
+<script>
+  const LSKEY = "cakefit_config_v1";
+  function loadConfig(){
+    const saved = localStorage.getItem(LSKEY);
+    return saved ? JSON.parse(saved) : window.CAKEFIT_DEFAULT;
+  }
+  window.CAKEFIT_CONFIG = loadConfig();
+</script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cake Fit | Cake 1–3 pisos</title>
+
+<style>
+:root{
+  --verde:#2f7d57;
+  --verde-oscuro:#245f43;
+  --dorado:#c9a24d;
+
+  --fondo:#f4faf7;
+  --texto:#1f2a24;
+  --gris:#5b6b62;
+  --borde:#dfe8e2;
+
+  --sombra:0 18px 40px rgba(0,0,0,.10);
+  --radio:18px;
+  --verde-claro:#e9f5ef;
+
+  /* Cake colors (se actualizan por cobertura) */
+  --cake-top:#f6efe7;
+  --cake-base:#f3e8de;
+  --cake-side:#ead9cd;
+  --cake-deep:#d7c1b3;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  color:var(--texto);
+  background:
+    radial-gradient(900px 450px at 15% 8%, rgba(47,125,87,.14), transparent 60%),
+    radial-gradient(900px 450px at 90% 12%, rgba(201,162,77,.15), transparent 60%),
+    linear-gradient(180deg,var(--fondo),#ffffff 55%);
+  min-height:100vh;
+  padding:24px 16px 40px;
+}
+
+.wrapper{
+  max-width:1240px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns: 1.25fr .95fr;
+  gap:18px;
+}
+@media (max-width: 980px){ .wrapper{grid-template-columns:1fr} }
+
+.card{
+  background:rgba(255,255,255,.93);
+  border:1px solid var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  overflow:hidden;
+}
+
+.header{
+  padding:20px 22px 16px;
+  background: linear-gradient(135deg, rgba(47,125,87,.13), rgba(201,162,77,.10));
+  border-bottom:1px solid var(--borde);
+}
+.header h1{ margin:0; font-size:18px; color:var(--verde-oscuro); }
+.header p{
+  margin:6px 0 0;
+  color:var(--gris);
+  font-size:13px;
+  line-height:1.35;
+}
+
+.content{ padding:18px 22px 22px; }
+
+.section{
+  border:1px solid var(--borde);
+  background:#fff;
+  border-radius:16px;
+  padding:14px;
+  margin-bottom:14px;
+}
+
+.sectionTitle{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:10px;
+}
+.sectionTitle h2{ margin:0; font-size:14px; color:var(--verde-oscuro); }
+.helper{ font-size:12px; color:var(--gris); }
+
+.grid2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+@media (max-width: 560px){ .grid2{grid-template-columns:1fr} }
+
+label{
+  display:block;
+  font-weight:900;
+  color:var(--texto);
+  font-size:13px;
+  margin-bottom:6px;
+}
+
+select, input[type="text"], input[type="number"], input[type="file"], textarea{
+  width:100%;
+  padding:12px 12px;
+  border-radius:14px;
+  border:1px solid var(--borde);
+  background:#fff;
+  font-size:14px;
+  outline:none;
+  transition: box-shadow .2s ease, border-color .2s ease;
+}
+textarea{ min-height:92px; resize:vertical; }
+
+/* Fecha y hora (más amigable) */
+.dtInput{
+  padding-left:44px !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%235b6b62' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='16' y1='2' x2='16' y2='6'/%3E%3Cline x1='8' y1='2' x2='8' y2='6'/%3E%3Cline x1='3' y1='10' x2='21' y2='10'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:14px 50%;
+  background-size:20px 20px;
+}
+.dtInput::-webkit-calendar-picker-indicator{
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+
+select:focus, input:focus, textarea:focus{
+  border-color: rgba(47,125,87,.55);
+  box-shadow: 0 0 0 4px rgba(47,125,87,.12);
+}
+
+.small{
+  margin-top:8px;
+  font-size:12px;
+  color:var(--gris);
+  line-height:1.4;
+}
+
+.warn{
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:14px;
+  background: rgba(201,162,77,.16);
+  border:1px solid rgba(201,162,77,.28);
+  color:#6a521f;
+  font-size:12.5px;
+  line-height:1.35;
+}
+
+.switchRow{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  padding:10px 12px;
+  border:1px solid var(--borde);
+  border-radius:14px;
+  background:#fff;
+  margin-top:10px;
+}
+.switchRow input{ width:18px; height:18px; }
+.switchRow span{ font-size:13px; font-weight:900; color:var(--texto); }
+
+.badges{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:10px;
+}
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:9px 12px;
+  border-radius:999px;
+  background: var(--verde-claro);
+  border:1px solid rgba(47,125,87,.18);
+  color: var(--verde-oscuro);
+  font-weight:900;
+  font-size:12px;
+}
+.badge.warn{
+  background: rgba(201,162,77,.14);
+  border-color: rgba(201,162,77,.32);
+  color:#6a521f;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:12px;
+  flex-wrap:wrap;
+}
+.btn{
+  flex:1;
+  min-width:160px;
+  appearance:none;
+  border:0;
+  border-radius:14px;
+  padding:13px 14px;
+  font-weight:900;
+  font-size:14px;
+  cursor:pointer;
+  transition: transform .05s ease, box-shadow .2s ease, background .2s ease;
+}
+.btn:active{ transform: translateY(1px); }
+.btnPrimary{
+  background: var(--verde);
+  color:#fff;
+  box-shadow: 0 10px 18px rgba(47,125,87,.18);
+}
+.btnPrimary:hover{ background: var(--verde-oscuro); }
+.btnGhost{
+  background:#fff;
+  border:1px solid var(--borde);
+  color: var(--texto);
+}
+.btnGhost:hover{ box-shadow: 0 10px 18px rgba(0,0,0,.06); }
+
+/* Foto referencia */
+.refWrap{
+  display:grid;
+  grid-template-columns: 1fr 120px;
+  gap:12px;
+  align-items:start;
+}
+@media (max-width: 560px){ .refWrap{ grid-template-columns:1fr; } }
+.refPreview{
+  width:120px;
+  height:120px;
+  border-radius:16px;
+  border:1px dashed var(--borde);
+  background:#fbfdfc;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  color:var(--gris);
+  font-size:12px;
+  font-weight:900;
+}
+.refPreview img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+/* ===== Preview Cake (MEJORADO) ===== */
+.previewWrap{ padding:18px 18px 20px; }
+
+/* === Sticky panel derecha (3D + vista previa) === */
+.stickyPreview{
+  position: sticky;
+  top: 16px;
+  align-self: start;
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+}
+@media (max-width: 980px){
+  .stickyPreview{
+    position: static;
+    max-height: none;
+    overflow: visible;
+  }
+}
+
+.previewCard{
+  border:1px solid var(--borde);
+  border-radius:18px;
+  background:#fff;
+  overflow:hidden;
+}
+
+.previewHead{
+  padding:14px 14px 12px;
+  border-bottom:1px solid var(--borde);
+  background:#fbfdfc;
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:flex-start;
+}
+.previewHead b{ color:var(--verde-oscuro); font-size:14px; }
+.previewHead .meta{ color:var(--gris); font-size:12px; margin-top:4px; }
+.kpi{
+  text-align:right;
+  font-size:12px;
+  color:var(--gris);
+}
+.kpi strong{
+  display:block;
+  color:var(--verde-oscuro);
+  font-size:16px;
+  margin-top:2px;
+}
+
+.previewStage{
+  padding:18px 14px 18px;
+  background:
+    radial-gradient(520px 220px at 50% 18%, rgba(47,125,87,.10), transparent 70%),
+    radial-gradient(520px 220px at 50% 78%, rgba(201,162,77,.10), transparent 70%),
+    linear-gradient(180deg, #fff, #fbfbfb);
+  display:flex;
+  justify-content:center;
+  align-items:flex-end;
+  min-height:470px;
+  position:relative;
+}
+
+.shadowFloor{
+  position:absolute;
+  bottom:26px;
+  width:360px;
+  height:40px;
+  background: radial-gradient(closest-side, rgba(0,0,0,.24), transparent 75%);
+  filter: blur(1.8px);
+  opacity:.6;
+}
+
+.cake{
+  width:380px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap: 12px;
+  position:relative;
+  padding-bottom:28px;
+}
+
+/* Plato */
+.basePlate{
+  width:350px;
+  height:18px;
+  border-radius:999px;
+  background: linear-gradient(135deg, #cfd7d1, #f6f8f7);
+  border:1px solid rgba(0,0,0,.12);
+  box-shadow: 0 18px 26px rgba(0,0,0,.12);
+  position:relative;
+  z-index:1;
+}
+.basePlate::after{
+  content:"";
+  position:absolute;
+  inset:4px 12px;
+  border-radius:999px;
+  background: linear-gradient(135deg, rgba(26, 25, 25, 0.85), rgba(255,255,255,.12));
+  opacity:.75;
+}
+.basePlate::after{
+  content:"";
+  position:absolute;
+  inset:4px 12px;
+  border-radius:999px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.85), rgba(255,255,255,.12));
+  opacity:.75;
+}
+.tier{
+  position:relative;
+  width:280px;
+  height:74px;
+  border-radius:20px;
+  border:1px solid rgba(0,0,0,.10);
+  overflow:hidden;
+  z-index:3;
+
+  background:
+    linear-gradient(90deg,
+      rgba(0,0,0,.14) 0%,
+      var(--cake-base) 14%,
+      var(--cake-side) 56%,
+      var(--cake-deep) 100%);
+
+  box-shadow:
+    0 22px 28px rgba(0,0,0,.16),
+    0 2px 0 rgba(255,255,255,.55) inset;
+}
+
+.tier::before{
+  content:"";
+  position:absolute;
+  left:5%;
+  right:5%;
+  top:-18px;
+  height:34px;
+  border-radius:999px;
+  border:1px solid rgba(0,0,0,.12);
+  background:
+    radial-gradient(circle at 30% 35%, rgba(255,255,255,.80), rgba(255,255,255,.15) 62%),
+    linear-gradient(90deg, var(--cake-top) 0%, var(--cake-base) 60%, var(--cake-deep) 100%);
+  box-shadow: 0 16px 22px rgba(0,0,0,.12);
+}
+
+.tier .gloss{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(220px 70px at 30% 22%, rgba(255,255,255,.45), transparent 60%),
+    radial-gradient(220px 70px at 70% 28%, rgba(255,255,255,.22), transparent 65%);
+  opacity:.9;
+}
+
+.tier::after{
+  content:"";
+  position:absolute;
+  left:4%;
+  right:4%;
+  bottom:-12px;
+  height:16px;
+  border-radius:999px;
+  background: radial-gradient(closest-side, rgba(0,0,0,.22), transparent 72%);
+  filter: blur(1.2px);
+  opacity:.45;
+  z-index:-1;
+}
+
+.tierLabel{
+  position:absolute;
+  left:12px;
+  bottom:10px;
+  font-size:11px;
+  font-weight:950;
+  color:rgba(0,0,0,.62);
+  background:rgba(255,255,255,.88);
+  border:1px solid rgba(0,0,0,.12);
+  padding:5px 9px;
+  border-radius:999px;
+}
+.tierFlavor{
+  position:absolute;
+  right:12px;
+  bottom:10px;
+  font-size:11px;
+  font-weight:950;
+  color:rgba(0,0,0,.62);
+  background:rgba(255,255,255,.88);
+  border:1px solid rgba(0,0,0,.12);
+  padding:5px 9px;
+  border-radius:999px;
+  max-width:62%;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.legend{
+  margin:14px;
+  padding:14px;
+  border:1px solid var(--borde);
+  border-radius:16px;
+  background:#ececec;
+  color:var(--texto);
+  font-size:12.5px;
+  line-height:1.35;
+}
+.legend .lgRow{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  padding:6px 0;
+  border-bottom:1px dashed rgba(0,0,0,.10);
+}
+.legend .lgRow:last-child{ border-bottom:none; }
+.legend .lgRow span{ color:var(--gris); font-weight:900; }
+.legend .lgRow b{ color:var(--verde-oscuro); font-weight:950; text-align:right; }
+
+.rowInfo{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  padding:10px 12px;
+  border:1px solid var(--borde);
+  border-radius:14px;
+  background:#fff;
+  margin-top:10px;
+}
+.rowInfo .k{ font-size:12px; color:var(--gris); font-weight:900; }
+.rowInfo .v{ font-size:12px; font-weight:950; color:var(--verde-oscuro); text-align:right; }
+
+.totalBox{
+  margin-top:10px;
+  border-radius: 16px;
+  padding:14px;
+  background: linear-gradient(135deg, var(--verde), var(--dorado));
+  color:white;
+  box-shadow: 0 10px 18px rgba(0,0,0,.12);
+}
+.totalBox .tLabel{ font-size:12px; opacity:.92; }
+.totalBox .tValue{ font-size:26px; font-weight:950; margin-top:6px; }
+
+/* Modal referencias */
+.modalOverlay{
+  position:fixed; inset:0;
+  background: rgba(0,0,0,.45);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  z-index:999;
+}
+.modal{
+  max-width:920px;
+  width:100%;
+  background:#fff;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.25);
+  box-shadow: 0 30px 60px rgba(0,0,0,.24);
+  overflow:hidden;
+}
+.modalHead{
+  padding:12px 14px;
+  border-bottom:1px solid var(--borde);
+  background:#fbfdfc;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+.modalHead b{ color:var(--verde-oscuro); }
+.modalClose{
+  border:1px solid var(--borde);
+  background:#fff;
+  border-radius:12px;
+  padding:9px 12px;
+  font-weight:900;
+  cursor:pointer;
+}
+.modalBody{
+  padding:14px;
+}
+.gallery{
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap:10px;
+}
+@media (max-width: 800px){ .gallery{ grid-template-columns: repeat(2, 1fr); } }
+.thumb{
+  border:1px solid var(--borde);
+  border-radius:14px;
+  overflow:hidden;
+  background:#fbfdfc;
+  cursor:pointer;
+}
+.thumb img{
+  width:100%;
+  height:140px;
+  object-fit:cover;
+  display:block;
+}
+.thumb .cap{
+  padding:8px 10px;
+  font-size:12px;
+  color:var(--gris);
+  font-weight:900;
+}
+
+/* === Paleta pastel (desactivada: usamos solo Barra de tonos) === */
+.palette{ display:none !important; }
+
+.palette{ display:flex; flex-wrap:wrap; gap:10px; }
+.palBtn{
+  width:34px;height:34px;border-radius:12px;border:1px solid rgba(0,0,0,.10);
+  cursor:pointer; position:relative; box-shadow:0 8px 18px rgba(0,0,0,.10);
+}
+.palBtn[aria-pressed="true"]::after{
+  content:"✓"; position:absolute; inset:0; display:grid; place-items:center;
+  font-weight:900; color:#111; text-shadow:0 1px 0 rgba(255,255,255,.65);
+}
+
+/* === Barra de tonos (muchos colores) === */
+.toneRow{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+#hueBar{
+  -webkit-appearance:none;
+  appearance:none;
+  width:100%;
+  height:16px;
+  border-radius:999px;
+  border:1px solid rgba(0,0,0,.10);
+  background: linear-gradient(90deg,
+    #ff0000 0%,
+    #ffff00 15%,
+    #00ff00 33%,
+    #00ffff 50%,
+    #0000ff 66%,
+    #ff00ff 83%,
+    #ff0000 100%
+  );
+  box-shadow:0 10px 24px rgba(0,0,0,.06);
+}
+#hueBar::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  appearance:none;
+  width:22px;
+  height:22px;
+  border-radius:999px;
+  background:#fff;
+  border:2px solid rgba(0,0,0,.35);
+  box-shadow:0 10px 18px rgba(0,0,0,.14);
+  cursor:pointer;
+}
+#hueBar::-moz-range-thumb{
+  width:22px;
+  height:22px;
+  border-radius:999px;
+  background:#fff;
+  border:2px solid rgba(0,0,0,.35);
+  box-shadow:0 10px 18px rgba(0,0,0,.14);
+  cursor:pointer;
+}
+.toneSwatch{
+  width:34px;
+  height:34px;
+  border-radius:12px;
+  border:1px solid rgba(0,0,0,.10);
+  box-shadow:0 8px 18px rgba(0,0,0,.10);
+  background:#fff;
+  flex:0 0 auto;
+}
+
+.toneHex{
+  font-weight:950;
+  color:var(--verde-oscuro);
+  font-size:12.5px;
+  padding:7px 10px;
+  border-radius:12px;
+  border:1px solid var(--borde);
+  background:#fff;
+  box-shadow:0 8px 18px rgba(0,0,0,.06);
+  min-width:84px;
+  text-align:center;
+}
+
+.toneBtn{
+  border:1px solid var(--borde);
+  background:#fff;
+  border-radius:12px;
+  padding:9px 12px;
+  font-weight:900;
+  cursor:pointer;
+  flex:0 0 auto;
+}
+
+.alturaPisos .chips{ display:flex; gap:10px; flex-wrap:wrap; margin:8px 0 2px; }
+.chipBtn{
+  border:1px solid var(--borde); background:#fff; padding:8px 10px; border-radius:999px;
+  font-weight:800; cursor:pointer;
+}
+.chipBtn[aria-pressed="true"]{ border-color: rgba(220,38,38,.75); background: rgba(220,38,38,.10); box-shadow:0 0 0 4px rgba(220,38,38,.12); color:#7a1111; }
+
+/* === Responsive teléfonos === */
+@media (max-width: 720px){
+  .grid2, .grid3{ grid-template-columns: 1fr !important; }
+  .refWrap{ grid-template-columns: 1fr !important; }
+  .header{ flex-direction:column; align-items:flex-start; gap:10px; }
+  .btnRow{ flex-direction:column; }
+  .btn{ width:100%; }
+  .modal{ width: calc(100% - 28px); }
+}
+
+/* === Pago === */
+.payInfo{
+  border:1px solid var(--borde);
+  background:#fff;
+  border-radius:14px;
+  padding:12px;
+}
+.payInfoRow{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+}
+.payImg{
+  width:52px;
+  height:52px;
+  border-radius:14px;
+  border:1px solid var(--borde);
+  background:linear-gradient(180deg,#fff,#f7faf8);
+  object-fit:contain;
+  padding:8px;
+}
+.payText b{ color:var(--verde-oscuro); }
+.payText{ font-size:12.5px; color:var(--gris); line-height:1.35; }
+.payText .line{ margin-top:6px; color:var(--texto); font-weight:800; }
+
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+  <!-- CONTROLES -->
+  <div class="card">
+    <div class="header">
+      <h1>Cake 1–3 pisos (Eventos)</h1>
+      <p>Si el cake es <b>Alto</b>: el total sube <b>+50%</b> y el rinde se multiplica <b>x2</b>.</p>
+    </div>
+
+    <div class="content">
+
+      <!-- CLIENTE -->
+      <div class="section">
+        <div class="sectionTitle">
+          <h2>Cliente</h2>
+          <div class="helper">Aparece en PDF y WhatsApp</div>
+        </div>
+        <div class="grid3">
+          <div>
+            <label for="cliente">Nombre del cliente</label>
+            <input id="cliente" type="text" placeholder="Ej: RONNY COLMENARES" />
+          </div>
+          <div>
+            <label for="clienteTel">Teléfono del cliente</label>
+            <input id="clienteTel" type="text" placeholder="Ej: 6863-6913" />
+          </div>
+          <div>
+            <label for="fechaHora">Fecha y hora de entrega</label>
+            <input id="fechaHora" class="dtInput" type="datetime-local" />
+            <div class="small" id="anticTxt">Anticipación: 1 piso = 24h · 2+ pisos = 48h</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1) PISOS -->
+      <div class="section">
+        <div class="sectionTitle">
+          <h2>Estructura</h2>
+          <div class="helper">Pisos + tamaños</div>
+        </div>
+
+        <div class="grid2">
+          <div>
+            <label for="pisos">Cantidad de pisos</label>
+            <select id="pisos">
+              <option value="1">1 piso</option>
+              <option value="2" selected>2 pisos</option>
+              <option value="3">3 pisos</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="evento">Evento</label>
+            <select id="evento">
+              <option value="Cumpleaños" selected>Cumpleaños</option>
+              <option value="Quinceaños">Quinceaños</option>
+              <option value="Bautizo">Bautizo</option>
+              <option value="Boda">Boda</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </div>
+        </div>
+
+
+        <div class="grid2" style="margin-top:12px;">
+          <div id="tier1Wrap">
+            <label for="t1">Piso 1 (abajo)</label>
+            <select id="t1"></select>
+          </div>
+
+          <div id="tier2Wrap">
+            <label for="t2">Piso 2 (medio)</label>
+            <select id="t2"></select>
+          </div>
+
+          <div id="tier3Wrap" style="display:none;">
+            <label for="t3">Piso 3 (arriba)</label>
+            <select id="t3"></select>
+          </div>
+        </div>
+
+        <div class="warn" id="warnSizes">
+          Recomendación: el piso de arriba debe ser más pequeño que el de abajo.
+        </div>
+
+        <div class="rowInfo">
+          <div>
+            <div class="k">Rinde aprox</div>
+            <div class="small">Suma de porciones por piso (si es Alto, x2)</div>
+          </div>
+          <div class="v"><span id="porcionesTxt">—</span></div>
+        </div>
+      </div>
+
+      <!-- 2) ALTURA -->
+      <div class="section">
+        <div class="sectionTitle">
+          <h2>Altura</h2>
+          <div class="helper">Normal / Alto</div>
+        </div>
+
+        <div class="grid2">
+          <div>
+            <label for="altura">Altura</label>
+            <select id="altura">
+              <option value="normal" selected>Normal</option>
+              <option value="alta">CAKE ALTO</option>
+            </select>
+            <div class="small">Capas por piso: <b><span id="capasTxt">3</span></b> bizcochos.</div>
+          <div id="alturaPisosWrap" class="alturaPisos" style="display:none;">
+            <div class="small" style="margin-bottom:6px;">Selecciona qué piso(s) llevan <b>Altura x2</b>:</div>
+            <div class="chips" id="alturaPisosChips"></div>
+            <div class="small">Si marcas un piso, sus porciones se duplican y el precio sube proporcionalmente.</div>
+          </div>
+
+          </div>
+
+          <div>
+            <label for="acabadoCake">Estilo del cake</label>
+            <select id="acabadoCake">
+              <option value="liso" selected>Liso</option>
+              <option value="naked">Naked</option>
+              <option value="seminaked">Semi-Naked</option>
+            </select>
+            <div class="small">Afecta la vista 3D y la descripción.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3) HARINA -->
+      <div class="section">
+        <div class="sectionTitle">
+          <h2>Harina</h2>
+          <div class="helper">Avena / Almendra</div>
+        </div>
+
+        <div class="grid2">
+          <div>
+            <label for="harina">Harina</label>
+            <select id="harina">
+              <option value="Avena" selected>Avena</option>
+              <option value="Almendra">Almendra (+)</option>
+            </select>
+            <div class="small">Almendra suma por piso según tamaño.</div>
+          </div>
+          <div>
+           
+            <div class="small">Regla lácteos (igual a tu personalizado).</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4) SABORES (BIZCOCHO) -->
+      <div class="section" id="saboresSection">
+        <div class="sectionTitle">
+          <h2>Sabores de bizcocho</h2>
+          <div class="helper">Por piso (2–3 pisos)</div>
+        </div>
+
+        <div class="switchRow" id="rowMismoSabor">
+          <input type="checkbox" id="mismoSabor" checked />
+          <span>Mantener el mismo sabor en todos los pisos</span>
+        </div>
+
+        <div class="grid2" style="margin-top:12px;">
+          <div id="sabor1Wrap">
+            <label for="sabor1">Sabor piso 1</label>
+            <select id="sabor1"></select>
+          </div>
+          <div id="sabor2Wrap">
+            <label for="sabor2">Sabor piso 2</label>
+            <select id="sabor2"></select>
+          </div>
+          <div id="sabor3Wrap" style="display:none;">
+            <label for="sabor3">Sabor piso 3</label>
+            <select id="sabor3"></select>
+          </div>
+          <div>
+            <label for="notaSabores">Nota sabores (opcional)</label>
+            <input id="notaSabores" type="text" placeholder="Ej: arriba vainilla, abajo chocolate" />
+          </div>
+        </div>
+      </div>
+
+      <!-- SABOR ÚNICO (1 piso) -->
+      <div class="section" id="saborUnicoSection" style="display:none;">
+        <div class="sectionTitle">
+          <h2>Sabor de bizcocho</h2>
+          <div class="helper">1 piso</div>
+        </div>
+        <div class="grid2">
+          <div>
+            <label for="saborUnico">Sabor</label>
+            <select id="saborUnico"></select>
+          </div>
+          <div>
+            <label for="notaSabores2">Nota (opcional)</label>
+            <input id="notaSabores2" type="text" placeholder="Ej: extra intenso / con chispas" />
+          </div>
+        </div>
+      </div>
+
+      <!-- 5) RELLENOS (ahora también por piso si 2–3) -->
+      <div class="section" id="rellenosSection">
+        <div class="sectionTitle">
+          <h2>Rellenos</h2>
+          <div class="helper">Variedad por piso</div>
+        </div>
+
+        <div class="switchRow" id="rowMismoRelleno">
+          <input type="checkbox" id="mismoRelleno" checked />
+          <span>Mantener el mismo relleno en todos los pisos</span>
+        </div>
+
+        <div class="grid2" style="margin-top:12px;">
+          <div id="rell1Wrap">
+            <label for="relleno1">Relleno piso 1</label>
+            <select id="relleno1"></select>
+          </div>
+          <div id="rell2Wrap">
+            <label for="relleno2">Relleno piso 2</label>
+            <select id="relleno2"></select>
+          </div>
+          <div id="rell3Wrap" style="display:none;">
+            <label for="relleno3">Relleno piso 3</label>
+            <select id="relleno3"></select>
+          </div>
+          <div>
+            <label for="notaRelleno">Nota rellenos (opcional)</label>
+            <input id="notaRelleno" type="text" placeholder="Ej: relleno más intenso / menos dulce" />
+          </div>
+        </div>
+
+        <div class="small">Los costos del relleno se calculan por tamaño de cada piso.</div>
+      </div>
+
+      <!-- 6) COBERTURA (COLOR 3D) -->
+      <div class="section">
+        <div class="sectionTitle">
+          <h2>Cobertura</h2>
+          <div class="helper">Define el color del cake</div>
+        </div>
+
+        <div class="grid2" style="margin-top:0;">
+            <div>
+              <label>Color principal (pastel)</label>
+              
+               <div class="warn" id="payColorWarn" style="margin-top:10px;">
+              Si deseas que el pastel tenga <b>color</b>, la crema debe ser <b>base blanca</b>:
+              <b>Yogurt griego</b> o <b>Dulce de leche de coco</b>.
+
+            </div>
+
+              <!-- Barra de tonos (muchos colores) -->
+              <div class="toneWrap" style="margin-top:10px;">
+                <label class="small" style="font-weight:900; color:var(--gris); display:block; margin-bottom:6px;">Barra de tonos</label>
+                <div class="toneRow">
+                  <input id="hueBar" type="range" min="0" max="360" value="0" aria-label="Barra de tonos">
+                  <div class="toneSwatch" id="toneSwatch" title="Color seleccionado"></div>
+                  <div class="toneHex" id="toneHex">—</div>
+                  <button class="toneBtn" id="toneClear" type="button" title="Quitar color">Quitar</button>
+                </div>
+                <div class="small" id="toneTxt">Mueve la barra para elegir un color. Recuerda: el color solo aplica sobre crema blanca (Yogurt griego o Dulce de leche de coco).</div>
+              </div>
+              <input type="hidden" id="colorPastel" value="">
+              <div class="small" id="colorPastelTxt">Opcional · Para colocar color, la crema debe ser base blanca: <b>Yogurt griego</b> o <b>Dulce de leche de coco</b>. Si eliges un color, quedará como <b>POR CONFIRMAR</b>.</div>
+            </div>
+            <div>
+              <label for="tema">Tema (texto)</label>
+              <input id="tema" type="text" placeholder="Ej: Blanco + dorado elegante" />
+            </div>
+          </div>
+
+          
+<div class="grid2">
+          <div>
+            <label for="cobertura">Cobertura</label>
+            <select id="cobertura"></select>
+            <div class="small">El color de la vista 3D cambia automáticamente.</div>
+          </div>
+
+          <div>
+            <label for="decoracion">Decoración</label>
+            <select id="decoracion">
+              <option value="">Sin decoración</option>
+              <option value="flores">Flores</option>
+              <option value="frutas">Frutas</option>
+              <option value="frutasflores">Frutas y flores</option>
+              <option value="frutosrojos">Frutos rojos</option>
+                          <option value="personalizado">Personalizado</option>
+</select>
+            <div class="small">Costo según tamaño del piso MÁS GRANDE.</div>
+          </div>
+        </div>
+
+        
+          <div class="grid2" style="margin-top:12px;">
+            <div>
+              <label for="notaGeneral">Nota general (opcional)</label>
+              <input id="notaGeneral" type="text" placeholder="Ej: entrega 3pm / sin frutos rojos" />
+            </div>
+            <div></div>
+          </div>
+
+
+        <div class="badges" aria-live="polite">
+          <span class="badge" id="bSinGluten">Sin Gluten</span>
+          <span class="badge" id="bSinAzucar">Sin Azúcar</span>
+          <span class="badge" id="lacteoBadge">Sin Lácteos</span>
+        </div>
+      </div>
+
+      <!-- 7) FOTO REFERENCIA -->
+      <div class="section">
+        <div class="sectionTitle">
+          <h2>Foto de referencia</h2>
+          <div class="helper">Se verá en PDF y preview</div>
+        </div>
+
+        <div class="refWrap">
+          <div>
+            <label for="refImg">Subir imagen (opcional)</label>
+            <input id="refImg" type="file" accept="image/*" />
+            <div class="small">Se usará en la cotización (pequeña, al lado de sabores).</div>
+
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+              <button class="btn btnGhost" type="button" id="btnRefs">Ver imágenes de referencia</button>
+            </div>
+          </div>
+
+          <div class="refPreview" id="refPreview">Vista previa</div>
+        </div>
+      </div>
+
+      <!-- 8) DELIVERY (solo monto asesor + total general) -->
+      <div class="section">
+        <div class="sectionTitle">
+          <h2>Delivery</h2>
+          <div class="helper">Solo monto asesor</div>
+        </div>
+
+        <div class="grid2">
+          <div class="switchRow" style="margin-top:0;">
+            <input type="checkbox" id="delivery" />
+            <span>Incluir delivery</span>
+          </div>
+          <div>
+            <label for="deliveryMonto">Monto delivery</label>
+            <input id="deliveryMonto" type="number" min="0" step="0.01" placeholder="0.00" />
+            <div class="small">Si delivery está activo, este monto se suma al total general.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9) TOTALES (sin desglose de montos) -->
+      <div class="section">
+        <div class="sectionTitle">
+          <h2>Totales</h2>
+          <div class="helper">Solo totales</div>
+        </div>
+
+        <div class="grid2">
+<div>
+            <label for="montoAdicional">Monto adicional (asesor)</label>
+            <input id="montoAdicional" type="number" min="0" step="0.01" placeholder="0.00" />
+            <div class="small">Para boda u otro evento.</div>
+          </div>
+        </div>
+
+        <div class="rowInfo" style="margin-top:12px;">
+          <div>
+            <div class="k">Total del cake</div>
+            <div class="small">Incluye extras y altura</div>
+          </div>
+          <div class="v">$<span id="totalCake">0.00</span></div>
+        </div>
+
+        <div class="rowInfo">
+          <div>
+            <div class="k">Delivery</div>
+            <div class="small">Monto asesor</div>
+          </div>
+          <div class="v">$<span id="totalDelivery">0.00</span></div>
+        </div>
+
+        <div class="totalBox">
+          <div class="tLabel">Total general</div>
+          <div class="tValue">$<span id="totalGeneral">0.00</span></div>
+          <div class="small" style="color:rgba(255,255,255,.9);margin-top:8px;">
+            Si es Alto: el rinde se multiplica x2.
+          </div>
+        </div>
+      </div>
+      <!-- 10) MÉTODO DE PAGO -->
+      <div class="section" id="paySection">
+        <div class="sectionTitle">
+          <h2>Método de pago</h2>
+          <div class="helper">Se mostrará en PDF</div>
+        </div>
+
+        <div class="grid2">
+          <div>
+            <label for="metodoPago">Selecciona un método de pago</label>
+            <select id="metodoPago">
+              <option value="">Selecciona…</option>
+              <option value="yappy">Yappy</option>
+              <option value="tarjeta">Pago con tarjeta (link)</option>
+              <option value="ach">ACH EXPRESS</option>
+            </select>
+
+           
+          </div>
+
+          <div>
+            <label for="linkPago" id="linkPagoLabel" style="display:none;">Link de pago (tarjeta)</label>
+            <input id="linkPago" type="text" placeholder="Pega aquí el link de pago" style="display:none;" />
+            <div class="small" id="linkPagoHelp" style="display:none;">
+              Si el cliente elige <b>Pago con tarjeta</b>, este link se incluirá en el PDF y se enviará por WhatsApp.
+            </div>
+
+            <div class="payInfo" id="payInfo" style="margin-top:10px;">
+              <div class="small">Elige un método para ver los datos.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="actions">
+        <button class="btn btnPrimary" id="btnPDF">Generar PDF</button>
+        <button class="btn btnGhost" id="btnPDF80" type="button">PDF Factura 80mm</button>
+        <button class="btn btnPrimary" id="btnEnviar">Enviar por WhatsApp</button>
+       <button class="btn btnGhost" onclick="location.href='../index.html'">Volver</button>
+      </div>
+
+      <div class="small" style="margin-top:10px;">
+        Si el PDF no baja: abre la web desde un servidor (Live Server / hosting), no desde <b>file://</b>.
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PREVIEW -->
+  <div class="card stickyPreview">
+    <div class="previewWrap">
+      <div class="previewCard">
+        <div class="previewHead">
+          <div>
+            <b>Vista previa</b>
+            <div class="meta" id="previewMeta">—</div>
+          </div>
+          <div class="kpi">
+            Total general
+            <strong>$<span id="kpiTotal">0.00</span></strong>
+          </div>
+        </div>
+
+        <div class="previewStage">
+          <div class="shadowFloor"></div>
+
+          <div class="cake">
+            <div class="tier" id="tier3" style="display:none;">
+              <div class="gloss"></div>
+              <div class="tierLabel" id="label3">—</div>
+              <div class="tierFlavor" id="flav3">—</div>
+            </div>
+
+            <div class="tier" id="tier2">
+              <div class="gloss"></div>
+              <div class="tierLabel" id="label2">—</div>
+              <div class="tierFlavor" id="flav2">—</div>
+            </div>
+
+            <div class="tier" id="tier1">
+              <div class="gloss"></div>
+              <div class="tierLabel" id="label1">—</div>
+              <div class="tierFlavor" id="flav1">—</div>
+            </div>
+
+            <div class="basePlate"></div>
+          </div>
+        </div>
+
+        <div class="legend" id="legend">—</div>
+
+        <div class="legend" style="margin-top:10px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px;">
+            <b style="color:var(--verde-oscuro);font-size:13px;">Pago seleccionado</b>
+            <span style="color:var(--gris);font-size:12px;font-weight:900;">Se muestra también en PDF</span>
+          </div>
+          <div class="payInfo" id="payInfoRight">
+            <div class="small">Elige un método para ver los datos.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL REFERENCIAS -->
+<div class="modalOverlay" id="refsOverlay" role="dialog" aria-modal="true" aria-label="Imágenes de referencia">
+  <div class="modal">
+    <div class="modalHead">
+      <b>Imágenes de referencia (img/modelo/)</b>
+      <button class="modalClose" id="refsClose" type="button">Cerrar</button>
+    </div>
+    <div class="modalBody">
+      <div class="small" style="margin-top:0">
+        Si quieres, cambia los nombres en el arreglo <b>referenceImages</b> del script.
+      </div>
+      <div class="gallery" id="refsGallery"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===========================
+   PRECIOS / PORCIONES (TU BASE)
+   =========================== */
+const base = {6:37.99,7:50.99,8:63.99,9:75.99};
+const base12Estimado = 114.00;
+
+const harinaAlmendra = {6:6,7:8,8:10,9:12,12:16};
+
+const costos = {
+  Chocolate:{6:5,7:7,8:8.5,9:10,12:14},
+  Pistacho:{6:3,7:5,8:7,9:10,12:14},
+  "Dulce de leche almendra":{6:3,7:5,8:7,9:10,12:14},
+  "Dulce de leche vaca":{6:3,7:5,8:7,9:10,12:14}
+};
+
+const decoracionCostos = {
+  flores:{6:5,7:7,8:9,9:11,12:16},
+  frutas:{6:5,7:7,8:9,9:11,12:16},
+  frutasflores:{6:5,7:7,8:9,9:11,12:16},
+  frutosrojos:{6:7,7:9,8:12,9:15,12:22}
+};
+
+const porciones = {
+  6:[6,8],
+  7:[8,10],
+  8:[12,15],
+  9:[16,20],
+  12:[28,35]
+};
+
+const sabores = ["Vainilla","Chocolate","Zanahoria","Guineo","Marmoleado","Red Velvet","Piña"];
+
+/* ===========================
+   RELLENOS / COBERTURAS (LISTAS)
+   - Relleno ahora también por piso si 2–3
+   =========================== */
+const rellenoOptions = [
+  {group:"Sin relleno", items:["SIN RELLENO"]},
+  {group:"Sin lácteos", items:["vainilla","Maracuya","limón","Dulce de leche de coco"]},
+  {group:"Sin lácteos – costo", items:["Chocolate","Pistacho","Dulce de leche almendra" ]},
+  {group:"Con lácteos", items:["Yogurt griego con queso crema"]},
+  {group:"Con lácteos –  costo", items:["Dulce de leche vaca"]},
+ 
+];
+
+const coberturaOptions = [
+  {group:"Sencilla", items:["SIN COBERTURA"]},
+  {group:"Sin lácteos", items:["vainilla","Maracuya","limón","Dulce de leche de coco"]},
+  {group:"Sin lácteos – costo", items:["Chocolate","Pistacho","Dulce de leche almendra" ]},
+  {group:"Con lácteos", items:["Yogurt griego con queso crema"]},
+  {group:"Con lácteos –  costo", items:["Dulce de leche vaca"]},
+ 
+];
+
+/* ===========================
+   DOM
+   =========================== */
+const $ = (id)=>document.getElementById(id);
+
+const cliente = $("cliente");
+const clienteTel = $("clienteTel");
+
+const pisos = $("pisos");
+const evento = $("evento");
+
+const t1 = $("t1");
+const t2 = $("t2");
+const t3 = $("t3");
+const tier1Wrap = $("tier1Wrap");
+const tier2Wrap = $("tier2Wrap");
+const tier3Wrap = $("tier3Wrap");
+
+const altura = $("altura");
+const acabadoCake = $("acabadoCake");
+const capasTxt = $("capasTxt");
+
+const porcionesTxt = $("porcionesTxt");
+const warnSizes = $("warnSizes");
+
+const saboresSection = $("saboresSection");
+const saborUnicoSection = $("saborUnicoSection");
+const rowMismoSabor = $("rowMismoSabor");
+const mismoSabor = $("mismoSabor");
+const sabor1 = $("sabor1");
+const sabor2 = $("sabor2");
+const sabor3 = $("sabor3");
+const saborUnico = $("saborUnico");
+const notaSabores = $("notaSabores");
+const notaSabores2 = $("notaSabores2");
+
+const sabor1Wrap = $("sabor1Wrap");
+const sabor2Wrap = $("sabor2Wrap");
+const sabor3Wrap = $("sabor3Wrap");
+
+const harina = $("harina");
+const bizcocho = $("bizcocho");
+
+const rellenosSection = $("rellenosSection");
+const rowMismoRelleno = $("rowMismoRelleno");
+const mismoRelleno = $("mismoRelleno");
+const relleno1 = $("relleno1");
+const relleno2 = $("relleno2");
+const relleno3 = $("relleno3");
+const rell1Wrap = $("rell1Wrap");
+const rell2Wrap = $("rell2Wrap");
+const rell3Wrap = $("rell3Wrap");
+const notaRelleno = $("notaRelleno");
+
+const cobertura = $("cobertura");
+const decoracion = $("decoracion");
+const tema = $("tema");
+const notaGeneral = $("notaGeneral");
+const paletteEl = $("palette");
+const colorPastel = $("colorPastel");
+const colorPastelTxt = $("colorPastelTxt");
+
+// Barra de tonos (color personalizado)
+const hueBar = $("hueBar");
+const toneSwatch = $("toneSwatch");
+const toneClear = $("toneClear");
+const toneTxt = $("toneTxt");
+
+function hslToHex(h, s=85, l=55){
+  // h:0-360, s/l:0-100
+  s/=100; l/=100;
+  const c = (1 - Math.abs(2*l - 1)) * s;
+  const x = c * (1 - Math.abs(((h/60) % 2) - 1));
+  const m = l - c/2;
+  let r=0,g=0,b=0;
+  if(h < 60){ r=c; g=x; b=0; }
+  else if(h < 120){ r=x; g=c; b=0; }
+  else if(h < 180){ r=0; g=c; b=x; }
+  else if(h < 240){ r=0; g=x; b=c; }
+  else if(h < 300){ r=x; g=0; b=c; }
+  else { r=c; g=0; b=x; }
+  const toHex = (v)=> Math.round((v+m)*255).toString(16).padStart(2,"0");
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
+}
+
+function setPastelValue(label){
+  colorPastel.value = label || "";
+  if(colorPastel.value){
+    colorPastelTxt.innerHTML = `Seleccionado: <b>${escapeHtml(colorPastel.value)}</b> · <b>POR CONFIRMAR</b>`;
+  }else{
+    colorPastelTxt.innerHTML = 'Opcional · Si eliges un color, quedará como <b>POR CONFIRMAR</b>.';
+  }
+  renderPalette();
+  updatePreview();
+}
+
+function updateToneUI(){
+  if(!hueBar || !toneSwatch) return;
+  const h = Number(hueBar.value||0);
+  const hex = hslToHex(h);
+  toneSwatch.style.background = hex;
+  const hexEl = $("toneHex");
+  if(hexEl) hexEl.textContent = hex;
+  if(toneTxt) toneTxt.innerHTML = `Seleccionado: <b>${hex}</b>. Recuerda: el color solo aplica sobre crema blanca (<b>Yogurt griego</b> o <b>Dulce de leche de coco</b>) y queda <b>POR CONFIRMAR</b>.`;
+  // Guardamos como "Personalizado #XXXXXX"
+  setPastelValue(`Personalizado ${hex}`);
+}
+
+if(hueBar){
+  // No sobreescribir una selección existente al cargar si ya hay valor
+  const current = (colorPastel?.value || "");
+  if(!current){
+    // inicializa swatch sin forzar valor
+    const hex = hslToHex(Number(hueBar.value||0));
+    if(toneSwatch) toneSwatch.style.background = hex;
+  }else{
+    // si ya tiene algo, no tocar
+    const hex = hslToHex(Number(hueBar.value||0));
+    if(toneSwatch) toneSwatch.style.background = hex;
+  }
+
+  hueBar.addEventListener("input", ()=>{
+    // En móvil, input se siente inmediato y sí “selecciona”
+    updateToneUI();
+  });
+}
+
+if(toneClear){
+  toneClear.addEventListener("click", ()=>{
+    // Limpia personalizado + botones
+    if(hueBar){
+      // deja el swatch en el color actual del slider, pero no lo selecciona
+      const hex = hslToHex(Number(hueBar.value||0));
+      if(toneSwatch) toneSwatch.style.background = hex;
+      if(toneTxt) toneTxt.textContent = "Mueve la barra para elegir un color personalizado.";
+    }
+    setPastelValue("");
+  });
+}
+
+
+
+const lacteoBadge = $("lacteoBadge");
+
+const montoAdicional = $("montoAdicional");
+
+const delivery = $("delivery");
+const deliveryMonto = $("deliveryMonto");
+
+const totalCakeEl = $("totalCake");
+const totalDeliveryEl = $("totalDelivery");
+const totalGeneralEl = $("totalGeneral");
+const kpiTotal = $("kpiTotal");
+
+const fechaHora = $("fechaHora");
+const anticTxt = $("anticTxt");
+const previewMeta = $("previewMeta");
+const legend = $("legend");
+
+
+
+const metodoPago = $("metodoPago");
+const linkPago = $("linkPago");
+const linkPagoLabel = $("linkPagoLabel");
+const linkPagoHelp = $("linkPagoHelp");
+const payInfo = $("payInfo");
+
+const tier1El = $("tier1");
+const tier2El = $("tier2");
+const tier3El = $("tier3");
+
+const label1 = $("label1");
+const label2 = $("label2");
+const label3 = $("label3");
+
+const flav1 = $("flav1");
+const flav2 = $("flav2");
+const flav3 = $("flav3");
+
+// Foto referencia
+const refImg = $("refImg");
+const refPreview = $("refPreview");
+let refImageDataUrl = "";
+
+// Modal refs
+const refsOverlay = $("refsOverlay");
+const refsClose = $("refsClose");
+const refsGallery = $("refsGallery");
+const btnRefs = $("btnRefs");
+
+// Altura por piso
+const alturaPisosWrap = $("alturaPisosWrap");
+const alturaPisosChips = $("alturaPisosChips");
+let alturaPisosSel = new Set();
+
+
+/* ===========================
+   HELPERS
+   =========================== */
+
+
+// Paleta de colores (pasteles) — editable por ustedes
+const pastelPalette = [
+  {name:"Rosa pastel", hex:"#F7C8D0"},
+  {name:"Lavanda", hex:"#D7C7F6"},
+  {name:"Celeste", hex:"#BFE6FF"},
+  {name:"Menta", hex:"#CFF3E3"},
+  {name:"Amarillo mantequilla", hex:"#FFF0B3"},
+  {name:"Durazno", hex:"#FFD1B8"},
+  {name:"Beige", hex:"#F1E3D3"},
+  {name:"Gris perla", hex:"#E7E9EE"}
+];
+
+function renderPalette(){
+  if(!paletteEl) return;
+  paletteEl.innerHTML = "";
+  const current = (colorPastel?.value || "");
+  pastelPalette.forEach((c)=>{
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "palBtn";
+    b.style.background = c.hex;
+    b.title = c.name;
+    b.setAttribute("aria-label", c.name);
+    b.setAttribute("aria-pressed", (current === c.name) ? "true":"false");
+    b.addEventListener("click", ()=>{
+      const isSame = (colorPastel.value === c.name);
+      colorPastel.value = isSame ? "" : c.name;
+      if(colorPastel.value){
+        colorPastelTxt.innerHTML = `Seleccionado: <b>${escapeHtml(colorPastel.value)}</b> · <b>POR CONFIRMAR</b>`;
+      }else{
+        colorPastelTxt.innerHTML = 'Opcional · Si eliges un color, quedará como <b>POR CONFIRMAR</b>.';
+      }
+      renderPalette();
+      updatePreview();
+    });
+    paletteEl.appendChild(b);
+  });
+}
+function money(n){ return Number(n||0).toFixed(2); }
+function escapeHtml(str){
+  return String(str||"").replace(/[&<>"']/g, (m)=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
+  }[m]));
+}
+function safeText(v, fallback="—"){
+  const s = String(v ?? "").trim();
+  return s ? s : fallback;
+}
+
+function fmtEntrega(val){
+  if(!val) return "—";
+  const d = new Date(val);
+  if(isNaN(d.getTime())) return val;
+  const dd = String(d.getDate()).padStart(2,"0");
+  const mm = String(d.getMonth()+1).padStart(2,"0");
+  const yyyy = d.getFullYear();
+  const hh = String(d.getHours()).padStart(2,"0");
+  const mi = String(d.getMinutes()).padStart(2,"0");
+  return `${dd}/${mm}/${yyyy} ${hh}:${mi}`;
+}
+
+function requiredHours(){
+  const n = Number(pisos.value || 1);
+  return (n >= 2) ? 48 : 24;
+}
+
+function getBaseSabor(){
+  const n = Number(pisos.value || 1);
+  if(n <= 1) return (saborUnico && saborUnico.value) ? saborUnico.value : "";
+  return (sabor1 && sabor1.value) ? sabor1.value : "";
+}
+
+
+function validateAnticipacion(){
+  if(!fechaHora) return true;
+
+  const req = requiredHours();
+  if(!fechaHora.value){
+    if(anticTxt){
+      anticTxt.style.color = "";
+      anticTxt.style.fontWeight = "";
+      anticTxt.textContent = `Anticipación: 1 piso = 24h · 2+ pisos = 48h · Horario: 9:00–20:00 (cada 30 min)`;
+    }
+    return true;
+  }
+
+  const sel = new Date(fechaHora.value);
+  if(isNaN(sel.getTime())){
+    if(anticTxt){
+      anticTxt.style.color = "#b3261e";
+      anticTxt.style.fontWeight = "900";
+      anticTxt.textContent = "Verificación de disponibilidad para la hora solicitada";
+    }
+    return false;
+  }
+
+  // reglas de horario/intervalo (ya normalizamos, pero validamos por seguridad)
+  const h = sel.getHours(), m = sel.getMinutes();
+  const inHours = (h > 9 || (h===9 && m>=0)) && (h < 20 || (h===20 && m===0));
+  const inStep = (m === 0 || m === 30);
+
+  const now = new Date();
+  const min = new Date(now.getTime() + req*60*60*1000);
+  const okLead = sel >= min;
+
+  const ok = okLead && inHours && inStep;
+
+  if(anticTxt){
+    if(ok){
+      anticTxt.style.color = "#0b7a44";
+      anticTxt.style.fontWeight = "900";
+      anticTxt.textContent = `Anticipación: OK (mín. ${req}h) · Horario OK`;
+    }else{
+      anticTxt.style.color = "#b3261e";
+      anticTxt.style.fontWeight = "900";
+      anticTxt.textContent = "Verificación de disponibilidad para la hora solicitada";
+    }
+  }
+  return ok;
+}
+
+function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
+
+function capasPorPiso(){
+  const n = Number(pisos.value) || 1;
+  if(altura.value !== "alta") return 3;
+  if(n <= 1) return 4;
+  // mezcla (hay pisos altos y normales)
+  return (alturaPisosSel.size === n) ? 4 : 3;
+}
+function alturaPriceFactor(){
+  if(altura.value !== "alta") return 1;
+  const n = Number(pisos.value) || 1;
+  if(n <= 1) return 1.5;
+  const c = (alturaPisosSel.size || n);
+  return 1 + 0.5*(c/n);
+}
+function alturaPorcionesFactor(){ return 1; }
+function isPisoAlto(i){
+  const n = Number(pisos.value) || 1;
+  if(altura.value !== "alta") return false;
+  if(n <= 1) return true;
+  return alturaPisosSel.has(String(i));
+}
+function heightByAltura(i){ return isPisoAlto(i) ? 86 : 74; }
+function sizeToWidth(inches){
+  const w = 90 + (Number(inches) * 22);
+  return clamp(w, 190, 340);
+}
+
+/* Estilo visual */
+function applyStyleToTier(el){
+  const style = acabadoCake.value;
+  if(style === "liso"){
+    el.style.opacity = "1";
+    el.style.filter = "none";
+    el.style.boxShadow = "0 22px 28px rgba(0,0,0,.16), 0 2px 0 rgba(255,255,255,.55) inset";
+  }else if(style === "naked"){
+    // “desnudo”: menos cobertura, más rústico
+    el.style.opacity = ".92";
+    el.style.filter = "contrast(1.02) saturate(.95)";
+    el.style.boxShadow = "0 18px 24px rgba(0,0,0,.14), 0 1px 0 rgba(255,255,255,.45) inset";
+  }else{
+    // semi-naked
+    el.style.opacity = ".97";
+    el.style.filter = "contrast(1.04) saturate(1.0)";
+    el.style.boxShadow = "0 20px 26px rgba(0,0,0,.15), 0 2px 0 rgba(255,255,255,.50) inset";
+  }
+}
+
+/* Cobertura -> color 3D */
+function setCakeColorsByCobertura(){
+  const c = (cobertura.value || "Sencilla").toLowerCase();
+
+  // defaults (crema suave)
+  let top="#f6efe7", base="#f3e8de", side="#ead9cd", deep="#d7c1b3";
+
+  const isChocolate = c.includes("chocolate");
+  const isPistacho  = c.includes("pistacho");
+  const isMaracuya  = c.includes("maracuy");
+  const isLimon     = c.includes("limon");
+  const isVainilla  = c.includes("vainilla");
+  const isDDL       = c.includes("dulce de leche");
+  const isYogurt    = c.includes("yogurt");
+  const isCoco      = c.includes("coco");
+
+  if(isChocolate){
+    top="#4b2b1f"; base="#5a3426"; side="#3f241a"; deep="#2a1711";
+  }else if(isPistacho){
+    top="#cfe6bf"; base="#bfe0ae"; side="#97c98a"; deep="#76b26c";
+  }else if(isMaracuya){
+    top="#fff1a6"; base="#ffe77a"; side="#ffd84d"; deep="#f1b929";
+  }else if(isLimon){
+    // blanco hueso
+    top="#f7f5ec"; base="#f2efdf"; side="#e7e2c8"; deep="#d6cfaa";
+  }else if(isVainilla){
+    top="#fbf1dc"; base="#f6e7c7"; side="#ead8b0"; deep="#d2bb8f";
+  }else if(isDDL){
+    top="#f2d2a9"; base="#e6bd8c"; side="#d5a56e"; deep="#b8844c";
+  }else if(isYogurt || isCoco){
+    top="#ffffff"; base="#fbfbfb"; side="#f0f0f0"; deep="#dedede";
+  }else{
+    // Sencilla / pastelera genérica
+    top="#f6efe7"; base="#f3e8de"; side="#ead9cd"; deep="#d7c1b3";
+  }
+
+  document.documentElement.style.setProperty("--cake-top", top);
+  document.documentElement.style.setProperty("--cake-base", base);
+  document.documentElement.style.setProperty("--cake-side", side);
+  document.documentElement.style.setProperty("--cake-deep", deep);
+}
+
+/* Select fillers */
+function fillSelectWithSizes(sel, values, selected){
+  sel.innerHTML = "";
+  values.forEach(v=>{
+    const o = document.createElement("option");
+    o.value = String(v);
+    o.textContent = `${v}”`;
+    if(String(v) === String(selected)) o.selected = true;
+    sel.appendChild(o);
+  });
+}
+function fillSabores(select){
+  select.innerHTML = "";
+  sabores.forEach(s=>{
+    const o = document.createElement("option");
+    o.value = s;
+    o.textContent = s;
+    select.appendChild(o);
+  });
+}
+function fillBizcocho(){
+  if(!bizcocho) return;
+  bizcocho.innerHTML = "";
+  sabores.forEach(s=>{
+    const o = document.createElement("option");
+    o.value = s;
+    o.textContent = s;
+    bizcocho.appendChild(o);
+  });
+}
+function fillGroupedSelect(select, groups){
+  select.innerHTML = "";
+  groups.forEach(g=>{
+    const og = document.createElement("optgroup");
+    og.label = g.group;
+    g.items.forEach(it=>{
+      const o = document.createElement("option");
+      o.value = it;
+      o.textContent = it;
+      og.appendChild(o);
+    });
+    select.appendChild(og);
+  });
+}
+
+/* Mano de obra */
+function manoDeObraPorPisos(n){
+  if(n===3) return 50;
+  if(n===2) return 20;
+  return 0;
+}
+
+/* Precios */
+function getBasePrice(size){
+  const s = Number(size);
+  if (s === 12){ return base12Estimado;
+  }
+  return base[s] || 0;
+}
+function getExtraCost(table, size, key){
+  const s = Number(size);
+  if (!key || key === "Sin relleno" || key === "Sencilla") return 0;
+  if (!table[key]) return 0;
+  return Number(table[key][s] || 0);
+}
+function getPorcionesRange(size){
+  const s = Number(size);
+  return porciones[s] || [0,0];
+}
+
+/* sizes según pisos */
+function getSizesArray(){
+  const n = Number(pisos.value) || 1;
+  const sizes = [];
+  if(n >= 1) sizes.push(Number(t1.value));
+  if(n >= 2) sizes.push(Number(t2.value));
+  if(n >= 3) sizes.push(Number(t3.value));
+  return sizes.filter(s=>!!s);
+}
+
+/* UI pisos */
+function syncPisosUI(){
+  // Altura por piso (solo cuando es 2+ pisos y Altura = Alta)
+  const buildAlturaChips = ()=>{
+    const n = Number(pisos.value) || 1;
+    if(altura.value !== "alta" || n <= 1){
+      alturaPisosWrap.style.display = "none";
+      alturaPisosChips.innerHTML = "";
+      alturaPisosSel = new Set();
+      return;
+    }
+    alturaPisosWrap.style.display = "block";
+    // default: todos los pisos altos (como antes)
+    if(alturaPisosSel.size === 0){
+      for(let i=1;i<=n;i++) alturaPisosSel.add(String(i));
+    }else{
+      // limpia selección fuera de rango
+      [...alturaPisosSel].forEach(v=>{ if(Number(v)>n) alturaPisosSel.delete(v); });
+      if(alturaPisosSel.size === 0){ for(let i=1;i<=n;i++) alturaPisosSel.add(String(i)); }
+    }
+
+    alturaPisosChips.innerHTML = "";
+    for(let i=1;i<=n;i++){
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "chipBtn";
+      b.textContent = `Piso ${i}`;
+      b.setAttribute("aria-pressed", alturaPisosSel.has(String(i)) ? "true":"false");
+      b.addEventListener("click", ()=>{
+        const key = String(i);
+        if(alturaPisosSel.has(key)) alturaPisosSel.delete(key);
+        else alturaPisosSel.add(key);
+        // evita 0 seleccionados
+        if(alturaPisosSel.size === 0) alturaPisosSel.add(key);
+        buildAlturaChips();
+        updatePreview();
+      });
+      alturaPisosChips.appendChild(b);
+    }
+  };
+  buildAlturaChips();
+
+  const n = Number(pisos.value) || 1;
+
+  tier1Wrap.style.display = (n>=1) ? "block" : "none";
+  tier2Wrap.style.display = (n>=2) ? "block" : "none";
+  tier3Wrap.style.display = (n>=3) ? "block" : "none";
+
+  tier1El.style.display = (n>=1) ? "block" : "none";
+  tier2El.style.display = (n>=2) ? "block" : "none";
+  tier3El.style.display = (n>=3) ? "block" : "none";
+
+  // Sabores: 1 piso => único
+  if(n === 1){
+    saboresSection.style.display = "none";
+    saborUnicoSection.style.display = "block";
+    rowMismoSabor.style.display = "none";
+  }else{
+    saboresSection.style.display = "block";
+    saborUnicoSection.style.display = "none";
+    rowMismoSabor.style.display = "flex";
+  }
+
+  // Rellenos: 1 piso => solo relleno1 (pero lo mostramos igual, con UI simplificada)
+  if(n === 1){
+    rowMismoRelleno.style.display = "none";
+    rell2Wrap.style.display = "none";
+    rell3Wrap.style.display = "none";
+    rell1Wrap.style.display = "block";
+  }else{
+    rowMismoRelleno.style.display = "flex";
+    rell1Wrap.style.display = "block";
+    rell2Wrap.style.display = "block";
+    rell3Wrap.style.display = (n===3) ? "block" : "none";
+  }
+
+  // sabores por piso wraps
+  sabor1Wrap.style.display = (n>=1) ? "block" : "none";
+  sabor2Wrap.style.display = (n>=2) ? "block" : "none";
+  sabor3Wrap.style.display = (n>=3) ? "block" : "none";
+
+  // mismo sabor toggle
+  if(n > 1){
+    if (mismoSabor.checked){
+      sabor2.disabled = true;
+      sabor3.disabled = true;
+    }else{
+      sabor2.disabled = false;
+      sabor3.disabled = false;
+    }
+  }
+
+  // mismo relleno toggle
+  if(n > 1){
+    if (mismoRelleno.checked){
+      relleno2.disabled = true;
+      relleno3.disabled = true;
+    }else{
+      relleno2.disabled = false;
+      relleno3.disabled = false;
+    }
+  }
+}
+
+function getSaborPiso(i){
+  if((Number(pisos.value)||1) === 1) return saborUnico.value;
+  if (mismoSabor.checked) return sabor1.value;
+  return (i===1) ? sabor1.value : (i===2) ? sabor2.value : sabor3.value;
+}
+function getRellenoPiso(i){
+  if((Number(pisos.value)||1) === 1) return relleno1.value;
+  if (mismoRelleno.checked) return relleno1.value;
+  return (i===1) ? relleno1.value : (i===2) ? relleno2.value : relleno3.value;
+}
+
+function validarTamaños(){
+  const n = Number(pisos.value) || 1;
+  const s1 = Number(t1.value);
+  const s2 = Number(t2.value);
+  const s3 = Number(t3.value);
+
+  if(n === 1){
+    warnSizes.textContent = "1 piso: selecciona el tamaño que deseas.";
+    warnSizes.style.background = "rgba(201,162,77,.16)";
+    warnSizes.style.borderColor = "rgba(201,162,77,.28)";
+    warnSizes.style.color = "#6a521f";
+    return;
+  }
+
+  let ok = true;
+  if (!(s2 < s1)) ok = false;
+  if (n === 3 && !(s3 < s2)) ok = false;
+
+  warnSizes.textContent = ok
+    ? "Recomendación: el piso de arriba debe ser más pequeño que el de abajo."
+    : "Revisa tamaños: el piso superior debe ser más pequeño que el inferior.";
+
+  warnSizes.style.background = ok ? "rgba(201,162,77,.16)" : "rgba(255, 231, 231, .9)";
+  warnSizes.style.borderColor = ok ? "rgba(201,162,77,.28)" : "rgba(215, 120, 120, .5)";
+  warnSizes.style.color = ok ? "#6a521f" : "#7a2d2d";
+}
+
+function sumPorciones(){
+  const n = Number(pisos.value) || 1;
+  let min=0, max=0;
+  const tiers = [Number(t1.value||0), Number(t2.value||0), Number(t3.value||0)];
+  for(let i=1;i<=n;i++){
+    const s = tiers[i-1];
+    if(!s) continue;
+    const [a,b] = getPorcionesRange(s);
+    const f = isPisoAlto(i) ? 2 : 1;
+    min += a*f; max += b*f;
+  }
+  return [min, max];
+}
+
+function tieneLacteos(){
+  // Bizcocho: se toma del sabor seleccionado (no existe "bizcocho base" separado)
+  const n = Number(pisos.value) || 1;
+  const b1 = getSaborPiso(1);
+  const b2 = n>=2 ? getSaborPiso(2) : "";
+  const b3 = n===3 ? getSaborPiso(3) : "";
+
+  if ([b1,b2,b3].includes("Red Velvet")) return true;
+
+  // Rellenos
+  const r1 = getRellenoPiso(1);
+  const r2 = n>=2 ? getRellenoPiso(2) : "";
+  const r3 = n===3 ? getRellenoPiso(3) : "";
+
+  const lactList = ["Dulce de leche vaca","Yogurt griego con queso crema"];
+  if (lactList.includes(r1) || lactList.includes(r2) || lactList.includes(r3)) return true;
+
+  // Cobertura
+  if (lactList.includes(cobertura.value)) return true;
+
+  return false;
+}
+function actualizarBadges(){
+  const lact = tieneLacteos();
+  lacteoBadge.textContent = lact ? "Con Lácteos" : "Sin Lácteos";
+  lacteoBadge.classList.toggle("warn", lact);
+}
+
+/* Regla tamaños */
+function enforceSizeRules(){
+  const n = Number(pisos.value) || 1;
+  if(n === 1) return;
+
+  const s1 = Number(t1.value);
+  if(n >= 2){
+    const allowedT2 = [12,9,8,7,6].filter(v=>v < s1);
+    const currentT2 = Number(t2.value);
+    const pick2 = allowedT2.includes(currentT2) ? currentT2 : (allowedT2[0] || 6);
+    fillSelectWithSizes(t2, allowedT2.length ? allowedT2 : [6], pick2);
+  }
+
+  if(n === 3){
+    const s2 = Number(t2.value);
+    const allowedT3 = [12,9,8,7,6].filter(v=>v < s2);
+    const currentT3 = Number(t3.value);
+    const pick3 = allowedT3.includes(currentT3) ? currentT3 : (allowedT3[0] || 6);
+    fillSelectWithSizes(t3, allowedT3.length ? allowedT3 : [6], pick3);
+  }
+}
+
+/* ===========================
+   CALC TOTALS (sin desglose en UI)
+   =========================== */
+function calcularTotales(){
+  const n = Number(pisos.value) || 1;
+  const sizes = getSizesArray();
+
+  let totalBase = 0;
+  sizes.forEach(s=> totalBase += getBasePrice(s));
+
+  let extraHarina = 0;
+  if (harina.value === "Almendra"){
+    sizes.forEach(s => extraHarina += Number(harinaAlmendra[s] || 0));
+  }
+
+  // relleno por piso (si mismoRelleno, devuelve igual)
+  let extraRelleno = 0;
+  if(n === 1){
+    extraRelleno += getExtraCost(costos, sizes[0], getRellenoPiso(1));
+  }else{
+    sizes.forEach((s, idx)=>{
+      const piso = idx+1;
+      extraRelleno += getExtraCost(costos, s, getRellenoPiso(piso));
+    });
+  }
+
+  let extraCobertura = 0;
+  sizes.forEach(s=>{
+    extraCobertura += getExtraCost(costos, s, cobertura.value);
+  });
+
+  let extraDecor = 0;
+  const largest = sizes.length ? Math.max(...sizes) : 0;
+  if (decoracion.value && largest){
+    extraDecor = Number((decoracionCostos[decoracion.value] || {})[largest] || 0);
+  }
+
+  const manoObra = manoDeObraPorPisos(n);
+  const adicional = Number(montoAdicional.value || 0);
+
+  const cakeBaseTotal = totalBase + extraHarina + extraRelleno + extraCobertura + extraDecor + manoObra + adicional;
+
+  // altura factor
+  const totalCake = cakeBaseTotal * alturaPriceFactor();
+
+  const del = delivery.checked ? Number(deliveryMonto.value || 0) : 0;
+  const totalGeneral = totalCake + del;
+
+  return { totalCake, delivery: del, totalGeneral };
+}
+
+
+/* ===========================
+   PAGO
+   =========================== */
+function getPagoData(){
+  const m = (metodoPago && metodoPago.value) || "";
+  const link = (linkPago && linkPago.value || "").trim();
+
+  if(m === "yappy"){
+    return {
+      metodo:"Yappy",
+      img:"img/yappy.jpg",
+      lines:[
+        "Yappy: 6863-6913",
+        "YAPPY PERSONAL – Titular: Ronny Colmenares"
+      ],
+      link:""
+    };
+  }
+  if(m === "tarjeta"){
+    return {
+      metodo:"Pago con tarjeta",
+      img:"img/cuanto.jpg",
+      lines:[
+        "Pago con tarjeta (link de pago)"
+      ],
+      link: link
+    };
+  }
+  if(m === "ach"){
+    return {
+      metodo:"Banco General (ACH Express)",
+      img:"img/ach.jpg",
+      lines:[
+        "Cuenta de Ahorros: 04-05-98-312161-7",
+        "Titular: Ronny Colmenares",
+        "Únicamente Tipo Express"
+      ],
+      link:""
+    };
+  }
+  return { metodo:"—", img:"", lines:["Selecciona un método de pago."], link:"" };
+}
+
+function updatePagoUI(){
+  const data = getPagoData();
+
+  // toggle link input
+  const showLink = (metodoPago.value === "tarjeta");
+  if(linkPago){ linkPago.style.display = showLink ? "" : "none"; }
+  if(linkPagoLabel){ linkPagoLabel.style.display = showLink ? "" : "none"; }
+  if(linkPagoHelp){ linkPagoHelp.style.display = showLink ? "" : "none"; }
+
+  // render info
+  if(!payInfo) return;
+  const imgHtml = data.img ? `<img class="payImg" src="${data.img}" alt="Pago">` : "";
+  const linesHtml = data.lines.map(t=>`<div class="line">${escapeHtml(t)}</div>`).join("");
+  const linkHtml = (data.metodo === "Pago con tarjeta")
+    ? `<div class="line"><b>Link:</b> ${escapeHtml(data.link || "Pendiente")}</div>`
+    : "";
+  const important = `
+    <div class="line" style="margin-top:10px;color:#7a1111;font-weight:900;">IMPORTANTE</div>
+    <div style="margin-top:6px;">
+      <div>• El pago debe ser completo</div>
+      <div>• El pedido será procesado al recibir el comprobante</div>
+      <div style="margin-top:6px;">NO REALIZAMOS DEDICATORIAS</div>
+    </div>
+  `;
+
+  payInfo.innerHTML = `
+    <div class="payInfoRow">
+      ${imgHtml}
+      <div class="payText">
+        <b>${escapeHtml(data.metodo)}</b>
+        ${linesHtml}
+        ${linkHtml}
+        ${important}
+      </div>
+    </div>
+  `;
+
+  const right = document.getElementById("payInfoRight");
+  if(right) right.innerHTML = payInfo.innerHTML;
+}
+
+/* ===========================
+   PREVIEW UPDATE
+   =========================== */
+function updatePreview(){
+  syncPisosUI();
+  validarTamaños();
+  actualizarBadges();
+  setCakeColorsByCobertura();
+
+  const nPisos = Number(pisos.value) || 1;
+  capasTxt.textContent = String(capasPorPiso());
+
+  const h1 = heightByAltura(1);
+  const h2 = heightByAltura(2);
+  const h3 = heightByAltura(3);
+
+  const s1 = Number(t1.value || 0);
+  const s2 = Number(t2.value || 0);
+  const s3 = Number(t3.value || 0);
+
+  const w1 = s1 ? sizeToWidth(s1) : 240;
+  const w2 = s2 ? sizeToWidth(s2) : 210;
+  const w3 = s3 ? sizeToWidth(s3) : 190;
+
+  if(nPisos >= 1){
+    tier1El.style.width = w1 + "px";
+    tier1El.style.height = h1 + "px";
+    applyStyleToTier(tier1El);
+    label1.textContent = s1 ? `${s1}”` : "—";
+    flav1.textContent = getSaborPiso(1) || "—";
+  }
+  if(nPisos >= 2){
+    tier2El.style.width = w2 + "px";
+    tier2El.style.height = h2 + "px";
+    applyStyleToTier(tier2El);
+    label2.textContent = s2 ? `${s2}”` : "—";
+    flav2.textContent = getSaborPiso(2) || "—";
+  }
+  if(nPisos >= 3){
+    tier3El.style.width = w3 + "px";
+    tier3El.style.height = h3 + "px";
+    applyStyleToTier(tier3El);
+    label3.textContent = s3 ? `${s3}”` : "—";
+    flav3.textContent = getSaborPiso(3) || "—";
+  }
+
+  const [min,max] = sumPorciones();
+  porcionesTxt.textContent = `${min} a ${max} porciones`;
+
+  const totals = calcularTotales();
+  totalCakeEl.textContent = money(totals.totalCake);
+  totalDeliveryEl.textContent = money(totals.delivery);
+  totalGeneralEl.textContent = money(totals.totalGeneral);
+  kpiTotal.textContent = money(totals.totalGeneral);
+
+  const sizesArr = getSizesArray();
+  const sizesTxt = sizesArr.length ? sizesArr.map(s=>`${s}”`).join(" / ") : "—";
+
+  const styleTxt =
+    (acabadoCake.value === "liso") ? "Liso" :
+    (acabadoCake.value === "naked") ? "Naked" : "Semi-Naked";
+
+  previewMeta.textContent = `${nPisos} piso${nPisos>1?"s":""} · Evento: ${evento.value} · Capas: ${capasPorPiso()} · Estilo: ${styleTxt} · Entrega: ${fmtEntrega(fechaHora && fechaHora.value)}`;
+  // Vista previa debajo del 3D (sin texto largo)
+const decoTxt = decoracion.value ? decoracion.options[decoracion.selectedIndex].text : "Sin decoración";
+
+const rows = [];
+rows.push(["Entrega", fmtEntrega(fechaHora && fechaHora.value)]);
+rows.push(["Tamaños", sizesTxt]);
+rows.push(["Rinde", porcionesTxt.textContent]);
+
+// Bizcochos
+rows.push(["Bizcocho P1", getSaborPiso(1) || "—"]);
+if(nPisos>=2) rows.push(["Bizcocho P2", getSaborPiso(2) || "—"]);
+if(nPisos===3) rows.push(["Bizcocho P3", getSaborPiso(3) || "—"]);
+
+// Rellenos
+rows.push(["Relleno P1", getRellenoPiso(1) || "Sin relleno"]);
+if(nPisos>=2) rows.push(["Relleno P2", getRellenoPiso(2) || "Sin relleno"]);
+if(nPisos===3) rows.push(["Relleno P3", getRellenoPiso(3) || "Sin relleno"]);
+
+rows.push(["Cobertura", cobertura.value || "Sencilla"]);
+
+// Pago
+const pago = getPagoData();
+rows.push(["Pago", pago.metodo || "—"]);
+if(pago.metodo === "Pago con tarjeta") rows.push(["Link de pago", pago.link || "Pendiente"]); 
+rows.push(["Decoración", decoTxt]);
+rows.push(["Estilo", styleTxt]);
+
+if(tema.value.trim()) rows.push(["Tema", tema.value.trim()]);
+
+const notaSab = (nPisos===1 ? (notaSabores2.value||"") : (notaSabores.value||"")).trim();
+const notaR = (notaRelleno.value||"").trim();
+const notaG = (notaGeneral.value||"").trim();
+
+if(notaSab) rows.push(["Nota sabores", notaSab]);
+if(notaR) rows.push(["Nota rellenos", notaR]);
+if(notaG) rows.push(["Nota general", notaG]);
+
+legend.innerHTML = rows.map(([k,v]) =>
+  `<div class="lgRow"><span>${escapeHtml(k)}</span><b>${escapeHtml(String(v||"—"))}</b></div>`
+).join("");
+  updatePagoUI();
+  validateAnticipacion();
+}
+
+/* ===========================
+   INIT
+   =========================== */
+function initSizesByPisos(){
+  const n = Number(pisos.value) || 1;
+  if(n === 1){
+    fillSelectWithSizes(t1, [12,9,8,7,6], 8);
+  }else if(n === 2){
+    fillSelectWithSizes(t1, [12,9,8,7,6], 9);
+    fillSelectWithSizes(t2, [9,8,7,6], 7);
+  }else{
+    fillSelectWithSizes(t1, [12,9,8,7,6], 9);
+    fillSelectWithSizes(t2, [9,8,7,6], 7);
+    fillSelectWithSizes(t3, [8,7,6], 6);
+  }
+}
+function initSabores(){
+  fillSabores(sabor1);
+  fillSabores(sabor2);
+  fillSabores(sabor3);
+  fillSabores(saborUnico);
+
+  sabor1.value = "Vainilla";
+  sabor2.value = "Vainilla";
+  sabor3.value = "Vainilla";
+  saborUnico.value = "Vainilla";
+}
+function initBizcocho(){
+  if(!bizcocho) return;
+  fillBizcocho();
+  bizcocho.value = "Vainilla";
+}
+function initRellenosCobertura(){
+  fillGroupedSelect(relleno1, rellenoOptions);
+  fillGroupedSelect(relleno2, rellenoOptions);
+  fillGroupedSelect(relleno3, rellenoOptions);
+  fillGroupedSelect(cobertura, coberturaOptions);
+
+  relleno1.value = "Sin relleno";
+  relleno2.value = "Sin relleno";
+  relleno3.value = "Sin relleno";
+  cobertura.value = "Sencilla";
+}
+
+refImg.addEventListener("change", ()=>{
+  const file = refImg.files && refImg.files[0];
+  refImageDataUrl = "";
+  refPreview.innerHTML = "Vista previa";
+  if(!file) return;
+
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    refImageDataUrl = String(reader.result || "");
+    const img = document.createElement("img");
+    img.src = refImageDataUrl;
+    refPreview.innerHTML = "";
+    refPreview.appendChild(img);
+    if(fechaHora){ fechaHora.addEventListener("input", updatePreview); fechaHora.addEventListener("change", updatePreview); }
+
+if(metodoPago){ metodoPago.addEventListener("change", updatePreview); metodoPago.addEventListener("input", updatePreview); }
+if(linkPago){ linkPago.addEventListener("input", updatePreview); linkPago.addEventListener("change", updatePreview); }
+
+updatePreview();
+  };
+  reader.readAsDataURL(file);
+});
+
+/* Modal refs: imágenes en /img/modelos o /img/modelo (modelo1..modelo10)
+   - Muestra un menú/galería
+   - Al seleccionar: queda como vista previa + se usa en PDF
+   - Mantiene opción de subir (si subes, reemplaza la selección) */
+const BASE_CANDIDATES = [
+  "../img/modelos/", "../img/modelo/",
+  "img/modelos/", "img/modelo/"
+];
+const EXT_CANDIDATES = ["png","jpg","jpeg","webp"];
+
+// Cache para precarga (para que al abrir estén listas)
+const refUrlCache = {}; // {1:url,2:url...}
+let refsPreloadingStarted = false;
+
+async function preloadReferenceImages(){
+  if(refsPreloadingStarted) return;
+  refsPreloadingStarted = true;
+  const tasks = [];
+  for(let i=1;i<=10;i++){
+    tasks.push((async ()=>{
+      const url = refUrlCache[i] || await resolveModelUrl(i);
+    if(url) refUrlCache[i] = url;
+      if(url){
+        refUrlCache[i] = url;
+        // precarga real (descarga) en segundo plano
+        const im = new Image();
+        im.decoding = "async";
+        im.loading = "eager";
+        im.src = url;
+      }
+    })());
+  }
+  // No bloquea la UI, pero dejamos que se disparen
+  Promise.allSettled(tasks).catch(()=>{});
+}
+
+
+async function urlOk(u){
+  try{
+    const r = await fetch(u, {method:"HEAD", cache:"no-store"});
+    return r.ok;
+  }catch(e){ return false; }
+}
+async function resolveModelUrl(n){
+  // intenta base y extensión hasta encontrar
+  for(const base of BASE_CANDIDATES){
+    for(const ext of EXT_CANDIDATES){
+      const u = `${base}modelo${n}.${ext}`;
+      // eslint-disable-next-line no-await-in-loop
+      if(await urlOk(u)) return u;
+    }
+  }
+  return ""; // no encontrado
+}
+
+async function openRefs(){
+  refsGallery.innerHTML = "";
+  // asegura que el overlay se muestre
+  refsOverlay.style.display = "flex";
+  refsOverlay.classList.add("show");
+
+  // Precarga en segundo plano (para que las imágenes ya estén listas)
+  preloadReferenceImages();
+
+  for(let i=1;i<=10;i++){
+    // eslint-disable-next-line no-await-in-loop
+    const url = await resolveModelUrl(i);
+
+    const div = document.createElement("div");
+    div.className = "thumb";
+
+    const img = document.createElement("img");
+    img.alt = `modelo${i}`;
+    img.loading = "lazy";
+
+    const cap = document.createElement("div");
+    cap.className = "cap";
+    cap.textContent = `modelo${i}`;
+
+    if(!url){
+      img.src = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(
+        `<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'>
+          <rect width='100%' height='100%' fill='#f4faf7'/>
+          <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle'
+                font-family='Arial' font-size='22' fill='#5b6b62'>modelo${i} no encontrado</text>
+        </svg>`
+      );
+      div.style.opacity = "0.7";
+    }else{
+      img.src = url;
+
+      div.addEventListener("click", async ()=>{
+        try{
+          // si el usuario selecciona un modelo, limpiamos el input de archivo (mantiene opción, pero no se mezcla)
+          refImg.value = "";
+          // vista previa inmediata (URL)
+          refPreview.innerHTML = "";
+          const p = document.createElement("img");
+          p.src = url;
+          p.alt = `modelo${i}`;
+          refPreview.appendChild(p);
+
+          // convertir a DataURL para que jsPDF lo pueda incrustar en el PDF
+          refImageDataUrl = await toDataURL(url);
+
+          // opcional: etiqueta en notas
+          const prev = (notaGeneral.value || "").trim();
+          const tag = `Referencia: modelo${i}`;
+          notaGeneral.value = prev ? (prev + " | " + tag) : tag;
+
+          closeRefs();
+          updatePreview();
+        }catch(e){
+          alert("No se pudo cargar la imagen seleccionada. Revisa la ruta /img/modelos/ y el nombre modelo"+i);
+        }
+      });
+    }
+
+    div.appendChild(img);
+    div.appendChild(cap);
+    refsGallery.appendChild(div);
+  }
+}
+function closeRefs(){
+  refsOverlay.classList.remove("show");
+  refsOverlay.style.display = "none";
+}
+
+btnRefs.addEventListener("click", ()=>{ openRefs(); });
+refsClose.addEventListener("click", closeRefs);
+refsOverlay.addEventListener("click", (e)=>{ if(e.target === refsOverlay) closeRefs(); });
+
+/* listeners */
+[
+  cliente, clienteTel,
+  evento, altura, acabadoCake,
+  mismoSabor, sabor1, sabor2, sabor3, saborUnico, notaSabores, notaSabores2,
+  mismoRelleno, relleno1, relleno2, relleno3, notaRelleno,
+  harina, bizcocho, cobertura, decoracion, tema, notaGeneral,
+  montoAdicional,
+  delivery, deliveryMonto,
+  metodoPago, linkPago
+].forEach(el => { if(!el) return; el.addEventListener("input", ()=>{ enforceSizeRules(); updatePreview(); }); });
+
+
+// ===== Fecha/Hora: horario 9:00–20:00 cada 30 min + anticipación 24/48h =====
+function pad2(x){ return String(x).padStart(2,"0"); }
+function toLocalInputValue(d){
+  return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}T${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+}
+function roundUpTo30(d){
+  const dd = new Date(d.getTime());
+  const m = dd.getMinutes();
+  const add = (m===0 || m===30) ? 0 : (m<30 ? (30-m) : (60-m));
+  dd.setMinutes(m + add, 0, 0);
+  return dd;
+}
+function clampToBusinessHours(d){
+  const dd = new Date(d.getTime());
+  const openH=9, openM=0, closeH=20, closeM=0;
+  const h = dd.getHours(), m = dd.getMinutes();
+
+  // Antes de apertura -> 09:00
+  if(h < openH || (h===openH && m<openM)){
+    dd.setHours(openH, openM, 0, 0);
+    return dd;
+  }
+  // Después de cierre -> siguiente día 09:00
+  if(h > closeH || (h===closeH && m>closeM)){
+    dd.setDate(dd.getDate()+1);
+    dd.setHours(openH, openM, 0, 0);
+    return dd;
+  }
+  return dd;
+}
+function normalizeToRules(d){
+  // 1) redondear a 30 min
+  let x = roundUpTo30(d);
+  // 2) horario laboral
+  x = clampToBusinessHours(x);
+  // 3) si al clamplear cayó en minutos no válidos, re-redondear
+  x = roundUpTo30(x);
+  // 4) asegurar horario nuevamente (por si redondeo empujó > 20:00)
+  x = clampToBusinessHours(x);
+  return x;
+}
+function computeMinDateTime(){
+  const req = requiredHours();
+  const now = new Date();
+  const min = new Date(now.getTime() + req*60*60*1000);
+  return normalizeToRules(min);
+}
+function initDateTimeRules(){
+  if(!fechaHora) return;
+  // step 30 minutos
+  fechaHora.step = "1800";
+  // min dinámico por pisos
+  const min = computeMinDateTime();
+  fechaHora.min = toLocalInputValue(min);
+
+  // si ya hay valor, normalizar (pero no forzar si está vacío)
+  if(fechaHora.value){
+    const sel = new Date(fechaHora.value);
+    if(!isNaN(sel.getTime())){
+      const norm = normalizeToRules(sel);
+      fechaHora.value = toLocalInputValue(norm);
+    }
+  }
+
+  // listeners
+  const onDtChange = ()=>{
+    // recalcular min
+    const min2 = computeMinDateTime();
+    fechaHora.min = toLocalInputValue(min2);
+
+    if(fechaHora.value){
+      const sel = new Date(fechaHora.value);
+      if(!isNaN(sel.getTime())){
+        const norm = normalizeToRules(sel);
+        // no bajar la hora si el usuario eligió una válida; solo normaliza minutos/horario
+        fechaHora.value = toLocalInputValue(norm);
+      }
+    }
+    updatePreview();
+  };
+  fechaHora.addEventListener("change", onDtChange);
+  fechaHora.addEventListener("input", onDtChange);
+}
+
+if(fechaHora){ initDateTimeRules(); }
+
+pisos.addEventListener("change", ()=>{
+  initSizesByPisos();
+  syncPisosUI();
+  enforceSizeRules();
+  if(fechaHora){ initDateTimeRules(); }
+  updatePreview();
+});
+
+[t1, t2, t3].forEach(el => el.addEventListener("change", ()=>{
+  enforceSizeRules();
+  updatePreview();
+}));
+
+initSizesByPisos();
+initSabores();
+initBizcocho();
+initRellenosCobertura();
+syncPisosUI();
+enforceSizeRules();
+renderPalette();
+// Precarga imágenes de referencia en segundo plano
+preloadReferenceImages();
+updatePreview();
+</script>
+
+<!-- jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+async function toDataURL(url){
+  const res = await fetch(url, {cache:"no-store"});
+  if(!res.ok) throw new Error("No se pudo cargar: " + url);
+  const blob = await res.blob();
+  return await new Promise((resolve)=>{
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.readAsDataURL(blob);
+  });
+}
+function pickImageTypeFromDataUrl(dataUrl){
+  const m = String(dataUrl||"").match(/^data:image\/(png|jpeg|jpg);/i);
+  if(!m) return "PNG";
+  const t = m[1].toLowerCase();
+  return (t === "jpeg" || t === "jpg") ? "JPEG" : "PNG";
+}
+
+function estiloTxt(){
+  if(acabadoCake.value === "naked") return "Naked";
+  if(acabadoCake.value === "seminaked") return "Semi-Naked";
+  return "Liso";
+}
+
+function buildFlavorsPdfLines(){
+  const n = Number(pisos.value) || 1;
+  if(n === 1){
+    return [
+      `Bizcocho: ${safeText(saborUnico.value)}`,
+      `Relleno: ${safeText(relleno1.value, "Sin relleno")}`,
+      `Cobertura: ${safeText(cobertura.value, "Sencilla")}`
+    ];
+  }
+  return [
+    `Bizcocho P1: ${safeText(getSaborPiso(1))}`,
+    `Bizcocho P2: ${safeText(getSaborPiso(2))}`,
+    ...(n===3 ? [`Bizcocho P3: ${safeText(getSaborPiso(3))}`] : []),
+    `Relleno P1: ${safeText(getRellenoPiso(1), "Sin relleno")}`,
+    `Relleno P2: ${safeText(getRellenoPiso(2), "Sin relleno")}`,
+    ...(n===3 ? [`Relleno P3: ${safeText(getRellenoPiso(3), "Sin relleno")}`] : []),
+    `Cobertura: ${safeText(cobertura.value, "Sencilla")}`,
+  ];
+}
+
+document.getElementById("btnPDF").addEventListener("click", async ()=>{
+  const n = Number(pisos.value) || 1;
+  const sizesArr = getSizesArray();
+  if(!sizesArr.length){
+    alert("Selecciona tamaños para generar el PDF.");
+    return;
+  }
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({orientation:"portrait", unit:"mm", format:"a4"});
+
+  const pageW = 210;
+  const pageH = 297;
+  const margen = 14;
+
+  const verde = [47,125,87];
+  const dorado = [201,162,77];
+  const gris = [90,105,98];
+  const negro = [20,20,20];
+
+  const totals = calcularTotales();
+  const [pMin, pMax] = sumPorciones();
+  const rinde = `${pMin} a ${pMax} porciones`;
+
+  const sizesTxt = sizesArr.map(s=>`${s}”`).join(" / ");
+  const fecha = new Date().toLocaleDateString("es-PA", {year:"numeric", month:"2-digit", day:"2-digit"});
+
+  const nombreC = safeText(cliente.value, "Cliente");
+  const telC = safeText(clienteTel.value, "—");
+
+  // HEADER “factura”
+  doc.setFillColor(...verde);
+  doc.rect(0,0,pageW,28,"F");
+
+  try{
+    const logoData = await (async ()=>{
+      const tries = ["../img/logo.png","../img/logo.jpg","img/logo.png","img/logo.jpg"];
+      for(const u of tries){ try{ return await toDataURL(u); }catch(e){} }
+      throw new Error("logo");
+    })();
+    doc.addImage(logoData, "PNG", margen, 4, 20, 20);
+  }catch(e){}
+
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(14);
+  doc.setTextColor(255,255,255);
+  doc.text("COTIZACIÓN", pageW/2, 12, {align:"center"});
+
+  doc.setFont("helvetica","normal");
+  doc.setFontSize(10);
+  doc.text("CAKE FIT", pageW/2, 20, {align:"center"});
+
+  // Caja info superior (como factura)
+  let y = 34;
+  doc.setDrawColor(220,220,220);
+  doc.roundedRect(margen, y, pageW-margen*2, 28, 3, 3, "S");
+
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(9.5);
+  doc.setTextColor(...gris);
+  doc.text("Cliente:", margen+4, y+8);
+  doc.text("Teléfono:", margen+4, y+16);
+  doc.text("Fecha:", pageW/2 + 6, y+8);
+  doc.text("Tipo:", pageW/2 + 6, y+16);
+
+  doc.setFont("helvetica","normal");
+  doc.setTextColor(...negro);
+  doc.text(nombreC, margen+25, y+8, {maxWidth: 80});
+  doc.text(telC, margen+25, y+16, {maxWidth: 80});
+  const entregaTxt = fmtEntrega(fechaHora && fechaHora.value);
+  doc.text(`Entrega: ${entregaTxt}`, margen+25, y+23, {maxWidth: 95});
+  doc.text(fecha, pageW/2 + 22, y+8);
+  doc.text(`Cake ${n} piso${n>1?"s":""}`, pageW/2 + 22, y+16);
+
+  // Detalles (col izquierda)
+  y = 72;
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(11);
+  doc.setTextColor(...verde);
+  doc.text("Detalles del pedido", margen, y);
+
+  y += 6;
+  doc.setDrawColor(225,225,225);
+  doc.line(margen, y, pageW-margen, y);
+
+  y += 6;
+  doc.setFont("helvetica","normal");
+  doc.setFontSize(10);
+  doc.setTextColor(...negro);
+
+  const details = [
+    ["Evento", safeText(evento.value)],
+    ["Tamaños", safeText(sizesTxt)],
+    ["Rinde aprox.", rinde],
+    ["Altura", safeText(altura.options[altura.selectedIndex].text)],
+    ["Capas por piso", `${capasPorPiso()} bizcochos`],
+    ["Estilo", estiloTxt()],
+    ["Harina", safeText(harina.value)],
+    ["Bizcocho", safeText(getBaseSabor())],
+    ["Decoración", decoracion.value ? decoracion.options[decoracion.selectedIndex].text : "Sin decoración"],
+    ["Tema", safeText(tema.value, "—")],
+    ["Nota general", safeText(notaGeneral.value, "—")]
+  ];
+
+  let leftX = margen;
+  let leftY = y;
+  const rowH = 6.2;
+
+  details.forEach(([k,v])=>{
+    doc.setTextColor(...gris);
+    doc.setFont("helvetica","bold");
+    doc.text(`${k}:`, leftX, leftY);
+    doc.setTextColor(...negro);
+    doc.setFont("helvetica","normal");
+    doc.text(String(v), leftX+40, leftY, {maxWidth: 86});
+    leftY += rowH;
+  });
+
+  // Sabores + Foto pequeña (lado derecho)
+  const boxX = pageW - margen - 78;
+  const boxY = 68;
+  const boxW = 78;
+  const boxH = 86;
+
+  doc.setDrawColor(220,220,220);
+  doc.roundedRect(boxX, boxY, boxW, boxH, 3, 3, "S");
+
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(10.5);
+  doc.setTextColor(...verde);
+  doc.text("Sabores", boxX+4, boxY+8);
+
+  doc.setFont("helvetica","normal");
+  doc.setFontSize(9.2);
+  doc.setTextColor(...negro);
+
+  const lines = buildFlavorsPdfLines();
+  let ly = boxY+16;
+  const maxW = boxW - 8;
+
+  lines.forEach((l)=>{
+    const wrapped = doc.splitTextToSize(l, maxW);
+    doc.text(wrapped, boxX+4, ly);
+    ly += (wrapped.length * 4.2) + 1.2;
+  });
+
+  // Foto pequeña a la derecha/abajo dentro del box
+  const imgAreaY = boxY + boxH - 34;
+  const imgAreaX = boxX + boxW - 34;
+  const imgSize = 30;
+
+  if(refImageDataUrl){
+    try{
+      const imgType = pickImageTypeFromDataUrl(refImageDataUrl);
+      doc.setDrawColor(225,225,225);
+      doc.roundedRect(imgAreaX, imgAreaY, imgSize, imgSize, 2, 2, "S");
+      doc.addImage(refImageDataUrl, imgType, imgAreaX+1, imgAreaY+1, imgSize-2, imgSize-2, undefined, "FAST");
+    }catch(e){}
+  }else{
+    doc.setTextColor(...gris);
+    doc.setFontSize(8.5);
+    doc.text("Sin foto", imgAreaX+6, imgAreaY+16);
+  }
+
+  // Características (sin gluten/azúcar/lácteos)
+  let yCar = Math.max(leftY, boxY + boxH) + 10;
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(11);
+  doc.setTextColor(...verde);
+  doc.text("Características", margen, yCar);
+
+  yCar += 6;
+  doc.setDrawColor(225,225,225);
+  doc.line(margen, yCar, pageW-margen, yCar);
+  yCar += 7;
+
+  doc.setFont("helvetica","normal");
+  doc.setFontSize(10);
+  doc.setTextColor(...negro);
+  const sinLact = tieneLacteos() ? "No" : "Sí";
+  doc.text(`- Sin Gluten`, margen, yCar); yCar += 6;
+  doc.text(`- Sin Azúcar`, margen, yCar); yCar += 6;
+  doc.text(`- Sin Lácteos: ${sinLact}`, margen, yCar); yCar += 6;
+
+  // Totales (SOLO)
+  let yTot = yCar + 8;
+  doc.setFillColor(...verde);
+  doc.roundedRect(margen, yTot, pageW-margen*2, 28, 4, 4, "F");
+  doc.setTextColor(255,255,255);
+
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(11);
+  doc.text("TOTAL DEL CAKE", margen+8, yTot+10);
+  doc.text(`$${money(totals.totalCake)}`, pageW-margen-8, yTot+10, {align:"right"});
+
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(11);
+  doc.text("DELIVERY", margen+8, yTot+18);
+  doc.text(`$${money(totals.delivery)}`, pageW-margen-8, yTot+18, {align:"right"});
+
+  // Total general grande
+  doc.setFillColor(...dorado);
+  doc.roundedRect(margen, yTot+34, pageW-margen*2, 22, 4, 4, "F");
+  doc.setTextColor(30,25,16);
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(12);
+  doc.text("TOTAL GENERAL", margen+8, yTot+48);
+  doc.setFontSize(16);
+  doc.text(`$${money(totals.totalGeneral)}`, pageW-margen-8, yTot+49, {align:"right"});
+
+  // Pago (según selección)
+  const pago = getPagoData();
+  const yPay = pageH - 42;
+  doc.setDrawColor(220,220,220);
+  doc.line(margen, yPay-10, pageW-margen, yPay-10);
+
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(10);
+  doc.setTextColor(...verde);
+  doc.text("MÉTODO DE PAGO", margen, yPay);
+
+  // Icono (si existe)
+  try{
+    const payIcon = pago.img ? await toDataURL(pago.img) : null;
+    if(payIcon){
+      const t = pickImageTypeFromDataUrl(payIcon);
+      doc.addImage(payIcon, t, pageW-margen-16, yPay-6, 12, 12, undefined, "FAST");
+    }
+  }catch(e){}
+
+  doc.setFont("helvetica","normal");
+  doc.setFontSize(9);
+  doc.setTextColor(...gris);
+
+  let py = yPay + 6;
+  doc.text(`${pago.metodo}`, margen, py); py += 5;
+  (pago.lines || []).forEach((ln)=>{
+    doc.text(String(ln), margen, py, {maxWidth: pageW-margen*2}); py += 4.8;
+  });
+  if(pago.metodo === "Pago con tarjeta"){
+    doc.setTextColor(...negro);
+    doc.text(`Link: ${pago.link || "Pendiente"}`, margen, py, {maxWidth: pageW-margen*2}); py += 5.2;
+    doc.setTextColor(...gris);
+  }
+
+  // Importante
+  doc.setTextColor(122,17,17);
+  doc.setFont("helvetica","bold");
+  doc.text("IMPORTANTE:", margen+80, yPay);
+  doc.setFont("helvetica","normal");
+  doc.setTextColor(...gris);
+  doc.text("Pago completo · Procesamos al recibir comprobante · No realizamos dedicatorias", margen+80, yPay+6, {maxWidth: (pageW-margen) - (margen+80)});
+
+  doc.save("Cotizacion_CakeFit_Eventos.pdf");
+});
+// ===== PDF tipo factura 80mm (térmico) =====
+document.getElementById("btnPDF80").addEventListener("click", async ()=>{
+  const n = Number(pisos.value) || 1;
+  const sizesArr = getSizesArray();
+  if(!sizesArr.length){
+    alert("Selecciona tamaños para generar el PDF 80mm.");
+    return;
+  }
+
+  const { jsPDF } = window.jspdf;
+  // 80mm de ancho. Altura suficiente para ticket (se puede recortar en impresora)
+  const doc = new jsPDF({orientation:"portrait", unit:"mm", format:[80, 280]});
+
+  const margenX = 4;
+  let y = 6;
+
+  const totals = calcularTotales();
+  const [pMin, pMax] = sumPorciones();
+  const rindeTxt = `${pMin} a ${pMax} porciones`;
+  const sizesTxt = sizesArr.map(s=>`${s}”`).join(" / ");
+  const entregaTxt = fmtEntrega(fechaHora && fechaHora.value);
+
+  // Header
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(12);
+  doc.text("CAKE FIT", 40, y, {align:"center"}); y += 6;
+
+  doc.setFont("helvetica","normal");
+  doc.setFontSize(9);
+  doc.text("Cotización / Factura", 40, y, {align:"center"}); y += 5;
+
+  doc.setDrawColor(0);
+  doc.setLineWidth(0.2);
+  doc.line(margenX, y, 80-margenX, y); y += 4;
+
+  const line = (k,v)=>{
+    doc.setFont("helvetica","bold"); doc.text(k, margenX, y);
+    doc.setFont("helvetica","normal"); doc.text(String(v||"—"), 80-margenX, y, {align:"right"});
+    y += 4.5;
+  };
+
+  line("Cliente", safeText(cliente.value,"—"));
+  line("Tel", safeText(clienteTel.value,"—"));
+  line("Entrega", entregaTxt);
+  line("Evento", safeText(evento.value,"—"));
+  line("Pisos", String(n));
+  line("Tamaños", sizesTxt);
+  line("Rinde", rindeTxt);
+  line("Altura", altura.options[altura.selectedIndex]?.text || "—");
+  line("Estilo", estiloTxt());
+  line("Harina", safeText(harina.value,"—"));
+  line("Cobertura", safeText(cobertura.value,"Sencilla"));
+  line("Decoración", decoracion.value ? decoracion.options[decoracion.selectedIndex].text : "Sin decoración");
+
+  // Sabores / rellenos (compacto)
+  y += 1;
+  doc.line(margenX, y, 80-margenX, y); y += 4;
+  doc.setFont("helvetica","bold"); doc.text("Sabores y rellenos", margenX, y); y += 4.5;
+  doc.setFont("helvetica","normal");
+
+  const lines = buildFlavorsPdfLines();
+  lines.forEach((l)=>{
+    const wrapped = doc.splitTextToSize(l, 80 - margenX*2);
+    doc.text(wrapped, margenX, y);
+    y += wrapped.length * 4.2;
+  });
+
+  // Totales
+  y += 2;
+  doc.line(margenX, y, 80-margenX, y); y += 4;
+
+  doc.setFont("helvetica","bold");
+  line("Total cake", `$${money(totals.totalCake)}`);
+  line("Delivery", `$${money(totals.delivery)}`);
+
+  doc.setFontSize(11);
+  doc.setFont("helvetica","bold");
+  doc.text("TOTAL", margenX, y);
+  doc.text(`$${money(totals.totalGeneral)}`, 80-margenX, y, {align:"right"});
+  y += 6;
+
+  // Pago
+  doc.setFontSize(9);
+  doc.line(margenX, y, 80-margenX, y); y += 4;
+
+  const pago = getPagoData();
+  doc.setFont("helvetica","bold");
+  doc.text("Método de pago", margenX, y); y += 4.5;
+  doc.setFont("helvetica","normal");
+  doc.text(pago.metodo || "—", margenX, y); y += 4.5;
+
+  (pago.lines || []).forEach((ln)=>{
+    const wrapped = doc.splitTextToSize(String(ln), 80 - margenX*2);
+    doc.text(wrapped, margenX, y);
+    y += wrapped.length * 4.2;
+  });
+
+  if(pago.metodo === "Pago con tarjeta"){
+    const linkTxt = (pago.link || "").trim();
+    const wrapped = doc.splitTextToSize(`Link: ${linkTxt || "Pendiente"}`, 80 - margenX*2);
+    doc.text(wrapped, margenX, y);
+    y += wrapped.length * 4.2;
+
+    // QR en ticket 80mm (solo si hay link)
+    if(linkTxt){
+      y += 2;
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(linkTxt)}`;
+      const qrDataUrl = await fetchAsDataURL(qrUrl);
+      if(qrDataUrl){
+        const qrSize = 38;
+        const x = (80 - qrSize) / 2;
+        // si se va a salir, agrega página
+        if(y + qrSize + 10 > 280){
+          doc.addPage([80, 280], "portrait");
+          y = 10;
+        }
+        doc.addImage(qrDataUrl, "PNG", x, y, qrSize, qrSize);
+        y += qrSize + 4;
+        doc.setFontSize(7);
+        doc.setFont("helvetica","normal");
+        // const linkWrap = doc.splitTextToSize(linkTxt, 80 - margenX*2);
+        // doc.text(linkWrap, margenX, y);
+        // y += linkWrap.length * 3.6;
+      }else{
+        // Si falla el QR, al menos deja el link
+        doc.setFontSize(8);
+        const linkWrap = doc.splitTextToSize(linkTxt, 80 - margenX*2);
+        doc.text(linkWrap, margenX, y);
+        y += linkWrap.length * 4.0;
+      }
+      doc.setFontSize(9);
+    }
+  }
+
+  y += 2;
+  doc.setFont("helvetica","bold");
+  doc.text("IMPORTANTE", margenX, y); y += 4.5;
+  doc.setFont("helvetica","normal");
+  const imp = "Pago completo. Procesamos al recibir comprobante. No realizamos dedicatorias.";
+  doc.text(doc.splitTextToSize(imp, 80 - margenX*2), margenX, y);
+
+  doc.save("Factura_80mm_CakeFit.pdf");
+});
+
+
+// ===== Inicializar selects en blanco (placeholders) =====
+function ensurePlaceholder(sel, label){
+  if(!sel) return;
+  const first = sel.options && sel.options[0];
+  if(first && first.value === "") { sel.value = ""; return; }
+  const opt = document.createElement("option");
+  opt.value = "";
+  opt.textContent = label || "Selecciona…";
+  sel.insertBefore(opt, sel.firstChild);
+  sel.value = "";
+}
+function initBlankSelections(){
+  // Dejar todo en blanco para que el cliente seleccione
+  ensurePlaceholder(pisos, "Selecciona pisos…");
+  ensurePlaceholder(evento, "Selecciona evento…");
+  ensurePlaceholder(t1, "Selecciona tamaño…");
+  ensurePlaceholder(t2, "Selecciona tamaño…");
+  ensurePlaceholder(t3, "Selecciona tamaño…");
+  ensurePlaceholder(altura, "Selecciona altura…");
+  ensurePlaceholder(acabadoCake, "Selecciona estilo…");
+  ensurePlaceholder(harina, "Selecciona harina…");
+  // Bizcocho base ya no se usa; si existe, lo dejamos en blanco
+  if(bizcocho) ensurePlaceholder(bizcocho, "—");
+  ensurePlaceholder(saborUnico, "Selecciona sabor…");
+  ensurePlaceholder(sabor1, "Selecciona sabor…");
+  ensurePlaceholder(sabor2, "Selecciona sabor…");
+  ensurePlaceholder(sabor3, "Selecciona sabor…");
+  ensurePlaceholder(relleno1, "Selecciona crema…");
+  ensurePlaceholder(relleno2, "Selecciona crema…");
+  ensurePlaceholder(relleno3, "Selecciona crema…");
+  ensurePlaceholder(cobertura, "Selecciona cobertura…");
+  ensurePlaceholder(decoracion, "Selecciona decoración…");
+  // Pago
+  ensurePlaceholder(metodoPago, "Selecciona método…");
+  if(linkPago) linkPago.value = "";
+  // Fecha/hora en blanco
+  if(fechaHora) fechaHora.value = "";
+}
+// Inicializa en blanco al cargar
+try{ initBlankSelections(); }catch(e){}
+/* ===========================
+   WHATSAPP (sin emojis, con negritas + cliente + teléfono)
+   =========================== */
+document.getElementById("btnEnviar").addEventListener("click", ()=>{
+  const n = Number(pisos.value) || 1;
+  const sizesArr = getSizesArray();
+  const sizesTxt = sizesArr.map(s=>`${s}”`).join(" / ");
+
+  const [pMin, pMax] = sumPorciones();
+  const rindeTxt = `${pMin} a ${pMax} porciones`;
+
+  const totals = calcularTotales();
+
+  const nombreCliente = (cliente.value || "").trim() || "Cliente";
+  const telCliente = (clienteTel.value || "").trim() || "—";
+  const entregaTxt = fmtEntrega(fechaHora && fechaHora.value);
+
+  const alturaTxt = altura.options[altura.selectedIndex].text;
+  const styleTxt = estiloTxt();
+  const decoTxt = decoracion.value ? decoracion.options[decoracion.selectedIndex].text : "Sin decoración";
+
+  const notaSab = (n===1 ? (notaSabores2.value||"") : (notaSabores.value||"")).trim();
+  const notaR = (notaRelleno.value||"").trim();
+  const notaG = (notaGeneral.value||"").trim();
+
+  const sinLact = tieneLacteos() ? "No" : "Sí";
+
+  let saboresMsg = "";
+  if(n === 1){
+    saboresMsg += `Bizcocho: ${safeText(saborUnico.value)}%0A`;
+    saboresMsg += `Relleno: ${safeText(relleno1.value, "Sin relleno")}%0A`;
+  }else{
+    saboresMsg += `Bizcocho P1: ${safeText(getSaborPiso(1))}%0A`;
+    saboresMsg += `Bizcocho P2: ${safeText(getSaborPiso(2))}%0A`;
+    if(n===3) saboresMsg += `Bizcocho P3: ${safeText(getSaborPiso(3))}%0A`;
+    saboresMsg += `%0A`;
+    saboresMsg += `Relleno P1: ${safeText(getRellenoPiso(1), "Sin relleno")}%0A`;
+    saboresMsg += `Relleno P2: ${safeText(getRellenoPiso(2), "Sin relleno")}%0A`;
+    if(n===3) saboresMsg += `Relleno P3: ${safeText(getRellenoPiso(3), "Sin relleno")}%0A`;
+  }
+const pago = getPagoData();
+
+const msg =
+  `*COTIZACIÓN CAKE FIT*%0A%0A` +
+  `*Cliente:* ${encodeURIComponent(nombreCliente)}%0A` +
+  `*Teléfono:* ${encodeURIComponent(telCliente)}%0A` +
+  `*Entrega:* ${encodeURIComponent(entregaTxt)}%0A%0A` +
+  `*Evento:* ${encodeURIComponent(evento.value)}%0A` +
+  `*Pisos:* ${n}%0A` +
+  `*Tamaño:* ${encodeURIComponent(sizesTxt || "—")}%0A` +
+  `*Altura:* ${encodeURIComponent(alturaTxt)}%0A` +
+  `*Rinde aprox:* ${encodeURIComponent(rindeTxt)}%0A` +
+  `*Estilo:* ${encodeURIComponent(styleTxt)}%0A` +
+  `*Cobertura:* ${encodeURIComponent(cobertura.value || "Sencilla")}%0A` +
+  `*Decoración:* ${encodeURIComponent(decoTxt)}%0A` +
+  (tema.value.trim() ? `*Tema:* ${encodeURIComponent(tema.value.trim())}%0A` : ``) +
+  `%0A` +
+  `*Sabores y rellenos*%0A` +
+  saboresMsg +
+  (notaSab ? `%0A*Nota sabores:* ${encodeURIComponent(notaSab)}%0A` : ``) +
+  (notaR ? `*Nota rellenos:* ${encodeURIComponent(notaR)}%0A` : ``) +
+  (notaG ? `*Nota general:* ${encodeURIComponent(notaG)}%0A` : ``) +
+  `%0A` +
+  `*Características*%0A` +
+  `Sin gluten: Sí%0A` +
+  `Sin azúcar: Sí%0A` +
+  `lácteos: ${encodeURIComponent(sinLact)}%0A%0A` +
+  `*Totales*%0A` +
+  `*Total del cake:* $${money(totals.totalCake)}%0A` +
+  `*Delivery:* $${money(totals.delivery)}%0A` +
+  `*Total general:* $${money(totals.totalGeneral)}%0A%0A` +
+  `*Método de pago:* ${encodeURIComponent(pago.metodo)}%0A` +
+  (pago.metodo === "Pago con tarjeta"
+    ? `*Link de pago:* ${encodeURIComponent(pago.link || "Pendiente")}%0A`
+    : ``) +
+  `%0A` +
+  `Quedo atento para confirmar disponibilidad y fecha de entrega.`;
+
+window.open(`https://wa.me/50768636913?text=${msg}`, "_blank");
+});
+
+// --- Helper: fetch image URL as DataURL (for QR PNG) ---
+async function fetchAsDataURL(url){
+  try{
+    const res = await fetch(url, {mode:"cors", cache:"no-store"});
+    if(!res.ok) throw new Error("HTTP "+res.status);
+    const blob = await res.blob();
+    return await new Promise((resolve,reject)=>{
+      const r = new FileReader();
+      r.onload = ()=> resolve(r.result);
+      r.onerror = reject;
+      r.readAsDataURL(blob);
+    });
+  }catch(e){
+    console.warn("QR fetch failed:", e);
+    return null;
+  }
+}
+
+</script>
+
+</body>
+</html>

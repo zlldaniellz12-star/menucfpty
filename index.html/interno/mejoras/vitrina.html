@@ -1,0 +1,736 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <a href="admin.html">Admin</a>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cake Fit | Vitrina Solo Crema</title>
+  
+  <script src="config.default.js"></script>
+<script>
+  const LSKEY = "cakefit_config_v1";
+  function loadConfig(){
+    const saved = localStorage.getItem(LSKEY);
+    return saved ? JSON.parse(saved) : window.CAKEFIT_DEFAULT;
+  }
+  window.CAKEFIT_CONFIG = loadConfig();
+</script>
+  <style>
+    :root{
+      --verde:#2f7d57;
+      --verde-oscuro:#245f43;
+      --dorado:#c9a24d;
+      --fondo:#f4faf7;
+      --texto:#1f2a24;
+      --gris:#5b6b62;
+      --borde:#dfe8e2;
+      --sombra:0 18px 40px rgba(0,0,0,.10);
+      --ok:#1f9d55;
+      --bad:#b42318;
+      --warn:#b45309;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--texto);
+      background:
+        radial-gradient(900px 450px at 15% 8%, rgba(47,125,87,.14), transparent 60%),
+        radial-gradient(900px 450px at 90% 0%, rgba(201,162,77,.12), transparent 62%),
+        linear-gradient(180deg, var(--fondo), #fff);
+      padding:16px;
+    }
+    .wrap{max-width:1150px;margin:auto}
+    .top{
+      background:#fff;
+      border:1px solid var(--borde);
+      border-radius:22px;
+      box-shadow:var(--sombra);
+      padding:14px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{
+      width:46px;height:46px;border-radius:14px;
+      border:1px solid var(--borde);
+      object-fit:cover;background:#fff;
+    }
+    h1{margin:0;color:var(--verde);font-size:1.18rem;line-height:1.1}
+    .sub{margin:2px 0 0;color:var(--gris);font-size:.92rem}
+    .tools{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+    .pill{
+      border:1px solid var(--borde);
+      border-radius:14px;
+      padding:10px 12px;
+      background:#fff;
+      min-width:190px;
+    }
+    .pill label{display:block;font-size:.78rem;color:var(--gris);font-weight:800;margin-bottom:6px}
+    .pill input[type="search"], .pill select{
+      width:100%;
+      border:1px solid var(--borde);
+      border-radius:12px;
+      padding:10px 10px;
+      outline:none;
+      font-size:.95rem;
+      background:#fff;
+    }
+    .rowChecks{display:flex;gap:10px;flex-wrap:wrap}
+    .check{
+      display:flex;align-items:center;gap:10px;
+      padding:10px 12px;border:1px solid var(--borde);
+      border-radius:14px;background:#fff;
+      user-select:none;
+    }
+    .check input{width:18px;height:18px;accent-color:var(--verde)}
+    .check .hint{color:var(--gris);font-size:.9rem}
+    .adminNote{color:var(--gris);font-size:.85rem;margin-top:6px}
+
+    .chips{display:flex;gap:8px;flex-wrap:wrap;margin:14px 2px 10px}
+    .chip{
+      border:1px solid var(--borde);
+      background:#fff;
+      border-radius:999px;
+      padding:8px 12px;
+      cursor:pointer;
+      color:var(--gris);
+      font-weight:800;
+      transition:.15s;
+      user-select:none;
+    }
+    .chip.active{
+      border-color: rgba(47,125,87,.35);
+      color:var(--verde);
+      background:rgba(47,125,87,.06);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:14px;
+    }
+    .card{
+      background:#fff;
+      border:1px solid var(--borde);
+      border-radius:22px;
+      overflow:hidden;
+      box-shadow:0 10px 25px rgba(0,0,0,.08);
+      display:flex;flex-direction:column;
+      min-height: 100%;
+    }
+
+    .thumbWrap{position:relative;padding:10px 10px 0;background:linear-gradient(180deg,#f7fbf9,#fff)}
+    /* IMÁGENES MÁS CHICAS */
+    .thumb{
+      width:100%;
+      height:170px;          /* antes 220 */
+      object-fit:contain;
+      border-radius:18px;
+      background:#fff;
+      border:1px solid var(--borde);
+    }
+
+    .badgeStack{
+      position:absolute;
+      top:18px; left:18px;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      pointer-events:none;
+    }
+    .badge{
+      font-weight:900;
+      font-size:.74rem;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.75);
+      background:rgba(31,42,36,.80);
+      color:#fff;
+      backdrop-filter: blur(6px);
+      width:max-content;
+    }
+
+    .body{padding:12px 12px 14px;display:flex;flex-direction:column;gap:10px}
+    .headRow{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+    .name{font-weight:900;font-size:1.02rem;margin:0}
+    .status{
+      font-weight:900;
+      font-size:.78rem;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--borde);
+      white-space:nowrap;
+    }
+    .status.ok{color:var(--ok);background:rgba(31,157,85,.08);border-color:rgba(31,157,85,.20)}
+    .status.bad{color:var(--bad);background:rgba(180,35,24,.08);border-color:rgba(180,35,24,.20)}
+    .status.warn{color:var(--warn);background:rgba(180,83,9,.08);border-color:rgba(180,83,9,.20)}
+    .meta{color:var(--gris);font-size:.92rem;line-height:1.3}
+
+    .diet{
+      display:flex;gap:6px;flex-wrap:wrap;
+      margin-top:2px;
+    }
+    .tag{
+      font-weight:900;
+      font-size:.78rem;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid var(--borde);
+      background:#fff;
+      color:var(--gris);
+    }
+    .tag.ok{
+      border-color: rgba(47,125,87,.22);
+      background: rgba(47,125,87,.06);
+      color: var(--verde-oscuro);
+    }
+    .tag.extra{
+      border-color: rgba(201,162,77,.35);
+      background: rgba(201,162,77,.10);
+      color: #7a5a1d;
+    }
+
+    .prices{
+      border-top:1px solid var(--borde);
+      padding-top:10px;
+      display:grid;
+      grid-template-columns:1fr;
+      gap:8px;
+      margin-top:auto;
+    }
+    .priceLine{
+      display:flex;align-items:center;justify-content:space-between;
+      border:1px solid var(--borde);
+      border-radius:14px;
+      padding:10px 11px;
+      background:linear-gradient(180deg,#fff, #fbfdfc);
+    }
+    .priceLine b{color:var(--verde)}
+    .priceLine span{color:var(--gris);font-weight:900}
+
+    .noSizes{
+      border-top:1px solid var(--borde);
+      padding-top:10px;
+      color:var(--gris);
+      font-weight:900;
+      font-size:.92rem;
+    }
+
+    .adminPanel{
+      margin-top:10px;
+      border:1px dashed var(--borde);
+      border-radius:16px;
+      padding:10px;
+      background:rgba(47,125,87,.04);
+      display:none;
+    }
+    .adminPanel .title{
+      font-weight:900;color:var(--verde);margin:0 0 8px 0;font-size:.92rem;
+    }
+    .adminGrid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+    .adminGrid .box{
+      border:1px solid var(--borde);
+      border-radius:14px;
+      padding:10px;background:#fff;
+    }
+    .adminGrid .box label{font-size:.78rem;color:var(--gris);font-weight:900;display:block;margin-bottom:8px}
+    .toggleRow{display:flex;gap:8px;flex-wrap:wrap}
+    .tog{
+      display:flex;align-items:center;gap:8px;
+      border:1px solid var(--borde);
+      border-radius:999px;
+      padding:8px 10px;
+      cursor:pointer;
+      user-select:none;
+      font-weight:900;
+      font-size:.85rem;
+      background:#fff;
+    }
+    .tog input{width:16px;height:16px;accent-color:var(--verde)}
+    .empty{
+      margin-top:14px;
+      padding:16px;
+      border:1px dashed var(--borde);
+      border-radius:18px;
+      background:#fff;
+      color:var(--gris);
+      text-align:center;
+    }
+
+    @media (max-width: 980px){ .grid{grid-template-columns:repeat(2,1fr)} }
+    @media (max-width: 640px){
+      body{padding:12px}
+      .top{align-items:stretch}
+      .pill{min-width: 100%}
+      .grid{grid-template-columns:1fr}
+      .adminGrid{grid-template-columns:1fr}
+      .thumb{height:160px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">
+        <img class="logo" src="img/logo.jpg" onerror="this.onerror=null;this.src='img/logo.png'" alt="Cake Fit">
+        <div>
+          <h1>Vitrina · Solo Crema</h1>
+          <div class="sub">Tamaño+pax en esquina · Precio según tamaño disponible</div>
+        </div>
+      </div>
+
+      <div class="tools">
+        <div class="pill">
+          <label for="buscar">Buscar</label>
+          <input id="buscar" type="search" placeholder="Ej: zanahoria, keto, velvet..." />
+        </div>
+
+        <div class="pill">
+          <label for="view">Ver</label>
+          <select id="view">
+            <option value="todos">Todos</option>
+            <option value="disponible">Solo disponibles</option>
+            <option value="nodisponible">Solo no disponibles</option>
+          </select>
+        </div>
+
+        <div class="pill">
+          <label for="sizeFilter">Tamaño</label>
+          <select id="sizeFilter">
+            <option value="__all__">Todos</option>
+            <option value="6">6”</option>
+            <option value="7">7”</option>
+            <option value="8">8”</option>
+            <option value="9">9”</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="chips" id="chips"></div>
+
+    <div class="rowChecks" style="margin:8px 2px 6px;">
+      <label class="check" title="Si está activo, algunos sabores de 9” también se podrán ofrecer en 6” cuando haya bizcocho de chocolate 6”.">
+        <input id="choco6" type="checkbox">
+        <div>
+          <div style="font-weight:900">Hay bizcocho chocolate 6”</div>
+          <div class="hint">Activa 6” en algunos sabores (cuando aplique)</div>
+        </div>
+      </label>
+
+      <label class="check" title="Activa para editar disponibilidad y tamaños (se guarda en este dispositivo).">
+        <input id="admin" type="checkbox">
+        <div>
+          <div style="font-weight:900">Modo admin</div>
+          <div class="hint">Cambiar disponible / tamaños / almendra</div>
+        </div>
+      </label>
+    </div>
+
+    <div class="adminNote">Tip: los cambios se guardan en este navegador (no afecta otros dispositivos).</div>
+
+    <div class="grid" id="grid"></div>
+    <div class="empty" id="empty" style="display:none">No hay resultados con esos filtros.</div>
+  </div>
+
+<script>
+const IMG_BASE = "img/";
+
+const paxBySize = {
+  "6": "6–9 pax",
+  "7": "10–12 pax",
+  "8": "13–16 pax",
+  "9": "17–20 pax"
+};
+
+/* Extra harina de almendras */
+const almondExtra = { "6":6, "7":8, "8":10, "9":12 };
+
+const cakes = [
+  { id:"zanahoria-avena", name:"Zanahoria Avena", tags:["con lácteos"], img:"zanahoria-avena.png",
+    defaultSizes:["9"], basePrices:{6:39.99,7:53.99,8:66.99,9:79.98}, canAlt6FromChocoBase:false, note:"Principal: 9” (lo demás por confirmar)" },
+
+  { id:"zanahoria-almendra", name:"Zanahoria Almendra", tags:["sin lácteos"], img:"zanahoria-almendra.png",
+    defaultSizes:["9"], basePrices:{6:46.00,7:62.00,8:76.99,9:91.99}, canAlt6FromChocoBase:false, note:"Principal: 9” (lo demás por confirmar)" },
+
+  { id:"selva-negra-keto", name:"Selva Negra Keto", tags:["keto","con lácteos"], img:"selva-negra.png",
+    defaultSizes:["9"], basePrices:{6:45.99,7:61.99,8:76.99,9:91.99}, canAlt6FromChocoBase:true, note:"Principal: 9” (6” si hay bizcocho choco, lo demás por confirmar)" },
+
+  { id:"triple-chocolate", name:"Triple Chocolate", tags:["sin lácteos"], img:"triple-chocolate.png",
+    defaultSizes:["9"], basePrices:{6:44.99,7:59.99,8:74.98,9:89.98}, canAlt6FromChocoBase:true, note:"Principal: 9” (6” si hay bizcocho choco, lo demás por confirmar)" },
+
+  { id:"vainilla-keto", name:"Vainilla Keto", tags:["keto","con lácteos"], img:"vainilla-keto.png",
+    defaultSizes:["6"], basePrices:{6:42.99,7:57.99,8:71.99,9:85.98}, canAlt6FromChocoBase:false, note:"Principal: 6” (lo demás por confirmar)" },
+
+  { id:"red-velvet-avena", name:"Red Velvet Avena", tags:["con lácteos"], img:"red-velvet.png",
+    defaultSizes:["6"], basePrices:{6:37.99,7:50.99,8:63.99,9:75.99}, canAlt6FromChocoBase:false, note:"Principal: 6” (lo demás por confirmar)" },
+
+  { id:"red-velvet-keto", name:"Red Velvet Keto", tags:["keto","con lácteos"], img:"red-velvet-keto.png",
+    defaultSizes:["6"], basePrices:{6:43.00,7:57.99,8:71.99,9:86.00}, canAlt6FromChocoBase:false, note:"Principal: 6” (lo demás por confirmar)" },
+
+  { id:"guineo", name:"Guineo", tags:["sin lácteos"], img:"guineo-nuez.png",
+    defaultSizes:["6"], basePrices:{6:37.99,7:50.99,8:63.99,9:75.99}, canAlt6FromChocoBase:false, note:"Principal: 6” (lo demás por confirmar)" },
+
+  { id:"pina", name:"Piña", tags:["sin lácteos"], img:"pina.png",
+    defaultSizes:["6"], basePrices:{6:37.99,7:50.99,8:63.99,9:75.99}, canAlt6FromChocoBase:false, note:"Principal: 6” (lo demás por confirmar)" },
+
+  { id:"choco-pistacho", name:"Chocolate Pistacho", tags:["sin lácteos"], img:"chocolate-pistacho.png",
+    defaultSizes:["9"], basePrices:{}, canAlt6FromChocoBase:true, note:"Principal: 9” (6” si hay bizcocho choco, lo demás por confirmar)" },
+
+  { id:"zanahoria-pistacho", name:"Zanahoria Pistacho", tags:["sin lácteos"], img:"zanahoria-pistacho.png",
+    defaultSizes:["9"], basePrices:{}, canAlt6FromChocoBase:false, note:"Principal: 9” (lo demás por confirmar)" },
+
+  { id:"choco-maracuya", name:"Choco Maracuyá", tags:["sin lácteos"], img:"choco-maracuya.png",
+    defaultSizes:["6"], basePrices:{6:44.99,7:59.99,8:74.98,9:89.98}, canAlt6FromChocoBase:true, note:"Principal: 6” (9” por confirmar)" },
+];
+
+const LS_KEY = "cakefit_vitrina_solo_crema_v5";
+
+const $ = (s)=>document.querySelector(s);
+const grid = $("#grid");
+const empty = $("#empty");
+const buscar = $("#buscar");
+const viewSel = $("#view");
+const sizeFilter = $("#sizeFilter");
+const chips = $("#chips");
+const adminChk = $("#admin");
+const choco6Chk = $("#choco6");
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    if(!raw) return null;
+    return JSON.parse(raw);
+  }catch(e){ return null; }
+}
+
+const defaults = {};
+cakes.forEach(c=>{
+  defaults[c.id] = { available:true, sizes:[...c.defaultSizes], almond:false };
+});
+
+let persisted = loadState();
+const stateItems = (persisted && persisted.items) ? persisted.items : {};
+
+if(persisted){
+  adminChk.checked = !!persisted.admin;
+  choco6Chk.checked = !!persisted.choco6;
+}
+
+function getAvail(id){
+  return (stateItems[id] && typeof stateItems[id].available === "boolean") ? stateItems[id].available : defaults[id].available;
+}
+function setAvail(id, val){
+  stateItems[id] = stateItems[id] || {};
+  stateItems[id].available = !!val;
+  saveState();
+}
+function getSizes(id){
+  return (stateItems[id] && Array.isArray(stateItems[id].sizes)) ? [...stateItems[id].sizes] : [...defaults[id].sizes];
+}
+function setSizes(id, sizesArr){
+  stateItems[id] = stateItems[id] || {};
+  stateItems[id].sizes = [...sizesArr];
+  saveState();
+}
+function getAlmond(id){
+  return (stateItems[id] && typeof stateItems[id].almond === "boolean") ? stateItems[id].almond : defaults[id].almond;
+}
+function setAlmond(id, val){
+  stateItems[id] = stateItems[id] || {};
+  stateItems[id].almond = !!val;
+  saveState();
+}
+
+function saveState(){
+  const state = { admin: adminChk.checked, choco6: choco6Chk.checked, items:{} };
+  cakes.forEach(c=>{
+    state.items[c.id] = {
+      available:getAvail(c.id),
+      sizes:getSizes(c.id),
+      almond:getAlmond(c.id)
+    };
+  });
+  localStorage.setItem(LS_KEY, JSON.stringify(state));
+}
+
+/* Chips */
+const chipDefs = [
+  { key:"__all__", label:"Todos" },
+  { key:"sin", label:"Sin lácteos" },
+  { key:"lac", label:"Con lácteos" },
+  { key:"keto", label:"Keto" },
+];
+let activeChip = "__all__";
+
+function isKeto(c){ return (c.tags||[]).includes("keto"); }
+function isSin(c){ return (c.tags||[]).includes("sin lácteos"); }
+function isLac(c){ return (c.tags||[]).includes("con lácteos"); }
+
+function resolveSizes(c){
+  const base = new Set(getSizes(c.id));
+  if(choco6Chk.checked && c.canAlt6FromChocoBase) base.add("6");
+  return ["6","7","8","9"].filter(x=>base.has(x));
+}
+
+function chipMatch(c){
+  if(activeChip==="__all__") return true;
+  if(activeChip==="keto") return isKeto(c);
+  if(activeChip==="sin") return isSin(c);
+  if(activeChip==="lac") return isLac(c);
+  return true;
+}
+function textMatch(c, q){
+  if(!q) return true;
+  const blob = (c.name + " " + (c.tags||[]).join(" ") + " " + (c.note||"")).toLowerCase();
+  return blob.includes(q);
+}
+function viewMatch(c){
+  const v = viewSel.value;
+  const a = getAvail(c.id);
+  if(v==="todos") return true;
+  if(v==="disponible") return a;
+  if(v==="nodisponible") return !a;
+  return true;
+}
+function sizeMatch(c){
+  const f = sizeFilter.value;
+  if(f==="__all__") return true;
+  return resolveSizes(c).includes(f);
+}
+
+function statusClass(available, sizesArr){
+  if(!available) return "bad";
+  if(available && sizesArr.length===0) return "warn";
+  if(available && sizesArr.length===1) return "warn";
+  return "ok";
+}
+
+function money(n){
+  const num = Number(n);
+  if(Number.isFinite(num)) return "$" + num.toFixed(2);
+  return null;
+}
+
+function buildChips(){
+  chips.innerHTML = "";
+  chipDefs.forEach(ch=>{
+    const d = document.createElement("div");
+    d.className = "chip" + (ch.key===activeChip ? " active" : "");
+    d.textContent = ch.label;
+    d.addEventListener("click", ()=>{
+      activeChip = ch.key;
+      buildChips();
+      render();
+    });
+    chips.appendChild(d);
+  });
+}
+
+function dietTags(c, almondOn){
+  const tags = [];
+  tags.push({label:"Sin Gluten", cls:"ok"}); // TODOS
+  tags.push({label:"Sin Azúcar", cls:"ok"}); // TODOS
+  if(isSin(c)) tags.push({label:"Sin Lácteos", cls:"ok"});
+  if(almondOn) tags.push({label:"Harina de almendra +$6–$12", cls:"extra"});
+  return tags;
+}
+
+function priceFor(c, size, almondOn){
+  const base = c.basePrices ? c.basePrices[size] : undefined;
+  if(base == null) return null;
+  let total = Number(base);
+  if(almondOn){
+    const extra = almondExtra[size];
+    if(extra != null) total += Number(extra);
+  }
+  return total;
+}
+
+function buildCard(c){
+  const available = getAvail(c.id);
+  const sizesArr = available ? resolveSizes(c) : [];
+  const admin = adminChk.checked;
+  const almondOn = getAlmond(c.id);
+
+  const card = document.createElement("div");
+  card.className = "card";
+
+  const thumbWrap = document.createElement("div");
+  thumbWrap.className = "thumbWrap";
+
+  const img = document.createElement("img");
+  img.className = "thumb";
+  img.alt = c.name;
+  img.src = IMG_BASE + c.img;
+  img.onerror = ()=>{ img.onerror=null; img.src = IMG_BASE + "logo.jpg"; };
+
+  const badgeStack = document.createElement("div");
+  badgeStack.className = "badgeStack";
+  sizesArr.forEach(sz=>{
+    const b = document.createElement("div");
+    b.className = "badge";
+    b.textContent = `${sz}” · ${paxBySize[sz] || "pax"}`;
+    badgeStack.appendChild(b);
+  });
+
+  thumbWrap.appendChild(img);
+  thumbWrap.appendChild(badgeStack);
+
+  const body = document.createElement("div");
+  body.className = "body";
+
+  const head = document.createElement("div");
+  head.className = "headRow";
+
+  const name = document.createElement("h3");
+  name.className = "name";
+  name.textContent = c.name;
+
+  const st = document.createElement("div");
+  st.className = "status " + statusClass(available, sizesArr);
+  st.textContent = available ? "Disponible" : "No disponible";
+
+  head.appendChild(name);
+  head.appendChild(st);
+
+  const meta = document.createElement("div");
+  meta.className = "meta";
+  meta.textContent = c.note || "";
+
+  const diet = document.createElement("div");
+  diet.className = "diet";
+  dietTags(c, almondOn).forEach(t=>{
+    const span = document.createElement("div");
+    span.className = "tag " + t.cls;
+    span.textContent = t.label;
+    diet.appendChild(span);
+  });
+
+  // Precios SOLO tamaños disponibles (y ahora ya NO dice "Por", dice el precio por tamaño)
+  const priceBox = document.createElement("div");
+  priceBox.className = "prices";
+  sizesArr.forEach(sz=>{
+    const line = document.createElement("div");
+    line.className = "priceLine";
+    const total = priceFor(c, sz, almondOn);
+    const p = total != null ? money(total) : "Por confirmar";
+    line.innerHTML = `<span>${sz}”</span><b>${p}</b>`;
+    priceBox.appendChild(line);
+  });
+
+  const noSizes = document.createElement("div");
+  noSizes.className = "noSizes";
+  noSizes.textContent = "Tamaño: Por confirmar";
+
+  const adminPanel = document.createElement("div");
+  adminPanel.className = "adminPanel";
+  adminPanel.style.display = admin ? "block" : "none";
+  adminPanel.innerHTML = `
+    <div class="title">Editar (solo este dispositivo)</div>
+    <div class="adminGrid">
+      <div class="box">
+        <label>Disponibilidad</label>
+        <div class="toggleRow">
+          <label class="tog"><input type="radio" name="av-${c.id}" value="1"> Disponible</label>
+          <label class="tog"><input type="radio" name="av-${c.id}" value="0"> No disponible</label>
+        </div>
+      </div>
+      <div class="box">
+        <label>Tamaños que tienes listos</label>
+        <div class="toggleRow">
+          <label class="tog"><input type="checkbox" data-size="6"> 6”</label>
+          <label class="tog"><input type="checkbox" data-size="7"> 7”</label>
+          <label class="tog"><input type="checkbox" data-size="8"> 8”</label>
+          <label class="tog"><input type="checkbox" data-size="9"> 9”</label>
+        </div>
+      </div>
+      <div class="box" style="grid-column:1/-1;">
+        <label>Extras</label>
+        <div class="toggleRow">
+          <label class="tog" title="Suma el extra de almendra según el tamaño (+$6/$8/$10/$12).">
+            <input type="checkbox" data-almond="1"> Harina de almendras (+$6–$12)
+          </label>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const radios = adminPanel.querySelectorAll(`input[name="av-${c.id}"]`);
+  radios.forEach(r=>{
+    r.checked = (r.value==="1") ? available : !available;
+    r.addEventListener("change", ()=>{
+      setAvail(c.id, r.value==="1");
+      render();
+    });
+  });
+
+  const baseSizes = new Set(getSizes(c.id));
+  const sizeChecks = adminPanel.querySelectorAll(`input[type="checkbox"][data-size]`);
+  sizeChecks.forEach(chk=>{
+    const sz = chk.getAttribute("data-size");
+    chk.checked = baseSizes.has(sz);
+    chk.addEventListener("change", ()=>{
+      const s = new Set(getSizes(c.id));
+      if(chk.checked) s.add(sz); else s.delete(sz);
+      setSizes(c.id, Array.from(s));
+      render();
+    });
+  });
+
+  const almondChk = adminPanel.querySelector(`input[type="checkbox"][data-almond="1"]`);
+  almondChk.checked = almondOn;
+  almondChk.addEventListener("change", ()=>{
+    setAlmond(c.id, almondChk.checked);
+    render();
+  });
+
+  body.appendChild(head);
+  body.appendChild(meta);
+  body.appendChild(diet);
+
+  if(available){
+    if(sizesArr.length) body.appendChild(priceBox);
+    else body.appendChild(noSizes);
+  }else{
+    body.appendChild(noSizes);
+  }
+
+  body.appendChild(adminPanel);
+
+  card.appendChild(thumbWrap);
+  card.appendChild(body);
+  return card;
+}
+
+function applyFilters(){
+  const q = (buscar.value || "").trim().toLowerCase();
+  return cakes.filter(c => chipMatch(c) && textMatch(c, q) && viewMatch(c) && sizeMatch(c));
+}
+
+function render(){
+  grid.innerHTML = "";
+  const list = applyFilters();
+  list.forEach(c => grid.appendChild(buildCard(c)));
+  empty.style.display = list.length ? "none" : "block";
+}
+
+buildChips();
+render();
+
+buscar.addEventListener("input", render);
+viewSel.addEventListener("change", render);
+sizeFilter.addEventListener("change", render);
+adminChk.addEventListener("change", ()=>{ saveState(); render(); });
+choco6Chk.addEventListener("change", ()=>{ saveState(); render(); });
+</script>
+</body>
+</html>
