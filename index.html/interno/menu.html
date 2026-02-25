@@ -16,6 +16,43 @@
   <title>Cake Fit | Solo Crema</title>
 
   <style>
+    /* Estilo hermoso para el select del título */
+    #cakeTipo.title {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background: linear-gradient(90deg, #f4faf7 60%, #e9f5ef 100%);
+      border: 10px solid var(--verde-oscuro);
+      border-radius: 18px;
+      padding: 12px 38px 12px 18px;
+      font-size: 22px;
+      font-weight: 800;
+      color: #51620a;
+      text-transform: uppercase;
+      box-shadow: 0 8px 32px rgba(47,125,87,.10);
+      transition: border 0.2s, box-shadow 0.2s;
+      outline: none;
+      cursor: pointer;
+      position: relative;
+    }
+    #cakeTipo.title:focus {
+      border-color: var(--dorado);
+      box-shadow: 0 0 0 3px rgba(201,162,77,.18);
+    }
+    #cakeTipo.title option {
+      color: #245f43;
+      background: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 12px;
+    }
+    /* Flecha personalizada */
+    #cakeTipo.title {
+      background-image: url('data:image/svg+xml;utf8,<svg fill="%232f7d57" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      background-size: 28px 28px;
+    }
     :root{
       --verde:#2f7d57;
       --verde-oscuro:#245f43;
@@ -49,10 +86,10 @@
       margin-bottom:18px;
     }
     .title{
-      font-size:56px;
+      font-size:40px;
       line-height:1;
       margin:0;
-      letter-spacing:.5px;
+      letter-spacing:.10px;
       color:#51620a; /* similar al ejemplo */
       font-weight:900;
       text-transform:uppercase;
@@ -72,14 +109,49 @@
     }
     .pill{
       border:1px solid var(--borde);
-      background:white;
-      border-radius:999px;
-      padding:9px 12px;
-      display:flex;
-      align-items:center;
-      gap:10px;
-      box-shadow:0 10px 24px rgba(0,0,0,.06);
+      background: #f8faf9;
+      border-radius: 10px;
+      padding: 5px 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 2px 8px rgba(47,125,87,.06);
+      min-width: 0;
+      font-size: 15px;
+      transition: box-shadow 0.18s, border 0.18s;
     }
+    .pill label {
+      font-size: 13px;
+      color: var(--gris);
+      font-weight: 700;
+      margin-right: 2px;
+    }
+    .pill select, .pill input[type="search"] {
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--texto);
+      padding: 4px 2px;
+      min-width: 60px;
+      border-radius: 6px;
+      transition: background 0.18s;
+    }
+    .pill select:focus, .pill input[type="search"]:focus {
+      background: #e9f5ef;
+    }
+    .pill input[type="search"] {
+      width: 120px;
+      max-width: 180px;
+    }
+    @media (max-width: 560px) {
+      .pill input[type="search"] {
+        width: 100px;
+        max-width: 120px;
+      }
+    }
+    
     .pill label{ font-size:12px; color:var(--gris); }
     select{
       border:0;
@@ -180,6 +252,28 @@
     }
     .badge.sin{ background: rgba(47,125,87,.14); color: var(--verde-oscuro); }
     .badge.lac{ background: rgba(201,162,77,.16); color: #6a5219; }
+
+    /* Precio por tamaño (burbuja) */
+    .priceBubble{
+      position:absolute;
+      top:10px;
+      right:10px;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:950;
+      color:var(--verde-oscuro);
+      background:rgba(255, 255, 255, 0.795);
+      border:1px solid rgba(47,125,87,.22);
+      box-shadow:0 10px 22px rgba(0,0,0,.10);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      pointer-events:none;
+    }
+    @media (max-width:560px){
+      .priceBubble{ font-size:11px; padding:6px 9px; }
+    }
+
 
     /* PANEL inferior (resumen) */
     .summary{
@@ -292,11 +386,11 @@
       background:
         radial-gradient(900px 360px at 10% 0%, rgba(47,125,87,.10), transparent 55%),
         radial-gradient(900px 360px at 90% 0%, rgba(201,162,77,.10), transparent 55%),
-        #ffffff;
+        #f1f1f1;
       border-bottom:1px solid var(--borde);
     }
     .modalImg{
-      width: 280px;
+      width: 200px;
       aspect-ratio: 1/1;
       border-radius:18px;
       overflow:hidden;
@@ -348,10 +442,10 @@
       font-size:12px;
       font-weight:900;
       padding:7px 10px;
-      border-radius:999px;
+      border-radius:500px;
       border:1px solid var(--borde);
-      background:#fff;
-      color:var(--gris);
+      background:#ffffff;
+      color:var(--verde-oscuro);
     }
     .chip strong{ color:var(--texto); }
 
@@ -383,7 +477,7 @@
       flex-wrap:wrap;
     }
     .modalPrice{
-      font-size:22px;
+      font-size:20px;
       font-weight:950;
       color:var(--verde-oscuro);
     }
@@ -571,7 +665,13 @@
           - SIN GLUTEN 
           - SIN AZUCAR
         </p>
-        <h1 class="title">SOLO CREMA</h1>
+        <select id="cakeTipo" class="title" style="font-size:40px;line-height:1;margin:0;letter-spacing:.10px;color:#51620a;font-weight:900;text-transform:uppercase;border:none;background:transparent;outline:none;">
+          <option value="solo-crema">SOLO CREMA</option>
+          <option value="frutos-rojos">FRUTOS ROJOS</option>
+          <option value="frutas-flores">FRUTAS Y FLORES</option>
+          <option value="dulces-frios">DULCES FRIOS</option>
+          <option value="dulces-keto">DULCES KETO</option>
+        </select>
       </div>
 
       <div class="controls">
@@ -966,7 +1066,12 @@ function buildCard(cake){
   badge.classList.add(cake.category === "sin" ? "sin" : "lac");
   badge.textContent = categoryLabel(cake.category);
 
-  const thumb = document.createElement("div");
+  
+
+  const priceB = document.createElement("div");
+  priceB.className = "priceBubble";
+  priceB.textContent = "—";
+const thumb = document.createElement("div");
   thumb.className = "thumb";
 
   const img = document.createElement("img");
@@ -982,6 +1087,7 @@ function buildCard(cake){
   name.textContent = cake.name;
 
   div.appendChild(badge);
+  div.appendChild(priceB);
   div.appendChild(thumb);
   div.appendChild(name);
 
@@ -1014,7 +1120,11 @@ function renderGrid(){
   if(selectedId && !list.some(x=>x.id===selectedId)){
     selectedId = null;
     updateSummary();
+  try{ updateCardPrices(); }catch(e){}
   }
+  // Actualiza el precio por tamaño en cada card
+  try{ updateCardPrices(); }catch(e){}
+
 }
 
 /* ===========================
@@ -1022,6 +1132,17 @@ function renderGrid(){
    =========================== */
 function getCakeById(id){
   return cakes.find(c=>c.id===id) || null;
+}
+
+function updateCardPrices(){
+  const sizeKey = document.querySelector('#tamanoGlobal')?.value || '6';
+  document.querySelectorAll('#grid .card').forEach(card=>{
+    const id = card.dataset.id;
+    const cake = getCakeById(id);
+    const bubble = card.querySelector('.priceBubble');
+    if(!cake || !bubble) return;
+    bubble.textContent = `$${fmt(priceWithAlmendra(cake, sizeKey))}`;
+  });
 }
 
 function selectCake(id){
@@ -1050,6 +1171,7 @@ function updateSummary(){
   title.textContent = `${cake.name} · ${sizes.find(s=>s.key===sizeKey).label}`;
   sub.textContent = `${categoryLabel(cake.category)} · Toca “Ver detalles” para descripción.`;
   price.textContent = `$${fmt(priceWithAlmendra(cake, sizeKey))}`;
+  try{ updateCardPrices(); }catch(e){}
   openBtn.disabled = false;
 }
 
@@ -1188,6 +1310,7 @@ document.addEventListener("keydown", (e)=>{
 /* INIT */
 renderGrid();
 updateSummary();
+try{ updateCardPrices(); }catch(e){}
 
 // Harina de almendra (extra por tamaño)
 const almendraChk = $("#almendra");
@@ -1204,6 +1327,7 @@ if(almendraChk){
     }
     renderGrid();
     updateSummary();
+    try{ updateCardPrices(); }catch(e){}
   });
 }
 
