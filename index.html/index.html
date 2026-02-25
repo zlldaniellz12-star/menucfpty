@@ -7,17 +7,17 @@
 
 <style>
 :root{
-  --verde:#0b7a44;
+  --verde:#064124;
   --verde-oscuro:#065a31;
-  --dorado:#d4af37;
-  --gris:#5f6f66;
-  --texto:#122018;
-  --fondo:#f3faf6;
-  --glass:rgba(255,255,255,.72);
+  --dorado:#d6b032;
+  --gris:#6b6b6b;
+  --texto:#207745;
+  --fondo:#3fa069;
+  --glass:rgba(212, 212, 212, 0.72);
   --borde:rgba(255,255,255,.55);
   --sombra:0 22px 55px rgba(0,0,0,.16);
   --sombra2:0 14px 32px rgba(0,0,0,.12);
-  --radio:26px;
+  --radio:30px;
 }
 
 *{box-sizing:border-box}
@@ -50,18 +50,18 @@ body{
   border-radius:50%;
 }
 .bgOrbs::before{
-  left:-180px; top:-160px;
-  background: radial-gradient(circle at 30% 30%, rgba(11,122,68,.55), transparent 55%);
+  left:-150px; top:-160px;
+  background: radial-gradient(circle at 40% 30%, rgba(11,122,68,.55), transparent 55%);
 }
 .bgOrbs::after{
   right:-220px; top:-180px;
-  background: radial-gradient(circle at 30% 30%, rgba(212,175,55,.55), transparent 55%);
+  background: radial-gradient(circle at 40% 30%, rgba(212,175,55,.55), transparent 55%);
 }
 
 /* CARD principal */
 .card{
   width:100%;
-  max-width:480px;
+  max-width:600px;
   border-radius:var(--radio);
   background:var(--glass);
   border:1px solid var(--borde);
@@ -93,23 +93,24 @@ body{
 
 /* LOGO */
 .logo{
-  width:70px;
-  height:70px;
-  border-radius:19px;
+  height:90px;
+  width:90px;
+  border-radius:20px;
   background:linear-gradient(135deg,var(--verde),var(--dorado));
-  box-shadow:0 20px 20px rgba(11,122,68,.25);
+  box-shadow:0 15px 20px rgba(134, 134, 134, 0.397);
   display:flex;
   align-items:center;
   justify-content:center;
   overflow:hidden;
 }
 .logo img{
-  width:90%;
-  height:90%;
+  width:99%;
+  height:99%;
+  border-radius:0px;
   object-fit:contain;
   content:center;
   display:block;
-  filter: drop-shadow(0 8px 12px rgba(0,0,0,.15));
+  filter: drop-shadow(0 12px 12px rgba(0,0,0,.15));
 }
 
 /* textos */
@@ -130,12 +131,13 @@ h1{
 /* “chips” */
 .chips{
   display:flex;
-  gap:10px;
+  gap:15px;
   justify-content:center;
   flex-wrap:wrap;
   margin-bottom:18px;
 }
 .chip{
+  
   font-size:12px;
   font-weight:700;
   color:#173524;
@@ -170,7 +172,7 @@ h1{
 .left{
   display:flex;
   align-items:center;
-  gap:12px;
+  gap:25px;
   min-width:0;
 }
 .icon{
@@ -184,15 +186,15 @@ h1{
   border:1px solid rgba(255,255,255,.5);
 }
 .title{
-  font-weight:900;
+  font-weight:700;
   font-size:16px;
   margin:0;
   color:#fff;
   line-height:1.2;
 }
 .desc{
-  margin:2px 0 0;
-  font-size:12.5px;
+  margin:5px 0 ;
+  font-size:14px;
   color:rgba(255,255,255,.85);
   line-height:1.35;
 }
@@ -302,7 +304,8 @@ h1{
     <div class="chips">
       <span class="chip">Sin gluten</span>
       <span class="chip">Sin azúcar</span>
-      <span class="chip">Con y sin lácteos</span>
+      <span class="chip">Con lácteos</span>
+      <span class="chip">Sin lácteos</span>
     </div>
 
     <div class="options">
