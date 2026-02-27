@@ -25,719 +25,42 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  
-  <script src="config.default.js"></script>
-<script>
-  const LSKEY = "cakefit_config_v1";
-  function loadConfig(){
-    const saved = localStorage.getItem(LSKEY);
-    return saved ? JSON.parse(saved) : window.CAKEFIT_DEFAULT;
-  }
-  window.CAKEFIT_CONFIG = loadConfig();
-</script>
+<link rel="stylesheet" href="css/hpersonalizado.css">
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Cake Fit | Cake 1–3 pisos</title>
 
-<style>
-:root{
-  --verde:#2f7d57;
-  --verde-oscuro:#245f43;
-  --dorado:#c9a24d;
-
-  --fondo:#f4faf7;
-  --texto:#1f2a24;
-  --gris:#5b6b62;
-  --borde:#dfe8e2;
-
-  --sombra:0 18px 40px rgba(0,0,0,.10);
-  --radio:18px;
-  --verde-claro:#e9f5ef;
-
-  /* Cake colors (se actualizan por cobertura) */
-  --cake-top:#f6efe7;
-  --cake-base:#f3e8de;
-  --cake-side:#ead9cd;
-  --cake-deep:#d7c1b3;
-}
-
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-  color:var(--texto);
-  background:
-    radial-gradient(900px 450px at 15% 8%, rgba(47,125,87,.14), transparent 60%),
-    radial-gradient(900px 450px at 90% 12%, rgba(201,162,77,.15), transparent 60%),
-    linear-gradient(180deg,var(--fondo),#ffffff 55%);
-  min-height:100vh;
-  padding:24px 16px 40px;
-}
-
-.wrapper{
-  max-width:1240px;
-  margin:0 auto;
-  display:grid;
-  grid-template-columns: 1.25fr .95fr;
-  gap:18px;
-}
-@media (max-width: 980px){ .wrapper{grid-template-columns:1fr} }
-
-.card{
-  background:rgba(255,255,255,.93);
-  border:1px solid var(--borde);
-  border-radius: var(--radio);
-  box-shadow: var(--sombra);
-  overflow:hidden;
-}
-
-.header{
-  padding:20px 22px 16px;
-  background: linear-gradient(135deg, rgba(47,125,87,.13), rgba(201,162,77,.10));
-  border-bottom:1px solid var(--borde);
-}
-.header h1{ margin:0; font-size:18px; color:var(--verde-oscuro); }
-.header p{
-  margin:6px 0 0;
-  color:var(--gris);
-  font-size:13px;
-  line-height:1.35;
-}
-
-.content{ padding:18px 22px 22px; }
-
-.section{
-  border:1px solid var(--borde);
-  background:#fff;
-  border-radius:16px;
-  padding:14px;
-  margin-bottom:14px;
-}
-
-.sectionTitle{
-  display:flex;
-  align-items:flex-end;
-  justify-content:space-between;
-  gap:10px;
-  margin-bottom:10px;
-}
-.sectionTitle h2{ margin:0; font-size:14px; color:var(--verde-oscuro); }
-.helper{ font-size:12px; color:var(--gris); }
-
-.grid2{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-@media (max-width: 560px){ .grid2{grid-template-columns:1fr} }
-
-label{
-  display:block;
-  font-weight:900;
-  color:var(--texto);
-  font-size:13px;
-  margin-bottom:6px;
-}
-
-select, input[type="text"], input[type="number"], input[type="file"], textarea{
-  width:100%;
-  padding:12px 12px;
-  border-radius:14px;
-  border:1px solid var(--borde);
-  background:#fff;
-  font-size:14px;
-  outline:none;
-  transition: box-shadow .2s ease, border-color .2s ease;
-}
-textarea{ min-height:92px; resize:vertical; }
-
-/* Fecha y hora (más amigable) */
-.dtInput{
-  padding-left:44px !important;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%235b6b62' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='16' y1='2' x2='16' y2='6'/%3E%3Cline x1='8' y1='2' x2='8' y2='6'/%3E%3Cline x1='3' y1='10' x2='21' y2='10'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;
-  background-position:14px 50%;
-  background-size:20px 20px;
-}
-.dtInput::-webkit-calendar-picker-indicator{
-  opacity: 0.8;
-  cursor: pointer;
-}
 
 
-select:focus, input:focus, textarea:focus{
-  border-color: rgba(47,125,87,.55);
-  box-shadow: 0 0 0 4px rgba(47,125,87,.12);
-}
+<script src="config.default.js"></script>
 
-.small{
-  margin-top:8px;
-  font-size:12px;
-  color:var(--gris);
-  line-height:1.4;
-}
+<script>
+const LSKEY = "cakefit_config_v1";
 
-.warn{
-  margin-top:10px;
-  padding:10px 12px;
-  border-radius:14px;
-  background: rgba(201,162,77,.16);
-  border:1px solid rgba(201,162,77,.28);
-  color:#6a521f;
-  font-size:12.5px;
-  line-height:1.35;
-}
-
-.switchRow{
-  display:flex;
-  gap:10px;
-  align-items:center;
-  padding:10px 12px;
-  border:1px solid var(--borde);
-  border-radius:14px;
-  background:#fff;
-  margin-top:10px;
-}
-.switchRow input{ width:18px; height:18px; }
-.switchRow span{ font-size:13px; font-weight:900; color:var(--texto); }
-
-.badges{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-top:10px;
-}
-.badge{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding:9px 12px;
-  border-radius:999px;
-  background: var(--verde-claro);
-  border:1px solid rgba(47,125,87,.18);
-  color: var(--verde-oscuro);
-  font-weight:900;
-  font-size:12px;
-}
-.badge.warn{
-  background: rgba(201,162,77,.14);
-  border-color: rgba(201,162,77,.32);
-  color:#6a521f;
-}
-
-.actions{
-  display:flex;
-  gap:10px;
-  margin-top:12px;
-  flex-wrap:wrap;
-}
-.btn{
-  flex:1;
-  min-width:160px;
-  appearance:none;
-  border:0;
-  border-radius:14px;
-  padding:13px 14px;
-  font-weight:900;
-  font-size:14px;
-  cursor:pointer;
-  transition: transform .05s ease, box-shadow .2s ease, background .2s ease;
-}
-.btn:active{ transform: translateY(1px); }
-.btnPrimary{
-  background: var(--verde);
-  color:#fff;
-  box-shadow: 0 10px 18px rgba(47,125,87,.18);
-}
-.btnPrimary:hover{ background: var(--verde-oscuro); }
-.btnGhost{
-  background:#fff;
-  border:1px solid var(--borde);
-  color: var(--texto);
-}
-.btnGhost:hover{ box-shadow: 0 10px 18px rgba(0,0,0,.06); }
-
-/* Foto referencia */
-.refWrap{
-  display:grid;
-  grid-template-columns: 1fr 120px;
-  gap:12px;
-  align-items:start;
-}
-@media (max-width: 560px){ .refWrap{ grid-template-columns:1fr; } }
-.refPreview{
-  width:120px;
-  height:120px;
-  border-radius:16px;
-  border:1px dashed var(--borde);
-  background:#fbfdfc;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-  color:var(--gris);
-  font-size:12px;
-  font-weight:900;
-}
-.refPreview img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-}
-
-/* ===== Preview Cake (MEJORADO) ===== */
-.previewWrap{ padding:18px 18px 20px; }
-
-/* === Sticky panel derecha (3D + vista previa) === */
-.stickyPreview{
-  position: sticky;
-  top: 16px;
-  align-self: start;
-  max-height: calc(100vh - 32px);
-  overflow: auto;
-}
-@media (max-width: 980px){
-  .stickyPreview{
-    position: static;
-    max-height: none;
-    overflow: visible;
+function loadConfig(){
+  const saved = localStorage.getItem(LSKEY);
+  if(saved){
+    try{
+      return JSON.parse(saved);
+    }catch(e){
+      console.warn("Config corrupta, usando default");
+    }
   }
+  return window.CAKEFIT_DEFAULT || {};
 }
 
-.previewCard{
-  border:1px solid var(--borde);
-  border-radius:18px;
-  background:#fff;
-  overflow:hidden;
-}
+window.CAKEFIT_CONFIG = loadConfig();
+</script>
 
-.previewHead{
-  padding:14px 14px 12px;
-  border-bottom:1px solid var(--borde);
-  background:#fbfdfc;
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  align-items:flex-start;
-}
-.previewHead b{ color:var(--verde-oscuro); font-size:14px; }
-.previewHead .meta{ color:var(--gris); font-size:12px; margin-top:4px; }
-.kpi{
-  text-align:right;
-  font-size:12px;
-  color:var(--gris);
-}
-.kpi strong{
-  display:block;
-  color:var(--verde-oscuro);
-  font-size:16px;
-  margin-top:2px;
-}
-
-.previewStage{
-  padding:18px 14px 18px;
-  background:
-    radial-gradient(520px 220px at 50% 18%, rgba(47,125,87,.10), transparent 70%),
-    radial-gradient(520px 220px at 50% 78%, rgba(201,162,77,.10), transparent 70%),
-    linear-gradient(180deg, #fff, #fbfbfb);
-  display:flex;
-  justify-content:center;
-  align-items:flex-end;
-  min-height:470px;
-  position:relative;
-}
-
-.shadowFloor{
-  position:absolute;
-  bottom:26px;
-  width:360px;
-  height:40px;
-  background: radial-gradient(closest-side, rgba(0,0,0,.24), transparent 75%);
-  filter: blur(1.8px);
-  opacity:.6;
-}
-
-.cake{
-  width:380px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap: 12px;
-  position:relative;
-  padding-bottom:28px;
-}
-
-/* Plato */
-.basePlate{
-  width:350px;
-  height:18px;
-  border-radius:999px;
-  background: linear-gradient(135deg, #cfd7d1, #f6f8f7);
-  border:1px solid rgba(0,0,0,.12);
-  box-shadow: 0 18px 26px rgba(0,0,0,.12);
-  position:relative;
-  z-index:1;
-}
-.basePlate::after{
-  content:"";
-  position:absolute;
-  inset:4px 12px;
-  border-radius:999px;
-  background: linear-gradient(135deg, rgba(26, 25, 25, 0.85), rgba(255,255,255,.12));
-  opacity:.75;
-}
-.basePlate::after{
-  content:"";
-  position:absolute;
-  inset:4px 12px;
-  border-radius:999px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.85), rgba(255,255,255,.12));
-  opacity:.75;
-}
-.tier{
-  position:relative;
-  width:280px;
-  height:74px;
-  border-radius:20px;
-  border:1px solid rgba(0,0,0,.10);
-  overflow:hidden;
-  z-index:3;
-
-  background:
-    linear-gradient(90deg,
-      rgba(0,0,0,.14) 0%,
-      var(--cake-base) 14%,
-      var(--cake-side) 56%,
-      var(--cake-deep) 100%);
-
-  box-shadow:
-    0 22px 28px rgba(0,0,0,.16),
-    0 2px 0 rgba(255,255,255,.55) inset;
-}
-
-.tier::before{
-  content:"";
-  position:absolute;
-  left:5%;
-  right:5%;
-  top:-18px;
-  height:34px;
-  border-radius:999px;
-  border:1px solid rgba(0,0,0,.12);
-  background:
-    radial-gradient(circle at 30% 35%, rgba(255,255,255,.80), rgba(255,255,255,.15) 62%),
-    linear-gradient(90deg, var(--cake-top) 0%, var(--cake-base) 60%, var(--cake-deep) 100%);
-  box-shadow: 0 16px 22px rgba(0,0,0,.12);
-}
-
-.tier .gloss{
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  background:
-    radial-gradient(220px 70px at 30% 22%, rgba(255,255,255,.45), transparent 60%),
-    radial-gradient(220px 70px at 70% 28%, rgba(255,255,255,.22), transparent 65%);
-  opacity:.9;
-}
-
-.tier::after{
-  content:"";
-  position:absolute;
-  left:4%;
-  right:4%;
-  bottom:-12px;
-  height:16px;
-  border-radius:999px;
-  background: radial-gradient(closest-side, rgba(0,0,0,.22), transparent 72%);
-  filter: blur(1.2px);
-  opacity:.45;
-  z-index:-1;
-}
-
-.tierLabel{
-  position:absolute;
-  left:12px;
-  bottom:10px;
-  font-size:11px;
-  font-weight:950;
-  color:rgba(0,0,0,.62);
-  background:rgba(255,255,255,.88);
-  border:1px solid rgba(0,0,0,.12);
-  padding:5px 9px;
-  border-radius:999px;
-}
-.tierFlavor{
-  position:absolute;
-  right:12px;
-  bottom:10px;
-  font-size:11px;
-  font-weight:950;
-  color:rgba(0,0,0,.62);
-  background:rgba(255,255,255,.88);
-  border:1px solid rgba(0,0,0,.12);
-  padding:5px 9px;
-  border-radius:999px;
-  max-width:62%;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-
-.legend{
-  margin:14px;
-  padding:14px;
-  border:1px solid var(--borde);
-  border-radius:16px;
-  background:#ececec;
-  color:var(--texto);
-  font-size:12.5px;
-  line-height:1.35;
-}
-.legend .lgRow{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  padding:6px 0;
-  border-bottom:1px dashed rgba(0,0,0,.10);
-}
-.legend .lgRow:last-child{ border-bottom:none; }
-.legend .lgRow span{ color:var(--gris); font-weight:900; }
-.legend .lgRow b{ color:var(--verde-oscuro); font-weight:950; text-align:right; }
-
-.rowInfo{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  padding:10px 12px;
-  border:1px solid var(--borde);
-  border-radius:14px;
-  background:#fff;
-  margin-top:10px;
-}
-.rowInfo .k{ font-size:12px; color:var(--gris); font-weight:900; }
-.rowInfo .v{ font-size:12px; font-weight:950; color:var(--verde-oscuro); text-align:right; }
-
-.totalBox{
-  margin-top:10px;
-  border-radius: 16px;
-  padding:14px;
-  background: linear-gradient(135deg, var(--verde), var(--dorado));
-  color:white;
-  box-shadow: 0 10px 18px rgba(0,0,0,.12);
-}
-.totalBox .tLabel{ font-size:12px; opacity:.92; }
-.totalBox .tValue{ font-size:26px; font-weight:950; margin-top:6px; }
-
-/* Modal referencias */
-.modalOverlay{
-  position:fixed; inset:0;
-  background: rgba(0,0,0,.45);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:18px;
-  z-index:999;
-}
-.modal{
-  max-width:920px;
-  width:100%;
-  background:#fff;
-  border-radius:18px;
-  border:1px solid rgba(255,255,255,.25);
-  box-shadow: 0 30px 60px rgba(0,0,0,.24);
-  overflow:hidden;
-}
-.modalHead{
-  padding:12px 14px;
-  border-bottom:1px solid var(--borde);
-  background:#fbfdfc;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-}
-.modalHead b{ color:var(--verde-oscuro); }
-.modalClose{
-  border:1px solid var(--borde);
-  background:#fff;
-  border-radius:12px;
-  padding:9px 12px;
-  font-weight:900;
-  cursor:pointer;
-}
-.modalBody{
-  padding:14px;
-}
-.gallery{
-  display:grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap:10px;
-}
-@media (max-width: 800px){ .gallery{ grid-template-columns: repeat(2, 1fr); } }
-.thumb{
-  border:1px solid var(--borde);
-  border-radius:14px;
-  overflow:hidden;
-  background:#fbfdfc;
-  cursor:pointer;
-}
-.thumb img{
-  width:100%;
-  height:140px;
-  object-fit:cover;
-  display:block;
-}
-.thumb .cap{
-  padding:8px 10px;
-  font-size:12px;
-  color:var(--gris);
-  font-weight:900;
-}
-
-/* === Paleta pastel (desactivada: usamos solo Barra de tonos) === */
-.palette{ display:none !important; }
-
-.palette{ display:flex; flex-wrap:wrap; gap:10px; }
-.palBtn{
-  width:34px;height:34px;border-radius:12px;border:1px solid rgba(0,0,0,.10);
-  cursor:pointer; position:relative; box-shadow:0 8px 18px rgba(0,0,0,.10);
-}
-.palBtn[aria-pressed="true"]::after{
-  content:"✓"; position:absolute; inset:0; display:grid; place-items:center;
-  font-weight:900; color:#111; text-shadow:0 1px 0 rgba(255,255,255,.65);
-}
-
-/* === Barra de tonos (muchos colores) === */
-.toneRow{
-  display:flex;
-  gap:10px;
-  align-items:center;
-}
-#hueBar{
-  -webkit-appearance:none;
-  appearance:none;
-  width:100%;
-  height:16px;
-  border-radius:999px;
-  border:1px solid rgba(0,0,0,.10);
-  background: linear-gradient(90deg,
-    #ff0000 0%,
-    #ffff00 15%,
-    #00ff00 33%,
-    #00ffff 50%,
-    #0000ff 66%,
-    #ff00ff 83%,
-    #ff0000 100%
-  );
-  box-shadow:0 10px 24px rgba(0,0,0,.06);
-}
-#hueBar::-webkit-slider-thumb{
-  -webkit-appearance:none;
-  appearance:none;
-  width:22px;
-  height:22px;
-  border-radius:999px;
-  background:#fff;
-  border:2px solid rgba(0,0,0,.35);
-  box-shadow:0 10px 18px rgba(0,0,0,.14);
-  cursor:pointer;
-}
-#hueBar::-moz-range-thumb{
-  width:22px;
-  height:22px;
-  border-radius:999px;
-  background:#fff;
-  border:2px solid rgba(0,0,0,.35);
-  box-shadow:0 10px 18px rgba(0,0,0,.14);
-  cursor:pointer;
-}
-.toneSwatch{
-  width:34px;
-  height:34px;
-  border-radius:12px;
-  border:1px solid rgba(0,0,0,.10);
-  box-shadow:0 8px 18px rgba(0,0,0,.10);
-  background:#fff;
-  flex:0 0 auto;
-}
-
-.toneHex{
-  font-weight:950;
-  color:var(--verde-oscuro);
-  font-size:12.5px;
-  padding:7px 10px;
-  border-radius:12px;
-  border:1px solid var(--borde);
-  background:#fff;
-  box-shadow:0 8px 18px rgba(0,0,0,.06);
-  min-width:84px;
-  text-align:center;
-}
-
-.toneBtn{
-  border:1px solid var(--borde);
-  background:#fff;
-  border-radius:12px;
-  padding:9px 12px;
-  font-weight:900;
-  cursor:pointer;
-  flex:0 0 auto;
-}
-
-.alturaPisos .chips{ display:flex; gap:10px; flex-wrap:wrap; margin:8px 0 2px; }
-.chipBtn{
-  border:1px solid var(--borde); background:#fff; padding:8px 10px; border-radius:999px;
-  font-weight:800; cursor:pointer;
-}
-.chipBtn[aria-pressed="true"]{ border-color: rgba(220,38,38,.75); background: rgba(220,38,38,.10); box-shadow:0 0 0 4px rgba(220,38,38,.12); color:#7a1111; }
-
-/* === Responsive teléfonos === */
-@media (max-width: 720px){
-  .grid2, .grid3{ grid-template-columns: 1fr !important; }
-  .refWrap{ grid-template-columns: 1fr !important; }
-  .header{ flex-direction:column; align-items:flex-start; gap:10px; }
-  .btnRow{ flex-direction:column; }
-  .btn{ width:100%; }
-  .modal{ width: calc(100% - 28px); }
-}
-
-/* === Pago === */
-.payInfo{
-  border:1px solid var(--borde);
-  background:#fff;
-  border-radius:14px;
-  padding:12px;
-}
-.payInfoRow{
-  display:flex;
-  gap:12px;
-  align-items:flex-start;
-}
-.payImg{
-  width:52px;
-  height:52px;
-  border-radius:14px;
-  border:1px solid var(--borde);
-  background:linear-gradient(180deg,#fff,#f7faf8);
-  object-fit:contain;
-  padding:8px;
-}
-.payText b{ color:var(--verde-oscuro); }
-.payText{ font-size:12.5px; color:var(--gris); line-height:1.35; }
-.payText .line{ margin-top:6px; color:var(--texto); font-weight:800; }
-
-</style>
 </head>
-
 <body>
 
 <div class="wrapper">
   <!-- CONTROLES -->
   <div class="card">
     <div class="header">
-      <h1>Cake 1–3 pisos (Eventos)</h1>
-      <p>Si el cake es <b>Alto</b>: el total sube <b>+50%</b> y el rinde se multiplica <b>x2</b>.</p>
+      <h1>COTIZACION DE CAKE PERSONALIZADO</h1>
+      <p>Elige el sabor que mas te  <b>guste</b>
     </div>
 
     <div class="content">
@@ -745,7 +68,7 @@ select:focus, input:focus, textarea:focus{
       <!-- CLIENTE -->
       <div class="section">
         <div class="sectionTitle">
-          <h2>Cliente</h2>
+          <h2>Datos de Cliente</h2>
           <div class="helper">Aparece en PDF y WhatsApp</div>
         </div>
         <div class="grid3">
@@ -760,7 +83,7 @@ select:focus, input:focus, textarea:focus{
           <div>
             <label for="fechaHora">Fecha y hora de entrega</label>
             <input id="fechaHora" class="dtInput" type="datetime-local" />
-            <div class="small" id="anticTxt">Anticipación: 1 piso = 24h · 2+ pisos = 48h</div>
+            <div class="small" id="anticTxt">Anticipación: 1 piso = 24h · 2+ pisos = 48h · Horario: 9:00–20:00 (cada 30 min)</div>
           </div>
         </div>
       </div>
@@ -985,7 +308,7 @@ select:focus, input:focus, textarea:focus{
             </div>
 
               <!-- Barra de tonos (muchos colores) -->
-              <div class="toneWrap" style="margin-top:10px;">
+              <div class="toneWrap" style="margin-top:15px;">
                 <label class="small" style="font-weight:900; color:var(--gris); display:block; margin-bottom:6px;">Barra de tonos</label>
                 <div class="toneRow">
                   <input id="hueBar" type="range" min="0" max="360" value="0" aria-label="Barra de tonos">
@@ -1014,14 +337,10 @@ select:focus, input:focus, textarea:focus{
 
           <div>
             <label for="decoracion">Decoración</label>
-            <select id="decoracion">
-              <option value="">Sin decoración</option>
-              <option value="flores">Flores</option>
-              <option value="frutas">Frutas</option>
-              <option value="frutasflores">Frutas y flores</option>
-              <option value="frutosrojos">Frutos rojos</option>
-                          <option value="personalizado">Personalizado</option>
-</select>
+            <div class="cardOptions" id="decoracionCards">
+</div>
+
+<input type="hidden" id="decoracion" value="">
             <div class="small">Costo según tamaño del piso MÁS GRANDE.</div>
           </div>
         </div>
@@ -1095,7 +414,7 @@ select:focus, input:focus, textarea:focus{
         <div class="grid2">
 <div>
             <label for="montoAdicional">Monto adicional (asesor)</label>
-            <input id="montoAdicional" type="number" min="0" step="0.01" placeholder="0.00" />
+            <input id="montoAdicional" type="number" min="0" step="0.00" placeholder="0.00" />
             <div class="small">Para boda u otro evento.</div>
           </div>
         </div>
@@ -1160,11 +479,11 @@ select:focus, input:focus, textarea:focus{
 
 
       <div class="actions">
-        <button class="btn btnPrimary" id="btnPDF">Generar PDF</button>
-        <button class="btn btnGhost" id="btnPDF80" type="button">PDF Factura 80mm</button>
-          <button class="btn btnPrimary" id="btnEnviar">Enviar por WhatsApp</button>
-          <button class="btn btnPrimary" id="btnEnviarCliente">ENVIAR CLIENTE</button>
-        <button class="btn btnGhost" onclick="location.href='index.html'">Volver</button>
+        <button class="btn btnPrimary" id="btnPDF"> Cotizacion PDF</button>
+        <button class="btn btnGhost" id="btnPDF80" type="button">Factura PDF</button>
+          <button class="btn btnPrimary" id="btnEnviar">Enviar a asesor</button>
+          <button class="btn btnPrimary" id="btnEnviarCliente">CLIENTE</button>
+        <button class="btn btnGhost" onclick="location.href='../index.html'">Volver</button>
       </div>
 
       <div class="small" style="margin-top:10px;">
@@ -1584,7 +903,7 @@ function validateAnticipacion(){
     if(anticTxt){
       anticTxt.style.color = "";
       anticTxt.style.fontWeight = "";
-      anticTxt.textContent = `Anticipación: 1 piso = 24h · 2+ pisos = 48h · Horario: 9:00–20:00 (cada 30 min)`;
+      anticTxt.textContent = `Anticipación: CAKE sencillo = 24h · CAKE Elaborado = 48h· Horario: 9:00AM –8:00PM`;
     }
     return true;
   }
@@ -2016,7 +1335,8 @@ function calcularTotales(){
     sizes.forEach(s => extraHarina += Number(harinaAlmendra[s] || 0));
   }
 
-  // relleno por piso (si mismoRelleno, devuelve igual)
+
+// relleno por piso (si mismoRelleno, devuelve igual)
   let extraRelleno = 0;
   if(n === 1){
     extraRelleno += getExtraCost(costos, sizes[0], getRellenoPiso(1));
@@ -2074,7 +1394,7 @@ function getPagoData(){
   if(m === "tarjeta"){
     return {
       metodo:"Pago con tarjeta",
-      img:"img/cuanto.jpg",
+      img:"img/cuanto.png",
       lines:[
         "Pago con tarjeta (link de pago)"
       ],
@@ -2084,7 +1404,7 @@ function getPagoData(){
   if(m === "ach"){
     return {
       metodo:"Banco General (ACH Express)",
-      img:"img/ach.jpg",
+      img:"img/ach.png",
       lines:[
         "Cuenta de Ahorros: 04-05-98-312161-7",
         "Titular: Ronny Colmenares",
@@ -2093,7 +1413,7 @@ function getPagoData(){
       link:""
     };
   }
-  return { metodo:"—", img:"", lines:["Selecciona un método de pago."], link:"" };
+  return { metodo:"—", img:"", lines:["METODOS DE PAGO CAKEFIT."], link:"" };
 }
 
 function updatePagoUI(){
@@ -2204,28 +1524,28 @@ function updatePreview(){
 const decoTxt = decoracion.value ? decoracion.options[decoracion.selectedIndex].text : "Sin decoración";
 
 const rows = [];
-rows.push(["Entrega", fmtEntrega(fechaHora && fechaHora.value)]);
-rows.push(["Tamaños", sizesTxt]);
-rows.push(["Rinde", porcionesTxt.textContent]);
+rows.push(["Entrega: ", fmtEntrega(fechaHora && fechaHora.value)]);
+rows.push(["Tamaños: ", sizesTxt]);
+rows.push(["Rinde: ", porcionesTxt.textContent]);
 
 // Bizcochos
-rows.push(["Bizcocho P1", getSaborPiso(1) || "—"]);
-if(nPisos>=2) rows.push(["Bizcocho P2", getSaborPiso(2) || "—"]);
-if(nPisos===3) rows.push(["Bizcocho P3", getSaborPiso(3) || "—"]);
+rows.push(["PISO 1: ", getSaborPiso(1) || "—"]);
+if(nPisos>=2) rows.push(["PISO 2: ", getSaborPiso(2) || "—"]);
+if(nPisos===3) rows.push(["PISO 3: ", getSaborPiso(3) || "—"]);
 
 // Rellenos
-rows.push(["Relleno P1", getRellenoPiso(1) || "Sin relleno"]);
-if(nPisos>=2) rows.push(["Relleno P2", getRellenoPiso(2) || "Sin relleno"]);
-if(nPisos===3) rows.push(["Relleno P3", getRellenoPiso(3) || "Sin relleno"]);
+rows.push(["Relleno 1:  ", getRellenoPiso(1) || "Sin relleno"]);
+if(nPisos>=2) rows.push(["Relleno 2: ", getRellenoPiso(2) || "Sin relleno"]);
+if(nPisos===3) rows.push(["Relleno 3: ", getRellenoPiso(3) || "Sin relleno"]);
 
-rows.push(["Cobertura", cobertura.value || "Sencilla"]);
+rows.push(["Cobertura: ", cobertura.value || "Sencilla"]);
 
 // Pago
 const pago = getPagoData();
-rows.push(["Pago", pago.metodo || "—"]);
+rows.push(["Pago: ", pago.metodo || "—"]);
 if(pago.metodo === "Pago con tarjeta") rows.push(["Link de pago", pago.link || "Pendiente"]); 
-rows.push(["Decoración", decoTxt]);
-rows.push(["Estilo", styleTxt]);
+rows.push(["Decoración: ", decoTxt]);
+rows.push(["Estilo: ", styleTxt]);
 
 if(tema.value.trim()) rows.push(["Tema", tema.value.trim()]);
 
@@ -2816,8 +2136,8 @@ document.getElementById("btnPDF").addEventListener("click", async ()=>{
 
   // Total general grande
   doc.setFillColor(...dorado);
-  doc.roundedRect(margen, yTot+34, pageW-margen*2, 22, 4, 4, "F");
-  doc.setTextColor(30,25,16);
+  doc.roundedRect(margen, yTot, pageW-margen*2, 22, 4, 4, "F");
+  doc.setTextColor(30,25,16);+34
   doc.setFont("helvetica","bold");
   doc.setFontSize(12);
   doc.text("TOTAL GENERAL", margen+8, yTot+48);
@@ -3230,6 +2550,14 @@ async function fetchAsDataURL(url){
 }
 
 </script>
-
+<script>
+document.querySelectorAll('.optionCard').forEach(card=>{
+  card.addEventListener('click', function(){
+    document.querySelectorAll('.optionCard').forEach(c=>c.classList.remove('active'));
+    this.classList.add('active');
+    document.getElementById('decoracion').value = this.dataset.value;
+  });
+});
+</script>
 </body>
 </html>
