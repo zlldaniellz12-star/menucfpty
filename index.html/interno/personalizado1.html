@@ -59,32 +59,8 @@ window.CAKEFIT_CONFIG = loadConfig();
   <!-- CONTROLES -->
   <div class="card">
     <div class="header">
-      <h1>COTIZACION DE CAKE PERSONALIZADO</h1>
+      <h1 class="titleH1"><img class="titleLogo" src="img/logos/logo.png" alt="Cake Fit" onerror="this.style.display='none'">COTIZACION DE CAKE PERSONALIZADO</h1>
       <p>Elige el sabor que más te <b>guste</b>.</p>
-    </div>
-
-    <div class="stepper">
-      <div class="stepperTop">
-  <div class="brandMini">
-    <img class="brandMiniLogo" src="img/logo.jpg" alt="Cake Fit" onerror="this.style.display='none'">
-    <div class="brandMiniText">
-      <div class="brandMiniName">Cake Fit</div>
-      <div class="brandMiniSub">Arma tu cotización</div>
-    </div>
-  </div>
-
-  <div class="progressWrap" aria-label="Progreso del pedido">
-    <div class="progressMeta">
-      <span class="progressLabel">Progreso</span>
-      <span class="progressPct" id="progressPct">0%</span>
-    </div>
-    <div class="progressBar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-      <div class="progressFill" id="progressFill"></div>
-    </div>
-    <div class="progressHint" id="progressHint">Completa los campos para avanzar.</div>
-  </div>
-</div>
-      <div class="stepBar" id="stepBar" aria-label="Progreso"></div>
     </div>
 <div class="content">
 
@@ -144,16 +120,19 @@ window.CAKEFIT_CONFIG = loadConfig();
         <div class="grid2" style="margin-top:12px;">
           <div id="tier1Wrap">
             <label for="t1">Piso 1 (abajo)</label>
+            <div class="sizePicker" data-for="t1"></div>
             <select id="t1"></select>
           </div>
 
           <div id="tier2Wrap">
             <label for="t2">Piso 2 (medio)</label>
+            <div class="sizePicker" data-for="t2"></div>
             <select id="t2"></select>
           </div>
 
           <div id="tier3Wrap" style="display:none;">
             <label for="t3">Piso 3 (arriba)</label>
+            <div class="sizePicker" data-for="t3"></div>
             <select id="t3"></select>
           </div>
         </div>
@@ -360,16 +339,12 @@ window.CAKEFIT_CONFIG = loadConfig();
 
           <div>
             <label for="decoracion">Decoración</label>
-            <select id="decoracion">
-              <option value="" selected>— Sin decoración —</option>
-              <option value="flores">🌸 Flores</option>
-              <option value="frutas">🍓 Frutas</option>
-              <option value="frutasflores">🌸🍓 Frutas y flores</option>
-              <option value="frutosrojos">🫐 Frutos rojos</option>
-              <option value="drip">🍫 Drip chocolate / caramelo</option>
-              <option value="tematica">🎨 Personalización temática</option>
-            </select>
-            <div class="small" id="decoracionHint">Costo según tamaño del piso MÁS GRANDE. Temática es un estimado (depende del diseño).</div>
+            <div class="cardOptions" id="decoracionCards">
+</div>
+
+<input type="hidden" id="decoracion" value="">
+            <div class="small">Costo según tamaño del piso MÁS GRANDE.</div>
+          </div>
         </div>
 
         
@@ -378,11 +353,7 @@ window.CAKEFIT_CONFIG = loadConfig();
               <label for="notaGeneral">Nota general (opcional)</label>
               <input id="notaGeneral" type="text" placeholder="Ej: entrega 3pm / sin frutos rojos" />
             </div>
-            <div>
-              <label for="fresas">Fresas medianas bañadas en chocolate</label>
-              <input id="fresas" type="number" min="0" value="0" />
-              <div class="small">$2 por unidad</div>
-            </div>
+            <div></div>
           </div>
 
 
@@ -511,10 +482,11 @@ window.CAKEFIT_CONFIG = loadConfig();
 
       <div class="actions">
         <button class="btn btnPrimary" id="btnPDF"> Cotizacion PDF</button>
-        <button class="btn btnGhost" id="btnPDF80" type="button">Factura PDF</button>
+        <button class="btn btnPrimary" id="btnPDF80" type="button">Factura PDF</button>
           <button class="btn btnPrimary" id="btnEnviar">Enviar a asesor</button>
           <button class="btn btnPrimary" id="btnEnviarCliente">CLIENTE</button>
-</div>
+        <button class="btn btnGhost" onclick="location.href='../index.html'">Volver</button>
+      </div>
 
       <div class="small" style="margin-top:10px;">
         Si el PDF no baja: abre la web desde un servidor (Live Server / hosting), no desde <b>file://</b>.
@@ -529,7 +501,7 @@ window.CAKEFIT_CONFIG = loadConfig();
       <div class="previewCard">
         <div class="previewHead">
           <div>
-            <div class="previewTitle"><img class="previewLogo" src="img/logo.png" alt="Cake Fit" onerror="this.style.display='none'"><b>Vista previa</b></div>
+            <div class="previewTitle"><img class="previewLogo" src="img/logos/logo.jpg" alt="Cake Fit" onerror="this.style.display='none'"><b>Vista previa</b></div>
             <div class="meta" id="previewMeta">—</div>
           </div>
           <div class="kpi">
@@ -537,7 +509,8 @@ window.CAKEFIT_CONFIG = loadConfig();
             <strong>$<span id="kpiTotal">0.00</span></strong>
           </div>
         </div>
-</div>
+          <button class="btn btnGhost btnVolverPreview" type="button" onclick="location.href='../index.html'">Volver</button>
+        </div>
 
         <div class="previewStage">
           <div class="shadowFloor"></div>
@@ -585,7 +558,7 @@ window.CAKEFIT_CONFIG = loadConfig();
 <div class="modalOverlay" id="refsOverlay" role="dialog" aria-modal="true" aria-label="Imágenes de referencia">
   <div class="modal">
     <div class="modalHead">
-      <b>Imágenes de referencia (img/modelo/)</b>
+      <b>Imágenes de referencia </b>
       <button class="modalClose" id="refsClose" type="button">Cerrar</button>
     </div>
     <div class="modalBody">
@@ -614,13 +587,10 @@ const costos = {
 };
 
 const decoracionCostos = {
-  flores:{6:5,7:7,8:9,9:11},
-  frutas:{6:5,7:7,8:9,9:11},
-  frutasflores:{6:5,7:7,8:9,9:11},
-  frutosrojos:{6:7,7:9,8:12,9:15},
-  drip:{6:3,7:5,8:7,9:9},
-  // Personalización temática: se toma el mínimo estimado según tamaño (el rango se comunica al cliente)
-  tematica:{6:10,7:20,8:30,9:40}
+  flores:{6:5,7:7,8:9,9:11,12:16},
+  frutas:{6:5,7:7,8:9,9:11,12:16},
+  frutasflores:{6:5,7:7,8:9,9:11,12:16},
+  frutosrojos:{6:7,7:9,8:12,9:15,12:22}
 };
 
 const porciones = {
@@ -709,7 +679,6 @@ const notaRelleno = $("notaRelleno");
 
 const cobertura = $("cobertura");
 const decoracion = $("decoracion");
-const fresas = $("fresas");
 const tema = $("tema");
 const notaGeneral = $("notaGeneral");
 const paletteEl = $("palette");
@@ -1077,7 +1046,69 @@ function fillSelectWithSizes(sel, values, selected){
     if(String(v) === String(selected)) o.selected = true;
     sel.appendChild(o);
   });
+
+  try{ buildSizePickerForSelect(sel); }catch(e){}
 }
+
+/* ====== Size Picker con imágenes ====== */
+function guessSizeIconSrc(size){
+  // Preferimos la ruta con ñ como pidió (tamaño12), pero hacemos fallback a "tamano12"
+  return `img/iconos-seleccion/tamaño${size}.png`;
+}
+function guessSizeIconFallback(size){
+  return `img/iconos-seleccion/tamano${size}.png`;
+}
+function buildSizePickerForSelect(sel){
+  if(!sel || !sel.id) return;
+  const wrap = document.querySelector(`.sizePicker[data-for="${sel.id}"]`);
+  if(!wrap) return;
+  const opts = Array.from(sel.querySelectorAll("option")).filter(o=>o.value);
+  if(opts.length === 0){ wrap.innerHTML=""; wrap.style.display="none"; return; }
+  wrap.style.display="grid";
+  wrap.innerHTML = "";
+
+  const current = String(sel.value || "");
+
+  opts.forEach(o=>{
+    const v = String(o.value);
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "sizePickBtn";
+    btn.setAttribute("data-size", v);
+    btn.setAttribute("aria-pressed", v===current ? "true":"false");
+
+    const img = document.createElement("img");
+    img.className = "sizePickImg";
+    img.alt = `Tamaño ${v}”`;
+    img.src = guessSizeIconSrc(v);
+    img.onerror = ()=>{
+      img.onerror = ()=>{
+        img.style.display = "none";
+        btn.classList.add("noImg");
+      };
+      img.src = guessSizeIconFallback(v);
+    };
+
+    const t = document.createElement("span");
+    t.className = "sizePickTxt";
+    t.textContent = `${v}”`;
+
+    btn.appendChild(img);
+    btn.appendChild(t);
+
+    btn.addEventListener("click", ()=>{
+      sel.value = v;
+      sel.dispatchEvent(new Event("change", {bubbles:true}));
+      // marcar activo
+      wrap.querySelectorAll(".sizePickBtn").forEach(b=>b.setAttribute("aria-pressed","false"));
+      btn.setAttribute("aria-pressed","true");
+    });
+
+    wrap.appendChild(btn);
+  });
+}
+
+
 function fillSabores(select){
   select.innerHTML = "";
   sabores.forEach(s=>{
@@ -1391,13 +1422,10 @@ function calcularTotales(){
     extraDecor = Number((decoracionCostos[decoracion.value] || {})[largest] || 0);
   }
 
-  // Extras: fresas bañadas en chocolate ($2 c/u)
-  const extraFresas = (Number(fresas?.value || 0) || 0) * 2;
-
   const manoObra = manoDeObraPorPisos(n);
   const adicional = Number(montoAdicional.value || 0);
 
-  const cakeBaseTotal = totalBase + extraHarina + extraRelleno + extraCobertura + extraDecor + extraFresas + manoObra + adicional;
+  const cakeBaseTotal = totalBase + extraHarina + extraRelleno + extraCobertura + extraDecor + manoObra + adicional;
 
   // altura factor
   const totalCake = cakeBaseTotal * alturaPriceFactor();
@@ -1419,7 +1447,7 @@ function getPagoData(){
   if(m === "yappy"){
     return {
       metodo:"Yappy",
-      img:"img/yappy.jpg",
+      img:"img/logos/yappy.jpg",
       lines:[
         "Yappy: 6863-6913",
         "YAPPY PERSONAL – Titular: Ronny Colmenares"
@@ -1430,7 +1458,7 @@ function getPagoData(){
   if(m === "tarjeta"){
     return {
       metodo:"Pago con tarjeta",
-      img:"img/cuanto.png",
+      img:"img/logos/cuanto.png",
       lines:[
         "Pago con tarjeta (link de pago)"
       ],
@@ -1581,8 +1609,6 @@ const pago = getPagoData();
 rows.push(["Pago: ", pago.metodo || "—"]);
 if(pago.metodo === "Pago con tarjeta") rows.push(["Link de pago", pago.link || "Pendiente"]); 
 rows.push(["Decoración: ", decoTxt]);
-  const fresasTxt = (Number(fresas?.value||0)>0) ? `${Number(fresas.value)} x $2` : "—";
-  rows.push(["Fresas choco: ", fresasTxt]);
 rows.push(["Estilo: ", styleTxt]);
 
 if(tema.value.trim()) rows.push(["Tema", tema.value.trim()]);
@@ -2008,7 +2034,7 @@ document.getElementById("btnPDF").addEventListener("click", async ()=>{
 
   try{
     const logoData = await (async ()=>{
-      const tries = ["../img/logo.png","../img/logo.jpg","img/logo.png","img/logo.jpg"];
+      const tries = ["../img/logos/logo.png","../img/logos/logo.jpg","img/logos/logo.png","img/logos/logo.jpg"];
       for(const u of tries){ try{ return await toDataURL(u); }catch(e){} }
       throw new Error("logo");
     })();
@@ -2156,56 +2182,35 @@ document.getElementById("btnPDF").addEventListener("click", async ()=>{
   doc.text(`- Sin Azúcar`, margen, yCar); yCar += 6;
   doc.text(`- ${sinLact} Lácteos: `, margen, yCar); yCar += 6;
 
-  
-  // Totales (bloque limpio y bien posicionado)
-  // Reservamos espacio para el pie de página (método de pago / importante)
-  const yPay = pageH - 42;
+  // Totales (SOLO)
+  let yTot = yCar + 8;
+  const boxW = pageW - margen*2;
 
-  // Si el contenido viene muy abajo, subimos la caja de totales para que no choque con el pie
-  let yTot = yCar + 10;
-  const totBlockH = 52; // banner + caja + total general
-  if(yTot + totBlockH > yPay - 10){
-    yTot = Math.max(92, yPay - 10 - totBlockH); // 92 aprox debajo de la zona superior
-  }
-
-  // Banner fino (dorado->verde visual simple)
-  doc.setFillColor(...dorado);
-  doc.roundedRect(margen, yTot, (pageW-margen*2)*0.35, 4, 2, 2, "F");
+  // Caja verde: Total cake + delivery
   doc.setFillColor(...verde);
-  doc.roundedRect(margen + (pageW-margen*2)*0.35 + 2, yTot, (pageW-margen*2)*0.65 - 2, 4, 2, 2, "F");
-
-  yTot += 8;
-
-  // Caja de subtotales (cake + delivery)
-  doc.setFillColor(...verde);
-  doc.roundedRect(margen, yTot, pageW-margen*2, 22, 4, 4, "F");
+  doc.roundedRect(margen, yTot, boxW, 20, 4, 4, "F");
   doc.setTextColor(255,255,255);
-
   doc.setFont("helvetica","bold");
   doc.setFontSize(11);
-  doc.text("TOTAL DEL CAKE", margen+8, yTot+9);
-  doc.text(`$${money(totals.totalCake)}`, pageW-margen-8, yTot+9, {align:"right"});
+  doc.text("TOTAL DEL CAKE", margen+8, yTot+8);
+  doc.text(`$${money(totals.totalCake)}`, pageW-margen-8, yTot+8, {align:"right"});
+  doc.text("DELIVERY", margen+8, yTot+15);
+  doc.text(`$${money(totals.delivery)}`, pageW-margen-8, yTot+15, {align:"right"});
 
-  doc.setFontSize(10.5);
-  doc.text("DELIVERY", margen+8, yTot+17);
-  doc.text(`$${money(totals.delivery)}`, pageW-margen-8, yTot+17, {align:"right"});
-
-  yTot += 26;
-
-  // Total general (protagonista)
+  // Caja dorada: Total general (debajo, sin encimar el footer)
+  const yGold = yTot + 24;
   doc.setFillColor(...dorado);
-  doc.roundedRect(margen, yTot, pageW-margen*2, 18, 4, 4, "F");
+  doc.roundedRect(margen, yGold, boxW, 18, 4, 4, "F");
   doc.setTextColor(30,25,16);
   doc.setFont("helvetica","bold");
   doc.setFontSize(12);
-  doc.text("TOTAL GENERAL", margen+8, yTot+7);
-
-  doc.setFontSize(18);
-  doc.text(`$${money(totals.totalGeneral)}`, pageW-margen-8, yTot+13, {align:"right"});
+  doc.text("TOTAL GENERAL", margen+8, yGold+8);
+  doc.setFontSize(16);
+  doc.text(`$${money(totals.totalGeneral)}`, pageW-margen-8, yGold+13, {align:"right"});
 
   // Pago (según selección)
   const pago = getPagoData();
-
+  const yPay = pageH - 42;
   doc.setDrawColor(220,220,220);
   doc.line(margen, yPay-10, pageW-margen, yPay-10);
 
@@ -2246,7 +2251,8 @@ document.getElementById("btnPDF").addEventListener("click", async ()=>{
   doc.setTextColor(...gris);
   doc.text("Pago completo · Procesamos al recibir comprobante · No realizamos dedicatorias", margen+80, yPay+6, {maxWidth: (pageW-margen) - (margen+80)});
 
-  doc.save("Cotizacion_CakeFit_Eventos.pdf");
+  doc.save(`${encodeURIComponent(nombreCliente)}.pdf`);
+
 });
 // ===== PDF tipo factura 80mm (térmico) =====
 document.getElementById("btnPDF80").addEventListener("click", async ()=>{
@@ -2301,8 +2307,8 @@ document.getElementById("btnPDF80").addEventListener("click", async ()=>{
   line("Harina", safeText(harina.value,"—"));
   line("Cobertura", safeText(cobertura.value,"Sencilla"));
   line("Decoración", decoracion.value ? decoracion.options[decoracion.selectedIndex].text : "Sin decoración");
-  line("Fresas choco", (Number(fresas?.value||0)>0) ? `${Number(fresas.value)} x $2` : "—");
-// Sabores / rellenos (compacto)
+
+  // Sabores / rellenos (compacto)
   y += 1;
   doc.line(margenX, y, 80-margenX, y); y += 4;
   doc.setFont("helvetica","bold"); doc.text("Sabores y rellenos", margenX, y); y += 4.5;
@@ -2479,7 +2485,6 @@ document.getElementById("btnEnviarCliente").addEventListener("click", ()=>{
     `*Estilo:* ${encodeURIComponent(styleTxt)}%0A` +
     `*Cobertura:* ${encodeURIComponent(cobertura.value || "Sencilla")}%0A` +
     `*Decoración:* ${encodeURIComponent(decoTxt)}%0A` +
-    `*Fresas choco:* ${encodeURIComponent((Number(fresas?.value||0)>0)? (Number(fresas.value)+" x $2") : "—")}%0A` +
     (tema.value.trim() ? `*Tema:* ${encodeURIComponent(tema.value.trim())}%0A` : ``) +
     `%0A` +
     `*Sabores y rellenos*%0A` +
@@ -2565,7 +2570,6 @@ const msg =
   `*Estilo:* ${encodeURIComponent(styleTxt)}%0A` +
   `*Cobertura:* ${encodeURIComponent(cobertura.value || "Sencilla")}%0A` +
   `*Decoración:* ${encodeURIComponent(decoTxt)}%0A` +
-    `*Fresas choco:* ${encodeURIComponent((Number(fresas?.value||0)>0)? (Number(fresas.value)+" x $2") : "—")}%0A` +
   (tema.value.trim() ? `*Tema:* ${encodeURIComponent(tema.value.trim())}%0A` : ``) +
   `%0A` +
   `*Sabores y rellenos*%0A` +
@@ -2620,142 +2624,79 @@ document.querySelectorAll('.optionCard').forEach(card=>{
   });
 });
 
-/* ====== STEPPER UI (scroll + progreso) ====== */
+/* ====== STEPPER UI (progreso + secciones por orden) ====== */
 (function(){
-  const content = document.querySelector('.content');
+  const sections = Array.from(document.querySelectorAll('.content .stepSection'));
   const stepBar = document.getElementById('stepBar');
-  const fill = document.getElementById('progressFill');
-  const pct = document.getElementById('progressPct');
-  const hint = document.getElementById('progressHint');
-  const pb = document.querySelector('.progressBar[role="progressbar"]');
+  const btnPrev = document.getElementById('btnPrevStep');
+  const btnNext = document.getElementById('btnNextStep');
+  if(!sections.length || !stepBar || !btnPrev || !btnNext) return;
 
-  if(!content || !stepBar) return;
-
-  // Tomar secciones reales del formulario
-  const sections = Array.from(content.querySelectorAll('.section'));
-  if(!sections.length) return;
-
-  // Crear IDs estables y pasos (evita duplicados visuales)
-  const slug = (s)=> (s||"").toLowerCase()
-    .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
-    .replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");
-
-  const steps = sections.map((sec, idx)=>{
+  // Construir barra de pasos desde los títulos
+  const steps = sections.map((sec, idx) => {
     const h2 = sec.querySelector('.sectionTitle h2');
-    const title = (h2 ? h2.textContent.trim() : `Paso ${idx+1}`) || `Paso ${idx+1}`;
-    const id = `step-${idx+1}-${slug(title) || "seccion"}`;
-    sec.dataset.stepIndex = String(idx);
-    if(!sec.id) sec.id = id;
-    return { sec, title, idx };
+    const title = h2 ? h2.textContent.trim() : `Paso ${idx+1}`;
+    return {sec, title};
   });
 
-  stepBar.innerHTML = steps.map((s)=>`
-    <button type="button" class="stepDot" data-step="${s.idx}" aria-label="${s.title}">
+  stepBar.innerHTML = steps.map((s,i)=>`
+    <button type="button" class="stepDot" data-step="${i}" aria-label="${s.title}">
       <span class="dot"></span>
-      <span class="label">${s.idx+1}. ${s.title}</span>
+      <span class="label">${s.title}</span>
     </button>
   `).join('');
 
-  const dots = Array.from(stepBar.querySelectorAll('.stepDot'));
+  let current = 0;
 
-  function scrollToSection(i){
-    const s = steps[i];
-    if(!s) return;
-    const top = s.sec.getBoundingClientRect().top + window.pageYOffset - 120; // espacio por sticky
-    window.scrollTo({ top, behavior:'smooth' });
+  function setActive(i){
+    current = Math.max(0, Math.min(i, steps.length-1));
+
+    steps.forEach((s, idx)=>{
+      s.sec.classList.toggle('isActive', idx===current);
+      s.sec.classList.toggle('isHidden', idx!==current);
+      if(idx===current){
+        // trigger entrance animation
+        s.sec.classList.remove('enter');
+        void s.sec.offsetWidth;
+        s.sec.classList.add('enter');
+      }
+    });
+
+    const dots = Array.from(stepBar.querySelectorAll('.stepDot'));
+    dots.forEach((d, idx)=>{
+      d.classList.toggle('active', idx===current);
+      d.classList.toggle('done', idx<current);
+    });
+
+    btnPrev.disabled = current===0;
+    btnNext.textContent = (current===steps.length-1) ? 'Finalizar' : 'Siguiente';
+
+    // autoscroll suave al inicio del card en móvil
+    const card = document.querySelector('.card');
+    if(card) card.scrollIntoView({behavior:'smooth', block:'start'});
   }
 
-  // Click: ir a la sección
   stepBar.addEventListener('click', (e)=>{
     const btn = e.target.closest('.stepDot');
     if(!btn) return;
     const idx = parseInt(btn.dataset.step,10);
-    if(Number.isFinite(idx)) scrollToSection(idx);
+    if(Number.isFinite(idx)) setActive(idx);
   });
 
-  // Activo según scroll
-  function setActive(i){
-    dots.forEach((d, idx)=>{
-      d.classList.toggle('active', idx===i);
-      d.classList.toggle('done', idx<i);
-    });
-  }
-
-  // Observer para marcar el paso visible
-  const obs = new IntersectionObserver((entries)=>{
-    const visible = entries
-      .filter(e=>e.isIntersecting)
-      .sort((a,b)=>b.intersectionRatio - a.intersectionRatio)[0];
-    if(!visible) return;
-    const idx = parseInt(visible.target.dataset.stepIndex || "0", 10);
-    if(Number.isFinite(idx)) setActive(idx);
-  }, { root:null, threshold:[0.25, 0.4, 0.55, 0.7] });
-
-  sections.forEach(sec=>obs.observe(sec));
-
-  /* ===== Progreso del pedido (simple y robusto) ===== */
-  const required = [
-    ['cliente', v=>v.trim().length>=2, 'Nombre del cliente'],
-    ['clienteTel', v=>v.trim().length>=6, 'Teléfono'],
-    ['fechaHora', v=>!!v, 'Fecha y hora'],
-    ['pisos', v=>!!v, 'Pisos'],
-    ['t1', v=>!!v, 'Tamaño piso 1'],
-    ['harina', v=>!!v, 'Harina'],
-    ['bizcocho1', v=>!!v, 'Bizcocho'],
-    ['relleno1', v=>!!v, 'Relleno'],
-    ['cobertura', v=>!!v, 'Cobertura'],
-    ['decoracion', v=>!!v, 'Decoración']
-  ];
-
-  function getVal(id){
-    const el = document.getElementById(id);
-    return el ? (el.value ?? '') : '';
-  }
-
-  function computeProgress(){
-    const pisos = parseInt(getVal('pisos') || "1", 10);
-    let list = required.slice();
-
-    if(pisos >= 2) list.push(['t2', v=>!!v, 'Tamaño piso 2']);
-    if(pisos >= 3) list.push(['t3', v=>!!v, 'Tamaño piso 3']);
-
-    for(let i=2;i<=pisos;i++){
-      const bId = `bizcocho${i}`;
-      const rId = `relleno${i}`;
-      if(document.getElementById(bId)) list.push([bId, v=>!!v, `Bizcocho piso ${i}`]);
-      if(document.getElementById(rId)) list.push([rId, v=>!!v, `Relleno piso ${i}`]);
+  btnPrev.addEventListener('click', ()=> setActive(current-1));
+  btnNext.addEventListener('click', ()=> {
+    if(current < steps.length-1) setActive(current+1);
+    else {
+      // En el último paso, bajamos a los botones finales
+      const finalBtns = document.getElementById('accionesFinales');
+      if(finalBtns) finalBtns.scrollIntoView({behavior:'smooth', block:'center'});
     }
+  });
 
-    list = list.filter(([id])=>document.getElementById(id));
-
-    const missing = [];
-    let ok = 0;
-    list.forEach(([id, test, label])=>{
-      const v = String(getVal(id));
-      if(test(v)) ok++;
-      else missing.push(label);
-    });
-
-    const total = Math.max(1, list.length);
-    const percent = Math.round((ok/total)*100);
-
-    if(fill) fill.style.width = percent + '%';
-    if(pct) pct.textContent = percent + '%';
-    if(pb) pb.setAttribute('aria-valuenow', String(percent));
-
-    if(hint){
-      hint.textContent = (missing.length===0)
-        ? '¡Listo! Puedes generar tu cotización.'
-        : `Te falta: ${missing.slice(0,3).join(', ')}${missing.length>3?'…':''}`;
-    }
-  }
-
-  content.addEventListener('input', computeProgress, {passive:true});
-  content.addEventListener('change', computeProgress, {passive:true});
-
+  // Inicial
   setActive(0);
-  computeProgress();
 })();
+
 </script>
 
   <button class="btn btnGhost floatingBack" type="button" onclick="location.href='../index.html'">Volver</button>
