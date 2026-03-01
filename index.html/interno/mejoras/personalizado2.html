@@ -25,7 +25,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<link rel="stylesheet" href="css/hpersonalizado_stepper_pro_layout_v2.css">
+<link rel="stylesheet" href="css/hpersonalizado1.css">
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Cake Fit | Cake 1–3 pisos</title>
@@ -56,69 +56,24 @@ window.CAKEFIT_CONFIG = loadConfig();
 <body>
 
   <div class="wrapper">
-
-  <div class="stepper stepperFull">
-  <div class="stepperLeft">
-    <div class="stepperTop">
-      <div class="brandMini">
-        <img class="brandMiniLogo" src="img/logo.jpg" alt="Cake Fit" onerror="this.style.display='none'">
-        <div class="brandMiniText">
-          <div class="brandMiniName">Cake Fit</div>
-          <div class="brandMiniSub">Arma tu cotización</div>
-        </div>
-      </div>
-
-      <div class="progressWrap" aria-label="Progreso del pedido">
-        <div class="progressMeta">
-          <span class="progressLabel">Progreso</span>
-          <span class="progressPct" id="progressPct">0%</span>
-        </div>
-        <div class="progressBar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-          <div class="progressFill" id="progressFill"></div>
-        </div>
-        <div class="progressHint" id="progressHint">Completa los campos para avanzar.</div>
-      </div>
-    </div>
-
-    <div class="stepBar" id="stepBar" aria-label="Progreso"></div>
-  </div>
-
-  <aside class="stepperRight" aria-label="Vista previa rápida">
-    <div class="miniPreview">
-      <div class="miniPreviewHead">
-        <div class="miniTitle">
-          <span class="miniDot" aria-hidden="true"></span>
-          <span>Vista previa</span>
-        </div>
-        <div class="miniTotal">
-          $<span id="miniTotal">0.00</span>
-        </div>
-      </div>
-      <div class="miniMeta" id="miniMeta">—</div>
-
-      <div class="miniGrid">
-        <div class="miniItem">
-          <span class="miniK">Tamaños</span>
-          <span class="miniV" id="miniSizes">—</span>
-        </div>
-        <div class="miniItem">
-          <span class="miniK">Decoración</span>
-          <span class="miniV" id="miniDecor">—</span>
-        </div>
-        <div class="miniItem">
-          <span class="miniK">Entrega</span>
-          <span class="miniV" id="miniEntrega">—</span>
-        </div>
-      </div>
-    </div>
-  </aside>
-</div></div>
-
   <!-- CONTROLES -->
-  <div class="card mainCard">
+  <div class="card">
     <div class="header">
       <h1>COTIZACION DE CAKE PERSONALIZADO</h1>
       <p>Elige el sabor que más te <b>guste</b>.</p>
+    </div>
+
+    <div class="stepper">
+      <div class="stepperTop">
+        <div class="brandMini">
+          <img class="brandMiniLogo" src="img/logo.jpg" alt="Cake Fit" onerror="this.style.display='none'">
+          <div class="brandMiniText">
+            <div class="brandMiniName">Cake Fit</div>
+            <div class="brandMiniSub">Arma tu cotización</div>
+          </div>
+        </div>
+</div>
+      <div class="stepBar" id="stepBar" aria-label="Progreso"></div>
     </div>
 <div class="content">
 
@@ -394,16 +349,12 @@ window.CAKEFIT_CONFIG = loadConfig();
 
           <div>
             <label for="decoracion">Decoración</label>
-            <select id="decoracion">
-              <option value="" selected>— Sin decoración —</option>
-              <option value="flores">🌸 Flores</option>
-              <option value="frutas">🍓 Frutas</option>
-              <option value="frutasflores">🌸🍓 Frutas y flores</option>
-              <option value="frutosrojos">🫐 Frutos rojos</option>
-              <option value="drip">🍫 Drip chocolate / caramelo</option>
-              <option value="tematica">🎨 Personalización temática</option>
-            </select>
-            <div class="small" id="decoracionHint">Costo según tamaño del piso MÁS GRANDE. Temática es un estimado (depende del diseño).</div>
+            <div class="cardOptions" id="decoracionCards">
+</div>
+
+<input type="hidden" id="decoracion" value="">
+            <div class="small">Costo según tamaño del piso MÁS GRANDE.</div>
+          </div>
         </div>
 
         
@@ -412,11 +363,7 @@ window.CAKEFIT_CONFIG = loadConfig();
               <label for="notaGeneral">Nota general (opcional)</label>
               <input id="notaGeneral" type="text" placeholder="Ej: entrega 3pm / sin frutos rojos" />
             </div>
-            <div>
-              <label for="fresas">Fresas medianas bañadas en chocolate</label>
-              <input id="fresas" type="number" min="0" value="0" />
-              <div class="small">$2 por unidad</div>
-            </div>
+            <div></div>
           </div>
 
 
@@ -648,13 +595,10 @@ const costos = {
 };
 
 const decoracionCostos = {
-  flores:{6:5,7:7,8:9,9:11},
-  frutas:{6:5,7:7,8:9,9:11},
-  frutasflores:{6:5,7:7,8:9,9:11},
-  frutosrojos:{6:7,7:9,8:12,9:15},
-  drip:{6:3,7:5,8:7,9:9},
-  // Personalización temática: se toma el mínimo estimado según tamaño (el rango se comunica al cliente)
-  tematica:{6:10,7:20,8:30,9:40}
+  flores:{6:5,7:7,8:9,9:11,12:16},
+  frutas:{6:5,7:7,8:9,9:11,12:16},
+  frutasflores:{6:5,7:7,8:9,9:11,12:16},
+  frutosrojos:{6:7,7:9,8:12,9:15,12:22}
 };
 
 const porciones = {
@@ -743,7 +687,6 @@ const notaRelleno = $("notaRelleno");
 
 const cobertura = $("cobertura");
 const decoracion = $("decoracion");
-const fresas = $("fresas");
 const tema = $("tema");
 const notaGeneral = $("notaGeneral");
 const paletteEl = $("palette");
@@ -1425,13 +1368,10 @@ function calcularTotales(){
     extraDecor = Number((decoracionCostos[decoracion.value] || {})[largest] || 0);
   }
 
-  // Extras: fresas bañadas en chocolate ($2 c/u)
-  const extraFresas = (Number(fresas?.value || 0) || 0) * 2;
-
   const manoObra = manoDeObraPorPisos(n);
   const adicional = Number(montoAdicional.value || 0);
 
-  const cakeBaseTotal = totalBase + extraHarina + extraRelleno + extraCobertura + extraDecor + extraFresas + manoObra + adicional;
+  const cakeBaseTotal = totalBase + extraHarina + extraRelleno + extraCobertura + extraDecor + manoObra + adicional;
 
   // altura factor
   const totalCake = cakeBaseTotal * alturaPriceFactor();
@@ -1590,30 +1530,6 @@ function updatePreview(){
     (acabadoCake.value === "naked") ? "Naked" : "Semi-Naked";
 
   previewMeta.textContent = `${nPisos} piso${nPisos>1?"s":""} · Evento: ${evento.value} · Capas: ${capasPorPiso()} · Estilo: ${styleTxt} · Entrega: ${fmtEntrega(fechaHora && fechaHora.value)}`;
-  // Mini vista previa (en la barra superior)
-  try{
-    const miniTotalEl = document.getElementById("miniTotal");
-    const miniMetaEl = document.getElementById("miniMeta");
-    const miniSizesEl = document.getElementById("miniSizes");
-    const miniDecorEl = document.getElementById("miniDecor");
-    const miniEntregaEl = document.getElementById("miniEntrega");
-
-    if(miniTotalEl) miniTotalEl.textContent = money(totals.totalGeneral);
-    if(miniMetaEl)  miniMetaEl.textContent  = previewMeta.textContent;
-
-    if(miniSizesEl) miniSizesEl.textContent = sizesTxt;
-
-    let decorLabel = "—";
-    const decorSel = (typeof decoracion !== "undefined") ? decoracion : document.getElementById("decoracion");
-    if(decorSel){
-      const opt = decorSel.options[decorSel.selectedIndex];
-      decorLabel = opt ? opt.textContent.trim() : "—";
-    }
-    if(miniDecorEl) miniDecorEl.textContent = decorLabel;
-
-    if(miniEntregaEl) miniEntregaEl.textContent = fmtEntrega(fechaHora && fechaHora.value);
-  }catch(e){ /* silent */ }
-
   // Vista previa debajo del 3D (sin texto largo)
 const decoTxt = decoracion.value ? decoracion.options[decoracion.selectedIndex].text : "Sin decoración";
 
@@ -1639,8 +1555,6 @@ const pago = getPagoData();
 rows.push(["Pago: ", pago.metodo || "—"]);
 if(pago.metodo === "Pago con tarjeta") rows.push(["Link de pago", pago.link || "Pendiente"]); 
 rows.push(["Decoración: ", decoTxt]);
-  const fresasTxt = (Number(fresas?.value||0)>0) ? `${Number(fresas.value)} x $2` : "—";
-  rows.push(["Fresas choco: ", fresasTxt]);
 rows.push(["Estilo: ", styleTxt]);
 
 if(tema.value.trim()) rows.push(["Tema", tema.value.trim()]);
@@ -2359,8 +2273,8 @@ document.getElementById("btnPDF80").addEventListener("click", async ()=>{
   line("Harina", safeText(harina.value,"—"));
   line("Cobertura", safeText(cobertura.value,"Sencilla"));
   line("Decoración", decoracion.value ? decoracion.options[decoracion.selectedIndex].text : "Sin decoración");
-  line("Fresas choco", (Number(fresas?.value||0)>0) ? `${Number(fresas.value)} x $2` : "—");
-// Sabores / rellenos (compacto)
+
+  // Sabores / rellenos (compacto)
   y += 1;
   doc.line(margenX, y, 80-margenX, y); y += 4;
   doc.setFont("helvetica","bold"); doc.text("Sabores y rellenos", margenX, y); y += 4.5;
@@ -2537,7 +2451,6 @@ document.getElementById("btnEnviarCliente").addEventListener("click", ()=>{
     `*Estilo:* ${encodeURIComponent(styleTxt)}%0A` +
     `*Cobertura:* ${encodeURIComponent(cobertura.value || "Sencilla")}%0A` +
     `*Decoración:* ${encodeURIComponent(decoTxt)}%0A` +
-    `*Fresas choco:* ${encodeURIComponent((Number(fresas?.value||0)>0)? (Number(fresas.value)+" x $2") : "—")}%0A` +
     (tema.value.trim() ? `*Tema:* ${encodeURIComponent(tema.value.trim())}%0A` : ``) +
     `%0A` +
     `*Sabores y rellenos*%0A` +
@@ -2623,7 +2536,6 @@ const msg =
   `*Estilo:* ${encodeURIComponent(styleTxt)}%0A` +
   `*Cobertura:* ${encodeURIComponent(cobertura.value || "Sencilla")}%0A` +
   `*Decoración:* ${encodeURIComponent(decoTxt)}%0A` +
-    `*Fresas choco:* ${encodeURIComponent((Number(fresas?.value||0)>0)? (Number(fresas.value)+" x $2") : "—")}%0A` +
   (tema.value.trim() ? `*Tema:* ${encodeURIComponent(tema.value.trim())}%0A` : ``) +
   `%0A` +
   `*Sabores y rellenos*%0A` +
@@ -2678,142 +2590,80 @@ document.querySelectorAll('.optionCard').forEach(card=>{
   });
 });
 
-/* ====== STEPPER UI (scroll + progreso) ====== */
+/* ====== STEPPER UI (progreso + secciones por orden) ====== */
 (function(){
-  const content = document.querySelector('.content');
+  const sections = Array.from(document.querySelectorAll('.content .stepSection'));
   const stepBar = document.getElementById('stepBar');
-  const fill = document.getElementById('progressFill');
-  const pct = document.getElementById('progressPct');
-  const hint = document.getElementById('progressHint');
-  const pb = document.querySelector('.progressBar[role="progressbar"]');
+  const btnPrev = document.getElementById('btnPrevStep');
+  const btnNext = document.getElementById('btnNextStep');
+  if(!sections.length || !stepBar) return;
 
-  if(!content || !stepBar) return;
-
-  // Tomar secciones reales del formulario
-  const sections = Array.from(content.querySelectorAll('.section'));
-  if(!sections.length) return;
-
-  // Crear IDs estables y pasos (evita duplicados visuales)
-  const slug = (s)=> (s||"").toLowerCase()
-    .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
-    .replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");
-
-  const steps = sections.map((sec, idx)=>{
+  // Construir barra de pasos desde los títulos
+  const steps = sections.map((sec, idx) => {
     const h2 = sec.querySelector('.sectionTitle h2');
-    const title = (h2 ? h2.textContent.trim() : `Paso ${idx+1}`) || `Paso ${idx+1}`;
-    const id = `step-${idx+1}-${slug(title) || "seccion"}`;
-    sec.dataset.stepIndex = String(idx);
-    if(!sec.id) sec.id = id;
-    return { sec, title, idx };
+    const title = h2 ? h2.textContent.trim() : `Paso ${idx+1}`;
+    return {sec, title};
   });
 
-  stepBar.innerHTML = steps.map((s)=>`
-    <button type="button" class="stepDot" data-step="${s.idx}" aria-label="${s.title}">
+  stepBar.innerHTML = steps.map((s,i)=>`
+    <button type="button" class="stepDot" data-step="${i}" aria-label="${s.title}">
       <span class="dot"></span>
-      <span class="label">${s.idx+1}. ${s.title}</span>
+      <span class="label">${s.title}</span>
     </button>
   `).join('');
 
-  const dots = Array.from(stepBar.querySelectorAll('.stepDot'));
+  let current = 0;
 
-  function scrollToSection(i){
-    const s = steps[i];
-    if(!s) return;
-    const top = s.sec.getBoundingClientRect().top + window.pageYOffset - 120; // espacio por sticky
-    window.scrollTo({ top, behavior:'smooth' });
+  function setActive(i){
+    current = Math.max(0, Math.min(i, steps.length-1));
+
+    steps.forEach((s, idx)=>{
+      s.sec.classList.toggle('isActive', idx===current);
+      s.sec.classList.toggle('isHidden', idx!==current);
+      if(idx===current){
+        // trigger entrance animation
+        s.sec.classList.remove('enter');
+        void s.sec.offsetWidth;
+        s.sec.classList.add('enter');
+      }
+    });
+
+    const dots = Array.from(stepBar.querySelectorAll('.stepDot'));
+    dots.forEach((d, idx)=>{
+      d.classList.toggle('active', idx===current);
+      d.classList.toggle('done', idx<current);
+    });
+
+    if(btnPrev) btnPrev.disabled = current===0;
+    if(btnNext) btnNext.textContent = (current===steps.length-1) ? 'Finalizar' : 'Siguiente';
+
+    // autoscroll suave al inicio del card en móvil
+    const card = document.querySelector('.card');
+    if(card) card.scrollIntoView({behavior:'smooth', block:'start'});
   }
 
-  // Click: ir a la sección
   stepBar.addEventListener('click', (e)=>{
     const btn = e.target.closest('.stepDot');
     if(!btn) return;
     const idx = parseInt(btn.dataset.step,10);
-    if(Number.isFinite(idx)) scrollToSection(idx);
+    if(Number.isFinite(idx)) setActive(idx);
   });
 
-  // Activo según scroll
-  function setActive(i){
-    dots.forEach((d, idx)=>{
-      d.classList.toggle('active', idx===i);
-      d.classList.toggle('done', idx<i);
-    });
-  }
-
-  // Observer para marcar el paso visible
-  const obs = new IntersectionObserver((entries)=>{
-    const visible = entries
-      .filter(e=>e.isIntersecting)
-      .sort((a,b)=>b.intersectionRatio - a.intersectionRatio)[0];
-    if(!visible) return;
-    const idx = parseInt(visible.target.dataset.stepIndex || "0", 10);
-    if(Number.isFinite(idx)) setActive(idx);
-  }, { root:null, threshold:[0.25, 0.4, 0.55, 0.7] });
-
-  sections.forEach(sec=>obs.observe(sec));
-
-  /* ===== Progreso del pedido (simple y robusto) ===== */
-  const required = [
-    ['cliente', v=>v.trim().length>=2, 'Nombre del cliente'],
-    ['clienteTel', v=>v.trim().length>=6, 'Teléfono'],
-    ['fechaHora', v=>!!v, 'Fecha y hora'],
-    ['pisos', v=>!!v, 'Pisos'],
-    ['t1', v=>!!v, 'Tamaño piso 1'],
-    ['harina', v=>!!v, 'Harina'],
-    ['bizcocho1', v=>!!v, 'Bizcocho'],
-    ['relleno1', v=>!!v, 'Relleno'],
-    ['cobertura', v=>!!v, 'Cobertura'],
-    ['decoracion', v=>!!v, 'Decoración']
-  ];
-
-  function getVal(id){
-    const el = document.getElementById(id);
-    return el ? (el.value ?? '') : '';
-  }
-
-  function computeProgress(){
-    const pisos = parseInt(getVal('pisos') || "1", 10);
-    let list = required.slice();
-
-    if(pisos >= 2) list.push(['t2', v=>!!v, 'Tamaño piso 2']);
-    if(pisos >= 3) list.push(['t3', v=>!!v, 'Tamaño piso 3']);
-
-    for(let i=2;i<=pisos;i++){
-      const bId = `bizcocho${i}`;
-      const rId = `relleno${i}`;
-      if(document.getElementById(bId)) list.push([bId, v=>!!v, `Bizcocho piso ${i}`]);
-      if(document.getElementById(rId)) list.push([rId, v=>!!v, `Relleno piso ${i}`]);
+  if(btnPrev) btnPrev.addEventListener('click', ()=> setActive(current-1));
+  if(btnNext) btnNext.addEventListener('click', ()=> {
+    if(current < steps.length-1) setActive(current+1);
+    else {
+      const finalBtns = document.getElementById('accionesFinales');
+      if(finalBtns) finalBtns.scrollIntoView({behavior:'smooth', block:'center'});
     }
+  });
+}
+  });
 
-    list = list.filter(([id])=>document.getElementById(id));
-
-    const missing = [];
-    let ok = 0;
-    list.forEach(([id, test, label])=>{
-      const v = String(getVal(id));
-      if(test(v)) ok++;
-      else missing.push(label);
-    });
-
-    const total = Math.max(1, list.length);
-    const percent = Math.round((ok/total)*100);
-
-    if(fill) fill.style.width = percent + '%';
-    if(pct) pct.textContent = percent + '%';
-    if(pb) pb.setAttribute('aria-valuenow', String(percent));
-
-    if(hint){
-      hint.textContent = (missing.length===0)
-        ? '¡Listo! Puedes generar tu cotización.'
-        : `Te falta: ${missing.slice(0,3).join(', ')}${missing.length>3?'…':''}`;
-    }
-  }
-
-  content.addEventListener('input', computeProgress, {passive:true});
-  content.addEventListener('change', computeProgress, {passive:true});
-
+  // Inicial
   setActive(0);
-  computeProgress();
 })();
+
 </script>
 
   <button class="btn btnGhost floatingBack" type="button" onclick="location.href='../index.html'">Volver</button>

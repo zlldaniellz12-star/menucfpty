@@ -25,7 +25,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<link rel="stylesheet" href="css/hpersonalizado_stepper_pro_layout_v2.css">
+<link rel="stylesheet" href="css/hpersonalizado.css">
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Cake Fit | Cake 1–3 pisos</title>
@@ -56,69 +56,35 @@ window.CAKEFIT_CONFIG = loadConfig();
 <body>
 
   <div class="wrapper">
-
-  <div class="stepper stepperFull">
-  <div class="stepperLeft">
-    <div class="stepperTop">
-      <div class="brandMini">
-        <img class="brandMiniLogo" src="img/logo.jpg" alt="Cake Fit" onerror="this.style.display='none'">
-        <div class="brandMiniText">
-          <div class="brandMiniName">Cake Fit</div>
-          <div class="brandMiniSub">Arma tu cotización</div>
-        </div>
-      </div>
-
-      <div class="progressWrap" aria-label="Progreso del pedido">
-        <div class="progressMeta">
-          <span class="progressLabel">Progreso</span>
-          <span class="progressPct" id="progressPct">0%</span>
-        </div>
-        <div class="progressBar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-          <div class="progressFill" id="progressFill"></div>
-        </div>
-        <div class="progressHint" id="progressHint">Completa los campos para avanzar.</div>
-      </div>
-    </div>
-
-    <div class="stepBar" id="stepBar" aria-label="Progreso"></div>
-  </div>
-
-  <aside class="stepperRight" aria-label="Vista previa rápida">
-    <div class="miniPreview">
-      <div class="miniPreviewHead">
-        <div class="miniTitle">
-          <span class="miniDot" aria-hidden="true"></span>
-          <span>Vista previa</span>
-        </div>
-        <div class="miniTotal">
-          $<span id="miniTotal">0.00</span>
-        </div>
-      </div>
-      <div class="miniMeta" id="miniMeta">—</div>
-
-      <div class="miniGrid">
-        <div class="miniItem">
-          <span class="miniK">Tamaños</span>
-          <span class="miniV" id="miniSizes">—</span>
-        </div>
-        <div class="miniItem">
-          <span class="miniK">Decoración</span>
-          <span class="miniV" id="miniDecor">—</span>
-        </div>
-        <div class="miniItem">
-          <span class="miniK">Entrega</span>
-          <span class="miniV" id="miniEntrega">—</span>
-        </div>
-      </div>
-    </div>
-  </aside>
-</div></div>
-
   <!-- CONTROLES -->
-  <div class="card mainCard">
+  <div class="card">
     <div class="header">
       <h1>COTIZACION DE CAKE PERSONALIZADO</h1>
       <p>Elige el sabor que más te <b>guste</b>.</p>
+    </div>
+
+    <div class="stepper">
+      <div class="stepperTop">
+  <div class="brandMini">
+    <img class="brandMiniLogo" src="img/logo.jpg" alt="Cake Fit" onerror="this.style.display='none'">
+    <div class="brandMiniText">
+      <div class="brandMiniName">Cake Fit</div>
+      <div class="brandMiniSub">Arma tu cotización</div>
+    </div>
+  </div>
+
+  <div class="progressWrap" aria-label="Progreso del pedido">
+    <div class="progressMeta">
+      <span class="progressLabel">Progreso</span>
+      <span class="progressPct" id="progressPct">0%</span>
+    </div>
+    <div class="progressBar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <div class="progressFill" id="progressFill"></div>
+    </div>
+    <div class="progressHint" id="progressHint">Completa los campos para avanzar.</div>
+  </div>
+</div>
+      <div class="stepBar" id="stepBar" aria-label="Progreso"></div>
     </div>
 <div class="content">
 
@@ -1590,30 +1556,6 @@ function updatePreview(){
     (acabadoCake.value === "naked") ? "Naked" : "Semi-Naked";
 
   previewMeta.textContent = `${nPisos} piso${nPisos>1?"s":""} · Evento: ${evento.value} · Capas: ${capasPorPiso()} · Estilo: ${styleTxt} · Entrega: ${fmtEntrega(fechaHora && fechaHora.value)}`;
-  // Mini vista previa (en la barra superior)
-  try{
-    const miniTotalEl = document.getElementById("miniTotal");
-    const miniMetaEl = document.getElementById("miniMeta");
-    const miniSizesEl = document.getElementById("miniSizes");
-    const miniDecorEl = document.getElementById("miniDecor");
-    const miniEntregaEl = document.getElementById("miniEntrega");
-
-    if(miniTotalEl) miniTotalEl.textContent = money(totals.totalGeneral);
-    if(miniMetaEl)  miniMetaEl.textContent  = previewMeta.textContent;
-
-    if(miniSizesEl) miniSizesEl.textContent = sizesTxt;
-
-    let decorLabel = "—";
-    const decorSel = (typeof decoracion !== "undefined") ? decoracion : document.getElementById("decoracion");
-    if(decorSel){
-      const opt = decorSel.options[decorSel.selectedIndex];
-      decorLabel = opt ? opt.textContent.trim() : "—";
-    }
-    if(miniDecorEl) miniDecorEl.textContent = decorLabel;
-
-    if(miniEntregaEl) miniEntregaEl.textContent = fmtEntrega(fechaHora && fechaHora.value);
-  }catch(e){ /* silent */ }
-
   // Vista previa debajo del 3D (sin texto largo)
 const decoTxt = decoracion.value ? decoracion.options[decoracion.selectedIndex].text : "Sin decoración";
 
