@@ -1,1230 +1,1028 @@
+/* =========================================================
+   CAKE FIT · PERSONALIZADO (PRO)
+   Archivo: css/hpersonalizado.css
+   Hecho para: personalizado.html (tus clases reales)
+   Estilo: Verde + Dorado + Negro + Glass + Burbujas sutiles
+========================================================= */
 
-  /* =========================================================
-   Cake Fit - Personalizado (Eventos)
-   Archivo: css/estiloperzonalizado-1.css
-   (Diseñado para tus clases reales: .wrapper .card .section
-    .previewCard .palette .palBtn .alturaPisos, etc.)
-   ========================================================= */
-body{
-  display:grid ;
-  place-items: center;
- background-image: url("../img/fondo.jpg");
- background-size: cover;
- background-repeat: no-repeat;  
-}
-
+/* =========================
+   :root — Variables globales (colores / sombras / radios)
+========================= */
 :root{
+  /* Marca */
   --verde:#0b7a44;
-  --verde-osc:#044626;
-  --verde-2:#075f35;
+  --verde-oscuro:#075a33;
+  --verde-agua:#19a46b;
 
   --dorado:#d4af37;
+  --dorado-soft:#f0d27a;
 
-  --texto:#132019;
-  --gris:#5f6f66;
+  --negro:#0b0b0b;
+  --texto:#121212;
+  --gris:#6b7280;
 
-  --bg:#f3fbf6;
-  --bg2:#ffffff;
+  /* Fondos */
+  --fondo:#f6fbf8;
+  --glass:rgba(255,255,255,.78);
+  --card:rgba(255,255,255,.92);
 
-  --b1:rgba(16,37,26,.10);
+  /* Bordes */
+  --b1:rgba(0,0,0,.08);
   --b2:rgba(11,122,68,.22);
 
-  --shadow: 0 18px 48px rgba(0,0,0,.10);
-  --shadow2: 0 10px 22px rgba(0,0,0,.08);
+  /* Sombras */
+  --shadow:0 22px 55px rgba(0,0,0,.12);
+  --shadow2:0 10px 26px rgba(0,0,0,.08);
 
+  /* Radios */
   --r1:26px;
-  --r2:20px;
-  --r3:16px;
+  --r2:18px;
+  --r3:12px;
 
-  --focus: 0 0 0 4px rgba(11,122,68,.18), 0 0 0 1px rgba(11,122,68,.35);
+  /* Focus */
+  --focus:0 0 0 4px rgba(11,122,68,.20);
 
-  /* cake 3d (tu JS usa estos vars) */
-  --cake-top:#f6efe7;
-  --cake-base:#f3e8de;
-  --cake-side:#ead9cd;
-  --cake-deep:#d7c1b3;
+  /* Tamaño del fondo en preview */
+  --cake-bg-size: clamp(220px, 55%, 420px);
 }
-/* Imagen de fondo difuminada */
 
-
-
-
+/* =========================
+   Reset — Normalización base
+========================= */
 *{ box-sizing:border-box; }
 html,body{ height:100%; }
-
 body{
   margin:0;
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
   color:var(--texto);
-  background-image: url("../img/fondo.jpg");
-  background-size: cover;
-  background-repeat: repeat;
-    
-}
 
-a{ color:inherit; }
-b,strong{ font-weight: 950; }
-/* fondo verde de web */
-
-
-
-/* ---------- Layout ---------- */
-.wrapper{
-  max-width: 1220px;
-  margin: 0 auto;
-  padding: clamp(14px, 2.4vw, 26px);
-  display:grid;
-  grid-template-columns: 1.12fr .88fr;
-  gap: 18px;
-  align-items:start;
-}
-
-@media (max-width: 980px){
-  .wrapper{ grid-template-columns:1fr; gap:14px; }
-}
-
-/* ---------- Cards base ---------- */
-.card{
-  background: linear-gradient(180deg, rgba(232, 208, 115, 0.9), rgba(255,255,255,.70));
-  border:1px solid var(--b1);
-  border-radius: var(--r1);
-  box-shadow: var(--shadow);
-  overflow:hidden;
-  position:relative;
-}
-
-.card::before{
-  content:"";
-  position:absolute;
-  inset:-2px;
+  /* Fondo premium con toques verde/dorado */
   background:
-    radial-gradient(520px 220px at 10% 0%, rgba(11,122,68,.16), transparent 65%),
-    radial-gradient(520px 240px at 90% 0%, rgba(212,175,55,.14), transparent 70%);
-  pointer-events:none;
-  opacity:.9;
+    radial-gradient(circle at 12% 10%, rgba(212,175,55,.18), transparent 48%),
+    radial-gradient(circle at 85% 12%, rgba(11,122,68,.16), transparent 48%),
+    radial-gradient(circle at 50% 92%, rgba(11,122,68,.10), transparent 55%),
+    linear-gradient(180deg, #f7fcf9, #ffffff);
+
+  /* Si quieres usar tu fondo.jpg (opcional) */
+  /* background-image: url("../img/fondo.jpg");
+     background-size: cover;
+     background-position: center; */
 }
 
-.header{
-  position:relative;
-  padding: 22px 22px 14px;
-  border-bottom: 1px solid rgba(16,37,26,.08);
-  background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.62));
-}
-
-.header h1{
-  margin:0;
-  font-size: clamp(18px, 2.2vw, 26px);
-  color: var(--verde-osc);
-  letter-spacing:.2px;
-}
-
-.header p{
-  margin:8px 0 0;
-  color: rgba(19,32,25,.78);
-  line-height:1.45;
-}
-
-.content{
-  position:relative;
-  padding: 18px 18px 22px;
-}
-
-/* ---------- Sections ---------- */
-.section{
-  background: linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.64));
-  border: 1px solid rgba(16,37,26,.09);
-  border-radius: var(--r2);
-  padding: 16px;
-  box-shadow: var(--shadow2);
-  margin: 14px 0;
-}
-
-.sectionTitle{
-  display:flex;
-  align-items:flex-end;
-  justify-content:space-between;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-
-.sectionTitle h2{
-  margin:0;
-  font-size: 15px;
-  color: var(--verde-2);
-  letter-spacing:.2px;
-}
-
-.helper{
-  font-size: 12px;
-  color: rgba(95,111,102,.95);
-  font-weight: 900;
-  padding: 7px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(11,122,68,.16);
-  background: rgba(11,122,68,.07);
-  white-space:nowrap;
-}
-
-.small{
-  font-size: 12px;
-  color: rgba(95,111,102,.95);
-  line-height:1.35;
-}
-
-/* ---------- Grids ---------- */
-.grid2{
-  display:grid;
-  grid-template-columns: repeat(2, minmax(0,1fr));
-  gap: 12px;
-}
-.grid3{
-  display:grid;
-  grid-template-columns: repeat(3, minmax(0,1fr));
-  gap: 12px;
-}
-@media (max-width: 760px){
-  .grid2,.grid3{ grid-template-columns: 1fr; }
-}
-
-/* ---------- Inputs ---------- */
-label{
-  display:block;
-  font-size: 12px;
-  font-weight: 950;
-  color: rgba(19,32,25,.86);
-  margin: 2px 0 7px;
-  letter-spacing:.2px;
-}
-
-input[type="text"],
-input[type="number"],
-input[type="datetime-local"],
-select{
-  width:100%;
-  border-radius: 14px;
-  border: 1px solid rgba(16,37,26,.12);
-  background: rgba(255,255,255,.92);
-  color: var(--texto);
-  padding: 12px 12px;
-  outline:none;
-  box-shadow: 0 1px 0 rgba(255,255,255,.65) inset;
-  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
-}
-
-input::placeholder{ color: rgba(95,111,102,.65); }
-
-input:focus,
-select:focus{
-  border-color: rgba(11,122,68,.35);
-  box-shadow: var(--focus);
-  transform: translateY(-1px);
-}
-
-select{
-  appearance:none;
-  background-image:
-    linear-gradient(45deg, transparent 50%, rgba(19,32,25,.75) 50%),
-    linear-gradient(135deg, rgba(19,32,25,.75) 50%, transparent 50%),
-    linear-gradient(to right, rgba(16,37,26,.10), rgba(16,37,26,.10));
-  background-position:
-    calc(100% - 18px) calc(50% - 2px),
-    calc(100% - 12px) calc(50% - 2px),
-    calc(100% - 42px) 50%;
-  background-size: 6px 6px, 6px 6px, 1px 22px;
-  background-repeat:no-repeat;
-  padding-right: 54px;
-}
-
-input[type="file"]{
-  width:100%;
-  padding: 12px;
-  border-radius: 14px;
-  border: 1px dashed rgba(11,122,68,.28);
-  background: rgba(11,122,68,.05);
-}
-
-/* ---------- Rows / chips / badges ---------- */
-.switchRow{
-  display:flex;
-  gap:10px;
-  align-items:center;
-  padding: 10px 12px;
-  border-radius: 14px;
-  border: 1px solid rgba(16,37,26,.10);
-  background: rgba(255,255,255,.70);
-}
-.switchRow input[type="checkbox"]{
-  width:18px;height:18px;
-  accent-color: var(--verde);
-}
-
-.badges{
-  display:flex;
-  flex-wrap:wrap;
-  gap: 8px;
-  margin-top: 10px;
-}
-.badge{
-  font-size: 12px;
-  font-weight: 950;
-  padding: 8px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(11,122,68,.18);
-  background: rgba(11,122,68,.08);
-  color: var(--verde-2);
-}
-.badge.warn{
-  border-color: rgba(189, 39, 39, .20);
-  background: rgba(189, 39, 39, .10);
-  color: rgba(130, 25, 25, .95);
-}
-
-.chips{ display:flex; flex-wrap:wrap; gap: 10px; }
-.chipBtn{
-  border: 1px solid rgba(11,122,68,.20);
-  background: rgba(255,255,255,.75);
-  color: var(--verde-osc);
-  padding: 10px 12px;
-  border-radius: 999px;
-  font-weight: 950;
-  cursor:pointer;
-  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
-}
-.chipBtn:hover{ transform: translateY(-1px); }
-.chipBtn[aria-pressed="true"]{
-  background: rgba(11,122,68,.10);
-  box-shadow: 0 12px 24px rgba(11,122,68,.12);
-}
-
-/* ---------- Warnings / infos ---------- */
-.warn{
-  margin-top: 12px;
-  padding: 12px 12px;
-  border-radius: 16px;
-  border: 1px solid rgba(212,175,55,.26);
-  background: rgba(212,175,55,.12);
-  color: rgba(90, 68, 18, .95);
-  font-weight: 900;
-  line-height:1.35;
-}
-
-.rowInfo{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap: 12px;
-  padding: 12px 12px;
-  border-radius: 16px;
-  border: 1px solid rgba(16,37,26,.08);
-  background: rgba(255,255,255,.70);
-  margin-top: 10px;
-}
-.rowInfo .k{ font-weight: 950; color: rgba(19,32,25,.86); }
-.rowInfo .v{ font-weight: 1000; color: var(--verde-2); }
-
-/* ---------- Totales ---------- */
-.totalBox{
-  margin-top: 12px;
-  border-radius: 22px;
-  padding: 16px;
-  color: #fff;
-  border: 1px solid rgba(255,255,255,.18);
-  background:
-    radial-gradient(420px 220px at 10% 15%, rgba(255,255,255,.16), transparent 62%),
-    radial-gradient(420px 240px at 90% 0%, rgba(212,175,55,.22), transparent 68%),
-    linear-gradient(135deg, var(--verde-2), var(--verde-osc));
-  box-shadow: 0 20px 50px rgba(4,70,38,.25);
-}
-.totalBox .tLabel{ font-weight: 950; opacity:.95; }
-.totalBox .tValue{ font-size: 28px; font-weight: 1000; margin-top: 6px; }
-
-/* ---------- Buttons ---------- */
-.actions{
-  display:flex;
-  flex-wrap:wrap;
-  gap: 10px;
-  margin-top: 16px;
-}
-.btn{
-  border:0;
-  cursor:pointer;
-  padding: 12px 14px;
-  border-radius: 16px;
-  font-weight: 1000;
-  letter-spacing:.2px;
-  transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
-  user-select:none;
-}
-.btn:active{ transform: translateY(1px); }
-
-.btnPrimary{
-  color:#0b1c13;
-  background:
-    radial-gradient(220px 120px at 15% 15%, rgba(255,255,255,.35), transparent 55%),
-    linear-gradient(135deg, #f3d77a, var(--dorado));
-  box-shadow: 0 14px 30px rgba(212,175,55,.25), 0 6px 14px rgba(0,0,0,.08);
-  border: 1px solid rgba(180,138,34,.28);
-}
-.btnPrimary:hover{ filter: brightness(1.03); }
-
-.btnGhost{
-  position: relative;
-  display: inline-block;
-  padding: 12px 22px;
-  border-radius: 14px;
-  font-weight: 600;
-  font-size: 15px;
-  letter-spacing: .3px;
-  cursor: pointer;
-  transition: all .35s cubic-bezier(.4,0,.2,1);
-  
-  color: var(--verde-osc);
-  background: rgba(255,255,255,.85);
-  backdrop-filter: blur(10px);
-  
-  border: 1px solid rgba(11,122,68,.25);
-  box-shadow: 0 8px 18px rgba(0,0,0,.06);
-}
-
-/* Hover */
-.btnGhost:hover{
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 18px 35px rgba(0,0,0,.12);
-  border-color: rgba(11,122,68,.45);
-}
-
-/* Click */
-.btnGhost:active{
-  transform: scale(.97);
-  box-shadow: 0 6px 12px rgba(0,0,0,.08);
-}
-
-/* ---------- Preview (right card) ---------- */
-.stickyPreview{ position: sticky; top: 16px; }
-@media (max-width: 980px){ .stickyPreview{ position: static; } }
-
-.previewWrap{ padding: 16px; }
-.previewCard{
-  border-radius: 22px;
-  border: 1px solid rgba(16,37,26,.10);
-  background:
-    radial-gradient(460px 260px at 20% 0%, rgba(11,122,68,.14), transparent 60%),
-    radial-gradient(420px 220px at 95% 0%, rgba(212,175,55,.14), transparent 62%),
-    linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.66));
-  box-shadow: var(--shadow2);
-  overflow:hidden;
-}
-
-.previewHead{
-  padding: 14px;
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap: 10px;
-  border-bottom: 1px solid rgba(16,37,26,.08);
-}
-.previewHead b{ color: var(--verde-osc); }
-
-.meta{
-  margin-top: 6px;
-  font-size: 12px;
-  color: rgba(95,111,102,.95);
-  line-height:1.35;
-}
-
-.kpi{
-  text-align:right;
-  font-size: 12px;
-  font-weight: 950;
-  color: rgba(95,111,102,.95);
-  padding: 10px 12px;
-  border-radius: 16px;
-  background: rgba(255,255,255,.78);
-  border: 1px solid rgba(11,122,68,.14);
-}
-.kpi strong{
-  display:block;
-  margin-top:4px;
-  font-size: 18px;
-  color: var(--verde-2);
-}
-
-/* ---------- Cake stage ---------- */
-.previewStage{
-  position:relative;
-  padding: 14px 14px 10px;
-  display:flex;
-  justify-content:center;
-  align-items:flex-end;
-  min-height: 280px;
-}
-.shadowFloor{
-  position:absolute;
-  width: 82%;
-  height: 44px;
-  bottom: 18px;
-  left: 9%;
-  background: radial-gradient(closest-side, rgba(0,0,0,.22), transparent 70%);
-  filter: blur(2px);
-  opacity:.45;
-}
-.cake{
-  position:relative;
-  width:75%;
-  display:flex;
-  align-items:center;
-  flex-direction:column;
-  gap: 10px;
-  padding-bottom: 18px;
-}
-.tier{
-  position:relative;
-  border-radius: 22px;
-  background: linear-gradient(180deg, var(--cake-top), var(--cake-base));
-  border: 1px solid rgba(0,0,0,.06);
-  box-shadow: 0 22px 28px rgba(0,0,0,.14), 0 2px 0 rgba(255,255,255,.55) inset;
-  overflow:hidden;
-  display:flex;
-  align-items:flex-end;
-  justify-content:space-between;
-  padding: 10px 12px;
-}
-.tier::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:
-    linear-gradient(90deg, rgba(255,255,255,.40), transparent 28%, transparent 72%, rgba(0,0,0,.08)),
-    radial-gradient(160px 60px at 50% 0%, rgba(255,255,255,.55), transparent 60%);
-  opacity:.75;
-  pointer-events:none;
-}
-.gloss{
-  position:absolute;
-  top:-20%;
-  left:-10%;
-  width: 45%;
-  height: 140%;
-  background: linear-gradient(90deg, rgba(255,255,255,.55), transparent 70%);
-  transform: rotate(18deg);
-  opacity:.40;
-  pointer-events:none;
-}
-.tierLabel{
-  position:relative;
-  font-weight: 1000;
-  color: rgba(19,32,25,.88);
-  background: rgba(255,255,255,.72);
-  border: 1px solid rgba(16,37,26,.10);
-  padding: 6px 10px;
-  border-radius: 999px;
-  backdrop-filter: blur(10px);
-}
-.tierFlavor{
-  position:relative;
-  font-weight: 950;
-  color: rgba(19,32,25,.72);
-  background: rgba(255,255,255,.55);
-  border: 1px solid rgba(16,37,26,.10);
-  padding: 6px 10px;
-  border-radius: 999px;
-  max-width: 62%;
-  text-align:right;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  backdrop-filter: blur(10px);
-}
-.payImg{
-  width: 75px;
-  height: 75px;
-  object-fit:contain;
-  background: center;
-  filter: drop-shadow(0 1px 0 rgba(255,255,255,.65));
-}
-.basePlate{
-  width: 78%;
-  height: 18px;
-  border-radius: 999px;
-  background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(230,235,232,.96));
-  border: 1px solid rgba(16,37,26,.10);
-  box-shadow: 0 12px 26px rgba(0,0,0,.10);
-}
-
-/* ---------- Legend & pay info ---------- */
-.legend{
-  padding: 12px 14px 14px;
-  border-top: 1px solid rgba(16,37,26,.08);
-}
-
-.payInfo{
-  border-radius: 18px;
-  border: 1px solid rgba(16,37,26,.10);
-  background: rgba(255,255,255,.76);
-  padding: 12px;
-}
-
-/* ---------- Ref preview ---------- */
-.refWrap{
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  align-items:start;
-}
-@media (max-width: 760px){
-  .refWrap{ grid-template-columns: 1fr; }
-}
-.refPreview{
-  min-height: 170px;
-  border-radius: 18px;
-  border: 1px solid rgba(16,37,26,.10);
-  background:
-    radial-gradient(420px 220px at 30% 0%, rgba(11,122,68,.10), transparent 60%),
-    linear-gradient(180deg, rgba(255,255,255,.86), rgba(255,255,255,.62));
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color: rgba(95,111,102,.9);
-  font-weight: 950;
-  overflow:hidden;
-}
-.refPreview img{ width:100%; height:100%; object-fit:cover; }
-
-/* ---------- Palette buttons (tu script usa .palBtn) ---------- */
-#palette{ display:flex; flex-wrap:wrap; gap:10px; margin-top:10px; }
-.palBtn{
-  width: 34px; height: 34px;
-  border-radius: 14px;
-  border: 2px solid rgba(255,255,255,.85);
-  box-shadow: 0 12px 18px rgba(0,0,0,.10);
-  cursor:pointer;
-  transition: transform .12s ease, box-shadow .12s ease;
-}
-.palBtn:hover{ transform: translateY(-2px); box-shadow: 0 16px 26px rgba(0,0,0,.12); }
-.palBtn[aria-pressed="true"]{ outline: 3px solid rgba(11,122,68,.35); }
-
-/* ---------- Tone controls ---------- */
-.toneWrap{
-  border-radius: 18px;
-  border: 1px solid rgba(0, 5, 3, 0.1);
-  background: rgba(255,255,255,.74);
-  padding: 12px;
-}
-.toneRow{ display:flex; gap:10px; align-items:center; }
-#hueBar{ width:100%; accent-color: var(--verde); }
-.toneSwatch{
-  width: 100px; height: 40px;
-  border-radius: 5px;
-  border: 2px solid rgba(16,37,26,.12);
-  box-shadow: 0 10px 16px rgba(0,0,0,.08);
-  background:#fff;
-}
-.toneHex{
-  font-size: 12px;
-  font-weight: 950;
-  color: rgba(19,32,25,.80);
-  min-width: 78px;
-  text-align:center;
-  border-radius: 12px;
-  padding: 8px 10px;
-  border: 1px solid rgba(16,37,26,.10);
-  background: rgba(255,255,255,.78);
-}
-.toneBtn{
-  border: 1px solid rgba(212,175,55,.30);
-  background: rgba(212,175,55,.14);
-  color: rgba(90, 68, 18, .95);
-  padding: 10px 12px;
-  border-radius: 14px;
-  font-weight: 950;
-  cursor:pointer;
-}
-
-/* ---------- Modal referencias ---------- */
-.modalOverlay{
-  position:fixed; inset:0;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  background: rgba(0,0,0,.52);
-  padding: 18px;
-  z-index: 9999;
-}
-.modalOverlay.show{ display:flex; }
-
-.modal{
-  width:min(980px, 100%);
-  max-height: 86vh;
-  overflow:hidden;
-  border-radius: 24px;
-  border: 1px solid rgba(255,255,255,.16);
-  background:
-    radial-gradient(520px 260px at 15% 0%, rgba(11,122,68,.18), transparent 60%),
-    radial-gradient(520px 260px at 90% 0%, rgba(212,175,55,.18), transparent 62%),
-    linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.74));
-  box-shadow: 0 30px 80px rgba(0,0,0,.25);
-}
-.modalHead{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap: 10px;
-  padding: 14px 16px;
-  border-bottom: 1px solid rgba(16,37,26,.10);
-}
-.modalClose{
-  border: 1px solid rgba(11,122,68,.20);
-  background: rgba(255,255,255,.78);
-  color: var(--verde-osc);
-  padding: 10px 12px;
-  border-radius: 14px;
-  font-weight: 950;
-  cursor:pointer;
-}
-.modalBody{
-  padding: 14px 16px 18px;
-  overflow:auto;
-  max-height: calc(86vh - 60px);
-}
-.gallery{
-  margin-top: 12px;
-  display:grid;
-  grid-template-columns: repeat(4, minmax(0,1fr));
-  gap: 12px;
-}
-@media (max-width: 900px){
-  .gallery{ grid-template-columns: repeat(2, minmax(0,1fr)); }
-}
-.thumb{
-  border-radius: 18px;
-  overflow:hidden;
-  border: 1px solid rgba(16,37,26,.10);
-  background: rgba(255,255,255,.78);
-  box-shadow: 0 12px 24px rgba(0,0,0,.08);
-  cursor:pointer;
-  transition: transform .12s ease, box-shadow .12s ease;
-}
-.thumb:hover{ transform: translateY(-2px); box-shadow: 0 18px 34px rgba(0,0,0,.10); }
-.thumb img{ width:100%; height: 160px; object-fit:cover; display:block; }
-.cap{ padding: 10px 12px; font-weight: 950; font-size: 12px; color: rgba(19,32,25,.78); }
-
-/* ---------- Mobile polish ---------- */
-@media (max-width: 760px){
-  .header{ padding: 18px 16px 12px; }
-  .content{ padding: 14px; }
-  .section{ padding: 14px; }
-}
-
-/* Reduce motion */
-@media (prefers-reduced-motion: reduce){
-  *{ transition:none !important; scroll-behavior:auto !important; }
-}
-
-
-/* =========================================================
-   Cake Fit · Mejora Elegante (verde + dorado + bordes negros)
-   ✅ Fondo con imagen en BODY + blur con ::before
-   ✅ Secciones (pasos) con modelo premium
-   ✅ Selects agrupados: títulos (optgroup) en verde/dorado y opciones en negro
-   ========================================================= */
-
-:root{
-  --verde:#0b7a44;
-  --verde-osc:#064e2b;
-  --verde-claro:#e9f5ef;
-  --dorado:#c6a23a;
-
-  --negro:#111;
-  --borde-negro:rgba(17,17,17,.70);
-
-  --fondo:#f4faf7;
-  --radio:18px;
-
-  /* Cambia aquí la ruta de tu imagen si hace falta */
-  --bg-image: url("../img/fondo.jpg");
-
-  --sombra: 0 18px 45px rgba(0,0,0,.10);
-  --sombra-hover: 0 26px 70px rgba(0,0,0,.16);
-}
-
-/* Fondo base: la imagen queda en body (como pediste) */
-body{
-  background-color: var(--fondo) !important;
-  background-image: var(--bg-image) !important;
-  background-size: cover !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
-  background-attachment: fixed !important;
-
-  position: relative;
-  overflow-x: hidden;
-}
-
-/* Capa elegante difuminada encima (sin afectar el contenido) */
+/* =========================
+   Burbujas — Decoración sutil del fondo (pro)
+========================= */
 body::before{
   content:"";
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(900px 450px at 15% 8%, rgba(11,122,68,.14), transparent 60%),
-    radial-gradient(700px 380px at 85% 10%, rgba(198,162,58,.14), transparent 55%),
-    linear-gradient(rgba(244,250,247,.86), rgba(244,250,247,.86)),
-    var(--bg-image);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  filter: blur(14px);
-  z-index: -1;
-  transform: scale(1.05);
-  opacity: .98;
-}
-
-/* Card principal + secciones con borde negro elegante */
-.card{
-  background: rgba(255,255,255,.92) !important;
-  border: 1px solid var(--borde-negro) !important;
-  border-radius: calc(var(--radio) + 4px) !important;
-  box-shadow: var(--sombra) !important;
-  backdrop-filter: blur(10px);
-}
-
-.section{
-  background: rgba(255,255,255,.90) !important;
-  border: 1px solid rgba(17,17,17,.55) !important;
-  border-radius: var(--radio) !important;
-  box-shadow: 0 10px 25px rgba(0,0,0,.06);
-}
-
-.sectionTitle h2{
-  color: var(--verde-osc) !important;
-  letter-spacing: .2px;
-}
-.sectionTitle h2::after{
-  content:"";
-  display:block;
-  width: 72px;
-  height: 3px;
-  margin-top: 8px;
-  border-radius: 999px;
-  background: var(--dorado);
-  opacity: .95;
-}
-
-/* Labels y helpers */
-label{ color: #1b1b1b; font-weight: 700; }
-.helper, .small{ color: rgba(0,0,0,.62); }
-
-/* Inputs / selects con borde negro suave */
-input, select, textarea{
-  border: 1px solid rgba(17,17,17,.50) !important;
-  border-radius: 14px !important;
-  background: rgba(255,255,255,.92) !important;
-  box-shadow: 0 8px 18px rgba(0,0,0,.06);
-}
-
-input:focus, select:focus, textarea:focus{
-  outline: none !important;
-  border-color: rgba(198,162,58,.85) !important;
-  box-shadow: 0 0 0 4px rgba(198,162,58,.18), 0 12px 24px rgba(0,0,0,.10);
-}
-
-/* Select agrupado: títulos en verde/dorado, opciones en negro */
-select optgroup{
-  color: var(--verde-osc) !important;
-  font-weight: 800 !important;
-}
-select option{
-  color: #111 !important;
-  font-weight: 600;
-}
-
-/* Botón Ghost premium */
-.btnGhost{
-  position: relative;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  padding:12px 20px;
-  border-radius:14px;
-  font-weight:800;
-  font-size:15px;
-  letter-spacing:.2px;
-  cursor:pointer;
-  user-select:none;
-
-  color: var(--verde-osc) !important;
-  background: rgba(255,255,255,.84) !important;
-  border: 1px solid rgba(17,17,17,.55) !important;
-  box-shadow: 0 10px 22px rgba(0,0,0,.08) !important;
-
-  transition: transform .28s cubic-bezier(.2,.8,.2,1),
-              box-shadow .28s ease,
-              border-color .28s ease,
-              background .28s ease;
-}
-
-.btnGhost:hover{
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: var(--sombra-hover) !important;
-  border-color: rgba(198,162,58,.85) !important;
-  background: rgba(255,255,255,.94) !important;
-}
-
-.btnGhost:active{
-  transform: scale(.98);
-  box-shadow: 0 8px 16px rgba(0,0,0,.10) !important;
-}
-
-.btnGhost::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  border-radius:inherit;
-  background: linear-gradient(120deg, transparent 30%, rgba(198,162,58,.25), transparent 70%);
-  opacity:0;
-  transition: opacity .28s ease;
+  position:fixed;
+  inset:-40px;
   pointer-events:none;
+  z-index:-1;
+  background:
+    radial-gradient(circle at 20% 25%, rgba(11,122,68,.18), transparent 42%),
+    radial-gradient(circle at 80% 18%, rgba(212,175,55,.20), transparent 44%),
+    radial-gradient(circle at 78% 78%, rgba(11,122,68,.12), transparent 46%),
+    radial-gradient(circle at 28% 82%, rgba(212,175,55,.12), transparent 44%);
+  filter: blur(2px);
 }
-.btnGhost:hover::after{ opacity:1; }
 
+/* =========================
+   .wrapper — Layout principal (izq controles / der preview)
+========================= */
+.wrapper{
+  max-width:1280px;
+  margin:0 auto;
+  padding:clamp(14px, 2.2vw, 26px);
+  display:grid;
+  grid-template-columns: 1.15fr .85fr;
+  gap:18px;
+  align-items:start;
+}
 
+/* Responsive — 1 columna en móvil */
+@media (max-width: 980px){
+  .wrapper{
+    grid-template-columns:1fr;
+    gap:14px;
+  }
+}
 
-/* ====== UI ELEGANTE: STEPPER + VOLVER SIEMPRE VISIBLE ====== */
+/* =========================
+   .card — Tarjeta base (contenedores principales)
+========================= */
+.card{
+  background:linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.88));
+  border:1px solid var(--b1);
+  border-radius:var(--r1);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+
+/* =========================
+   .header — Encabezado del panel izquierdo
+========================= */
+.header{
+  padding:18px 18px 14px;
+  background:
+    linear-gradient(90deg, rgba(11,122,68,.10), transparent 62%),
+    linear-gradient(180deg, rgba(212,175,55,.10), transparent 60%);
+  border-bottom:1px solid var(--b1);
+}
+.header h1{
+  margin:0;
+  font-weight:950;
+  letter-spacing:.2px;
+  color:var(--negro);
+  font-size:clamp(18px, 1.7vw, 24px);
+}
+.header p{
+  margin:8px 0 0;
+  color:var(--gris);
+  font-weight:700;
+}
+
+/* =========================
+   .stepper — Contenedor del paso a paso (barra superior + nav)
+========================= */
 .stepper{
-  margin: 16px 0 10px;
-  padding: 14px 14px 12px;
-  border-radius: 18px;
-  border: 1px solid rgba(17,17,17,.75);
-  background: rgba(255,255,255,.88);
-  box-shadow: 0 14px 38px rgba(0,0,0,.08);
+  padding:14px 18px 16px;
+  border-bottom:1px solid var(--b1);
+  background:rgba(255,255,255,.74);
   backdrop-filter: blur(10px);
 }
 
+/* .stepperTop — fila superior (mini brand + botón volver fijo) */
 .stepperTop{
   display:flex;
-  align-items:center;
   justify-content:space-between;
+  align-items:center;
   gap:12px;
-  margin-bottom:10px;
+  margin-bottom:12px;
 }
 
+/* .brandMini — bloque mini de marca dentro del stepper */
 .brandMini{
   display:flex;
   align-items:center;
   gap:10px;
-  min-width: 0;
 }
 .brandMiniLogo{
-  width:36px;
-  height:36px;
+  width:42px;
+  height:42px;
   object-fit:contain;
-  border-radius:10px;
-  border:1px solid rgba(17,17,17,.55);
-  background:#fff;
-  box-shadow: 0 10px 22px rgba(0,0,0,.06);
+  filter: drop-shadow(0 8px 14px rgba(0,0,0,.12));
 }
-.brandMiniText{min-width:0}
-.brandMiniName{
-  font-weight:800;
-  color: var(--verde-osc);
-  line-height:1.1;
-}
-.brandMiniSub{
-  font-size:12px;
-  color: rgba(0,0,0,.62);
-  margin-top:2px;
-}
+.brandMiniText{ display:flex; flex-direction:column; line-height:1.05; }
+.brandMiniName{ font-weight:950; color:var(--negro); letter-spacing:.2px; }
+.brandMiniSub{ font-weight:800; color:var(--gris); font-size:12px; }
 
+/* =========================
+   .stepBar — Barra de progreso (JS la rellena con steps)
+========================= */
 .stepBar{
   display:flex;
-  gap:10px;
-  overflow:auto;
-  padding: 6px 2px 10px;
-  scroll-snap-type: x mandatory;
+  gap:8px;
+  flex-wrap:wrap;
+  margin:10px 0 12px;
 }
 
-.stepDot{
+/* Estilo sugerido para los steps si tu JS crea botones/etiquetas */
+.stepBar .stepDot,
+.stepBar button{
+  border:1px solid var(--b1);
+  background:rgba(255,255,255,.9);
+  padding:8px 10px;
+  border-radius:999px;
+  font-weight:900;
+  font-size:12px;
+  color:var(--gris);
+  cursor:pointer;
+  transition:.2s ease;
+}
+.stepBar .active,
+.stepBar button.active{
+  border-color: rgba(212,175,55,.55);
+  background: linear-gradient(135deg, rgba(212,175,55,.20), rgba(11,122,68,.10));
+  color:var(--negro);
+}
+
+/* =========================
+   .stepNav — Botones anterior / siguiente
+========================= */
+.stepNav{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+
+/* =========================
+   .btn — Botón base (todos)
+========================= */
+.btn{
+  border:none;
+  border-radius:16px;
+  padding:12px 14px;
+  cursor:pointer;
+  font-weight:950;
+  letter-spacing:.2px;
+  transition: transform .15s ease, filter .15s ease, box-shadow .15s ease;
+}
+.btn:active{ transform: translateY(1px); }
+
+/* .btnGhost — botón tipo “secundario” */
+.btnGhost{
+  background:rgba(255,255,255,.88);
+  border:1px solid var(--b1);
+  color:var(--negro);
+  box-shadow:var(--shadow2);
+}
+.btnGhost:hover{ filter: brightness(1.02); }
+
+/* .btnPrimary — botón principal verde */
+.btnPrimary{
+  background: linear-gradient(135deg, var(--verde), var(--verde-agua));
+  color:#fff;
+  box-shadow:0 16px 35px rgba(11,122,68,.24);
+}
+.btnPrimary:hover{ filter: brightness(1.03); }
+
+/* .btnVolverFixed — “Volver” arriba del panel */
+.btnVolverFixed{
+  white-space:nowrap;
+}
+
+/* =========================
+   .content — área de secciones (panel izquierdo)
+========================= */
+.content{
+  padding:16px 18px 18px;
+}
+
+/* =========================
+   .section — bloque por cada paso
+========================= */
+.section{
+  padding:14px 0;
+  border-bottom:1px dashed rgba(0,0,0,.10);
+}
+.section:last-child{ border-bottom:none; }
+
+/* =========================
+   .sectionTitle — Título + helper (encabezado de sección)
+========================= */
+.sectionTitle{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:10px;
+  margin-bottom:10px;
+}
+.sectionTitle h2{
+  margin:0;
+  font-size:16px;
+  font-weight:950;
+  color:var(--verde);
+}
+.helper{
+  color:var(--gris);
+  font-size:12px;
+  font-weight:900;
+}
+
+/* =========================
+   .grid2 / .grid3 — Grids de formulario
+========================= */
+.grid2{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:12px;
+}
+.grid3{
+  display:grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap:12px;
+}
+@media (max-width: 980px){
+  .grid2{ grid-template-columns:1fr; }
+  .grid3{ grid-template-columns:1fr; }
+}
+
+/* =========================
+   labels / inputs / selects — Estilo pro de formularios
+========================= */
+label{
+  display:block;
+  font-size:12px;
+  font-weight:950;
+  color:var(--verde-oscuro);
+  margin-bottom:6px;
+}
+input, select, textarea{
+  width:100%;
+  border:1px solid var(--b1);
+  border-radius:14px;
+  padding:10px 12px;
+  background:rgba(255,255,255,.92);
+  outline:none;
+  transition: box-shadow .18s ease, border-color .18s ease;
+}
+input:focus, select:focus, textarea:focus{
+  border-color: rgba(11,122,68,.45);
+  box-shadow: var(--focus);
+}
+.small{
+  margin-top:6px;
+  font-size:12px;
+  color:var(--gris);
+  font-weight:800;
+}
+
+/* .dtInput — input de fecha/hora */
+.dtInput{
+  font-weight:900;
+}
+
+/* =========================
+   .switchRow — filas de switches / toggles
+========================= */
+.switchRow{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:10px 12px;
+  border:1px solid var(--b1);
+  border-radius:14px;
+  background:rgba(255,255,255,.86);
+}
+
+/* =========================
+   .warn — Caja de advertencia
+========================= */
+.warn{
+  padding:12px 14px;
+  border-radius:16px;
+  border:1px solid rgba(212,175,55,.45);
+  background: linear-gradient(135deg, rgba(212,175,55,.16), rgba(255,255,255,.70));
+  color:var(--negro);
+  font-weight:900;
+}
+
+/* =========================
+   .sizePickerWrap — Contenedor de selección de tamaños
+========================= */
+.sizePickerWrap{
+  margin-top:10px;
+  border:1px solid var(--b1);
+  border-radius:var(--r2);
+  overflow:hidden;
+  background:rgba(255,255,255,.86);
+  box-shadow:var(--shadow2);
+}
+
+/* .sizePickerTop — Header del selector de tamaños */
+.sizePickerTop{
+  padding:12px 14px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  border-bottom:1px solid var(--b1);
+  background:
+    linear-gradient(90deg, rgba(11,122,68,.10), transparent 60%),
+    linear-gradient(180deg, rgba(212,175,55,.10), transparent 60%);
+}
+.sizePickerTitle{
+  font-weight:950;
+  color:var(--negro);
+}
+.sizePickerSub{
+  font-size:12px;
+  font-weight:900;
+  color:var(--gris);
+}
+
+/* .sizePicker — Grid interno de botones tamaño (tus .sizePickBtn) */
+.sizePicker{
+  padding:12px;
+  display:grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap:10px;
+}
+@media (max-width: 980px){
+  .sizePicker{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 520px){
+  .sizePicker{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* .sizePickBtn — Botón de cada tamaño (imagen + label) */
+.sizePickBtn{
+  border:1px solid var(--b1);
+  background:rgba(255,255,255,.95);
+  border-radius:16px;
+  padding:10px;
+  cursor:pointer;
+  box-shadow:var(--shadow2);
+  transition:.18s ease;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  align-items:center;
+}
+.sizePickBtn:hover{
+  transform: translateY(-2px);
+  border-color: rgba(212,175,55,.40);
+  box-shadow: 0 18px 40px rgba(0,0,0,.14);
+}
+
+/* .sizePickImg — imagen del tamaño */
+.sizePickImg{
+  width:100%;
+  max-width:120px;
+  height:auto;
+  object-fit:contain;
+  filter: drop-shadow(0 10px 18px rgba(0,0,0,.10));
+}
+
+/* .sizePickLbl — texto del tamaño */
+.sizePickLbl{
+  font-weight:950;
+  color:var(--negro);
+  font-size:12px;
+}
+
+/* =========================
+   .toneWrap / .toneRow — Paleta de colores (si la usas)
+========================= */
+.toneWrap{
+  border:1px solid var(--b1);
+  border-radius:var(--r2);
+  padding:12px;
+  background:rgba(255,255,255,.86);
+  box-shadow:var(--shadow2);
+}
+.toneRow{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+/* .toneBtn — Botón de tono */
+.toneBtn{
   display:flex;
   align-items:center;
   gap:10px;
+  border:1px solid var(--b1);
+  background:#fff;
   padding:10px 12px;
-  border-radius:14px;
-  border:1px solid rgba(17,17,17,.45);
-  background: rgba(255,255,255,.78);
-  color: rgba(0,0,0,.72);
+  border-radius:999px;
   cursor:pointer;
-  transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease, background .28s ease;
-  scroll-snap-align: start;
-  white-space:nowrap;
+  font-weight:950;
+  color:var(--negro);
+  transition:.18s ease;
 }
-.stepDot .dot{
-  width:10px;height:10px;border-radius:999px;
-  border:2px solid rgba(17,17,17,.55);
-  background: transparent;
-  box-shadow: 0 8px 16px rgba(0,0,0,.06);
-}
-.stepDot .label{
-  font-size:12.5px;
-  font-weight:700;
-  letter-spacing:.2px;
+.toneBtn:hover{
+  border-color: rgba(11,122,68,.35);
+  box-shadow:var(--shadow2);
 }
 
-.stepDot:hover{ transform: translateY(-2px) scale(1.02); box-shadow: 0 14px 30px rgba(0,0,0,.10); }
-.stepDot.active{
-  border-color: rgba(198,162,58,.95);
-  background: rgba(11,122,68,.08);
-  color: var(--verde-osc);
+/* .toneSwatch — circulito de color */
+.toneSwatch{
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  border:1px solid rgba(0,0,0,.10);
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,.55);
 }
-.stepDot.active .dot{ border-color: rgba(198,162,58,.95); background: rgba(198,162,58,.95); }
+.toneHex{ font-size:12px; color:var(--gris); font-weight:900; }
 
-.stepDot.done{
-  border-color: rgba(11,122,68,.55);
-  background: rgba(233,245,239,.85);
+/* =========================
+   .stickyPreview — Card derecha sticky
+========================= */
+.stickyPreview{
+  position: sticky;
+  top: 14px;
 }
-.stepDot.done .dot{ border-color: rgba(11,122,68,.75); background: rgba(11,122,68,.35); }
+@media (max-width: 980px){
+  .stickyPreview{ position: relative; top:auto; }
+}
 
-.stepNav{
+/* =========================
+   .previewWrap / .previewCard — Contenedor superior del preview
+========================= */
+.previewWrap{ padding:0; }
+.previewCard{
+  padding:14px 16px;
+  border-bottom:1px solid var(--b1);
+  background:rgba(255,255,255,.78);
+  backdrop-filter: blur(10px);
+}
+.previewHead{
   display:flex;
-  gap:10px;
-  justify-content:flex-end;
-  padding-top:10px;
-  border-top: 1px dashed rgba(17,17,17,.18);
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
 }
-.stepNav .btn{ flex:0 0 auto; }
-.stepNav .btn:disabled{ opacity:.55; cursor:not-allowed; transform:none; }
-
-/* Secciones por orden (solo una visible) */
-.stepSection.isHidden{ display:none !important; }
-.stepSection.isActive{ display:block; }
-.stepSection.enter{
-  animation: stepIn .42s cubic-bezier(.2,.8,.2,1) both;
-}
-@keyframes stepIn{
-  from{ opacity:0; transform: translateY(10px) scale(.99); }
-  to{ opacity:1; transform: translateY(0) scale(1); }
-}
-
-/* Botón volver flotante (siempre a la vista) */
-.floatingBack{
-  position: fixed;
-  left: 16px;
-  bottom: 16px;
-  z-index: 50;
-  border-color: rgba(17,17,17,.75);
-  box-shadow: 0 18px 45px rgba(0,0,0,.16);
-}
-.floatingBack:hover{ transform: translateY(-3px) scale(1.05); }
-
-/* Preview: logo + tipografías */
 .previewTitle{
   display:flex;
   align-items:center;
   gap:10px;
+  color:var(--negro);
+  font-weight:950;
 }
 .previewLogo{
   width:34px;
   height:34px;
   object-fit:contain;
-  border-radius:10px;
-  border:1px solid rgba(17,17,17,.55);
-  background:#fff;
+  filter: drop-shadow(0 8px 14px rgba(0,0,0,.12));
+}
+.meta{
+  margin-top:6px;
+  color:var(--gris);
+  font-size:12px;
+  font-weight:900;
 }
 
-/* Vista previa: títulos en negrita, valores normales */
-.previewLines .k, .previewLines .label, .previewRows .k{
-  font-weight: 800 !important;
-  color: rgba(0,0,0,.78);
-}
-.previewLines .v, .previewRows .v, .previewLines .value{
-  font-weight: 400 !important;
-  color: rgba(0,0,0,.9);
+/* .kpi — total general */
+/* Caja del total (estilo botón verde grande) */
+.totalBox{
+  width:90%;
+  margin:auto;
+
+  text-align:center;
+
+  background:linear-gradient(135deg,#0b7a44,#0f9a5b);
+  color:#ffffff;
+
+  padding:14px 18px;
+  border-radius:16px;
+
+  font-size:14px;
+  font-weight:600;
+
+  box-shadow:0 10px 22px rgba(11,122,68,.35);
+
+  position:relative;
+  overflow:hidden;
 }
 
-/* Select: optgroup (títulos) y option (sabores) */
-select optgroup{
-  color: var(--verde-osc);
-  font-weight: 800;
-}
-select option{
-  color: #111;
-  font-weight: 500;
+/* brillo superior elegante */
+.totalBox::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:16px;
+
+  background:linear-gradient(
+    180deg,
+    rgba(255,255,255,.35),
+    transparent 60%
+  );
+
+  opacity:.35;
 }
 
-/* Botones finales más pro */
-.btnRow{
-  gap:12px;
-  flex-wrap: wrap;
-}
-.btnRow .btn{
-  border-radius: 14px;
-  transition: transform .28s cubic-bezier(.2,.8,.2,1), box-shadow .28s ease, filter .28s ease;
-}
-.btnRow .btn:hover{ transform: translateY(-3px) scale(1.04); box-shadow: 0 22px 55px rgba(0,0,0,.18); }
-.btnRow .btn:active{ transform: scale(.98); }
-
-/* En móvil: mejorar sticky preview / botones */
-@media (max-width: 980px){
-  .floatingBack{ left: 12px; bottom: 12px; }
-  .stepBar{ gap:8px; }
-  .stepDot{ padding: 10px 10px; }
+/* número del total */
+.totalBox strong{
+  display:block;
+  font-size:22px;
+  font-weight:600;
+  margin-top:4px;
 }
 
-/* Botón volver dentro de la vista previa */
-.previewHead{
-  position: relative;
-  gap: 12px;
+/* brillo superior para efecto premium */
+.totalBox::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:16px;
+
+  background:linear-gradient(
+    180deg,
+    rgba(255,255,255,.35),
+    transparent 60%
+  );
+
+  opacity:.35;
+  pointer-events:none;
 }
+
+/* valor del total */
+.totalBox strong{
+  display:block;
+  font-size:22px;
+  font-weight:900;
+  margin-top:4px;
+}
+/* .btnVolverPreview — volver dentro del preview */
 .btnVolverPreview{
-  margin-left: auto;
-  border-color: rgba(17,17,17,.75);
-}
-@media (max-width: 980px){
-  .btnVolverPreview{ display:none; } /* en móvil ya está el flotante */
+  width:100%;
+  margin-top:12px;
 }
 
+/* =========================
+   .previewStage — Escenario del cake (fondo + cake 3D)
+========================= */
+.previewStage{
+  position:relative;
+  overflow:hidden;
+  min-height: 320px;
+  border-radius: 5%;
+  display:flex;
+  justify-content:center;
+  align-items:flex-end;
+  padding:14px 14px 10px;
+  background: linear-gradient(180deg, rgba(11,122,68,.06), rgba(255,255,255,.0));
+}
 
+/* Fondo REAL detrás del cake (fondocake.png) — NO opaco y más chico */
+.previewStage::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:url("../img/iconos-seleccion/fondocake.png"); /* CSS está en /css */
+  background-repeat:no-repeat;
+  background-position:center;
+   background-size:100% 100%;
+ /*  background-size: var(--cake-bg-size); más chico y controlable */
+  opacity:1; /* visible */
+  z-index:0;
+  pointer-events:none;
+}
+
+/* .shadowFloor — sombra del piso (tu div ya existe) */
+.shadowFloor{
+  position:absolute;
+  left:50%;
+  bottom:14px;
+  transform:translateX(-50%);
+  width:min(360px, 80%);
+  height:28px;
+  border-radius:999px;
+  background: radial-gradient(circle, rgba(0,0,0,.24), transparent 70%);
+  filter: blur(6px);
+  opacity:.55;
+  z-index:1;
+}
+
+/* .cake — contenedor del cake (tus tiers) */
+.cake{
+  position:relative;
+  z-index:2;
+  width:min(340px, 88%);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:.5px;
+  padding-bottom:18px;
+}
+
+/* .tier — cada piso del cake */
+.tier{
+  width:100%;
+  border-radius:18px;
+  border:1px solid rgba(0,0,0,.08);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.95), rgba(245,245,245,.85));
+  box-shadow: 0 16px 30px rgba(0,0,0,.12);
+  position:relative;
+  overflow:hidden;
+  padding:14px 14px 12px;
+}
+
+/* .gloss — brillo “pro” encima del cake */
+.gloss{
+  position:absolute;
+  inset:0;
+  background: linear-gradient(75deg, rgba(73, 71, 71, 0.55), transparent 75%);
+  opacity:.50;
+  pointer-events:none;
+}
+
+/* .tierLabel — etiqueta de cada piso */
+.tierLabel{
+  font-weight:1000;
+  color:var(--negro);
+  letter-spacing:.2px;
+  font-size:13px;
+}
+
+/* .tierFlavor — sabor de cada piso */
+.tierFlavor{
+  margin-top:10px;
+  font-weight:900;
+  color:var(--negro);
+  font-size:12px;
+  
+}
+
+/* .basePlate — plato base del cake */
+/* Base del cake (plato inferior) */
+.basePlate{
+  width:90%;
+  height:30px;
+  border-radius:40px;
+
+  /* degradado metálico */
+  background:
+    linear-gradient(
+      180deg,
+      #ddba2e 5%,
+      #897641 35%,
+      #897247 60%,
+      #bc8d48 100%
+    );
+
+  border:2px solid rgba(0,0,0,.15);
+
+  /* profundidad */
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,.6),
+    inset 0 -3px 6px rgba(0,0,0,.2),
+    0 10px 18px rgba(0,0,0,.25);
+
+  position:relative;
+}
+
+/* =========================
+   .legend — texto inferior del preview
+========================= */
+.legend{
+  margin:0;
+  padding:12px 16px;
+  border-top:1px solid var(--b1);
+  background:rgba(255,255,255,.82);
+  color:var(--negro);
+  font-weight:700;
+  font-size:13px;
+}
+
+/* .payInfo — bloque de pago dentro del preview */
+.payInfo{
+  padding:12px;
+  border-radius:16px;
+  border:1px solid var(--b1);
+  background:rgba(255,255,255,.88);
+  box-shadow:var(--shadow2);
+}
+
+/* =========================
+   .modalOverlay — Fondo oscuro del modal
+========================= */
+.modalOverlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  backdrop-filter: blur(6px);
+  display:none; /* tu JS lo muestra */
+  z-index:50;
+}
+
+/* .modal — Ventana modal */
+.modal{
+  position:fixed;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:min(720px, 92vw);
+  background:rgba(255,255,255,.95);
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:var(--r1);
+  box-shadow:0 26px 70px rgba(0,0,0,.35);
+  overflow:hidden;
+  display:none; /* tu JS lo muestra */
+  z-index:60;
+}
+
+/* .modalHead — Encabezado del modal */
+.modalHead{
+  padding:14px 16px;
+  background:
+    linear-gradient(90deg, rgba(11,122,68,.14), transparent 60%),
+    linear-gradient(180deg, rgba(212,175,55,.12), transparent 60%);
+  border-bottom:1px solid var(--b1);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+.modalHead b{
+  font-weight:1000;
+  color:var(--negro);
+}
+.modalClose{
+  border:none;
+  background:rgba(0,0,0,.06);
+  border:1px solid rgba(0,0,0,.08);
+  border-radius:12px;
+  padding:8px 10px;
+  cursor:pointer;
+  font-weight:1000;
+}
+
+/* .modalBody — Contenido del modal */
+.modalBody{
+  padding:16px;
+}
+
+/* =========================
+   Pequeñas utilidades de tu HTML
+========================= */
+.rowInfo{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  padding:10px 12px;
+  border:1px solid var(--b1);
+  border-radius:14px;
+  background:rgba(255,255,255,.86);
+}
+.k{ font-weight:1000; color:var(--verde-oscuro); }
+.v{ font-weight:950; color:var(--negro); }
+
+/* .badge — insignia pequeña */
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:7px 10px;
+  border-radius:999px;
+  background:rgba(11,122,68,.10);
+  border:1px solid rgba(11,122,68,.18);
+  color:var(--verde-oscuro);
+  font-weight:1000;
+  font-size:12px;
+}
+
+/* =========================
+   Accesibilidad/Toques pro
+========================= */
+a{ color:inherit; }
+button:focus, input:focus, select:focus, textarea:focus{ outline:none; }
 
 /* =========================================================
-   PATCH PRO (sin tocar HTML)
-   - Wrapper verde, cards/sections con tonos vivos
-   - Bordes negros + acentos dorados
-   - Fix: nada debe bloquear selects (sabores)
-   ========================================================= */
+   AJUSTES EXTRA (Marzo 2026) - Pedido Daniel
+   - Fondo general verde
+   - TotalBox 90%
+   - Preview labels en negrita
+   - Caja extra para el cake 3D
+   - Selector de tamaños con rinde visible
+========================================================= */
 
-/* Fondo general (body) */
-html, body{
-  height: 100%;
-}
+/* Fondo verde principal (premium) */
 body{
-  background: #064e2b !important; /* verde base */
+  background:
+    radial-gradient(circle at 18% 12%, rgba(212,175,55,.18), transparent 48%),
+    radial-gradient(circle at 82% 18%, rgba(255,255,255,.10), transparent 52%),
+    linear-gradient(180deg, #0b7a44 0%, #075a33 55%, #064d2c 100%);
+  color:#0b0b0b;
 }
 
-/* Wrapper como panel principal verde */
-.wrapper{
-  background: linear-gradient(135deg, rgba(6,78,43,.92), rgba(11,122,68,.90)) !important;
-  border-radius: 26px !important;
-  border: 2px solid rgba(0,0,0,.55) !important;
-  box-shadow: 0 30px 80px rgba(0,0,0,.22) !important;
-  padding: clamp(14px, 2.2vw, 26px) !important;
-}
-
-/* Cards: más vivos, premium */
+/* Si necesitas tarjetas más legibles sobre verde */
 .card{
-  background: rgba(255,255,255,.92) !important;
-  border: 2px solid rgba(0,0,0,.55) !important;
-  box-shadow: 0 18px 46px rgba(0,0,0,.16) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.88));
 }
 
-/* Header con degradé suave + dorado */
-.header{
-  background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(233,245,239,.92)) !important;
-  border-bottom: 2px solid rgba(0,0,0,.12) !important;
-}
-.header h1{
-  font-weight: 1000 !important;
-  letter-spacing: .6px !important;
-}
-.header p{
-  font-weight: 650 !important;
-}
-
-/* Secciones con color (no blanco plano) */
-.section{
-  background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(233,245,239,.90)) !important;
-  border: 2px solid rgba(0,0,0,.40) !important;
-  box-shadow: 0 12px 34px rgba(0,0,0,.10) !important;
-}
-.sectionTitle h2{
-  font-weight: 1000 !important;
-  letter-spacing: .5px !important;
-}
-.sectionTitle h2::after{
-  content:"";
-  display:block;
-  width: 90px;
-  height: 4px;
-  margin-top: 8px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, rgba(212,175,55,.95), rgba(11,122,68,.65));
+/* Caja extra alrededor del 3D para que no quede pegado */
+.cakeBox,
+.cajaCake3d{
+  margin:14px 16px 0;
+  padding:14px 14px 18px;
+  border-radius:22px;
+  border:1px solid rgba(0,0,0,.08);
+  background:
+    radial-gradient(circle at 30% 10%, rgba(212,175,55,.12), transparent 55%),
+    linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.72));
+  box-shadow: 0 18px 40px rgba(0,0,0,.14);
 }
 
-/* Inputs / selects más pro */
-input[type="text"],
-input[type="number"],
-input[type="datetime-local"],
-select{
-  border: 2px solid rgba(0,0,0,.40) !important;
-  background: rgba(255,255,255,.96) !important;
-  font-weight: 700 !important;
-}
-input:focus,
-select:focus{
-  border-color: rgba(212,175,55,.85) !important;
-  box-shadow: 0 0 0 4px rgba(212,175,55,.20), 0 14px 30px rgba(0,0,0,.12) !important;
-  transform: translateY(-1px);
+/* Mantener el fondo decorativo detrás del cake */
+.cakeBox .previewStage::before,
+.cajaCake3d .previewStage::before{
+  background-size: 105%;
 }
 
-/* Optgroups/Options: vivos (pero legibles) */
-select optgroup{
-  color: #064e2b !important;
-  font-weight: 900 !important;
-}
-select option{
-  color: #111 !important;
-  font-weight: 650 !important;
+/* Preview: etiquetas (Entrega/Tamaño/Piso...) en negrita */
+.previewTable .k,
+.rowInfo .k{
+  font-weight:1000 !important;
+  color:rgba(0,0,0,.75);
 }
 
-/* Chips/botones con dorado */
-.chipBtn{
-  border: 2px solid rgba(0,0,0,.35) !important;
-  background: rgba(233,245,239,.92) !important;
-}
-.chipBtn[aria-pressed="true"]{
-  border-color: rgba(212,175,55,.90) !important;
-  background: rgba(212,175,55,.18) !important;
-  box-shadow: 0 18px 40px rgba(212,175,55,.18) !important;
-}
-
-/* Totales: más contraste */
+/* Total general encerrado elegante y ancho 90% */
 .totalBox{
-  border: 2px solid rgba(0,0,0,.20) !important;
+  width:90%;
+  margin:14px auto 0;
+  text-align:center;
+
+  background: linear-gradient(135deg, #0b7a44, #0f9a5b);
+  color:#fff;
+
+  padding:14px 18px;
+  border-radius:18px;
+
+  font-weight:900;
+  box-shadow:0 14px 28px rgba(0,0,0,.20);
+
+  position:relative;
+  overflow:hidden;
+}
+.totalBox::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: linear-gradient(180deg, rgba(255,255,255,.35), transparent 60%);
+  opacity:.28;
+  pointer-events:none;
+}
+.totalBox .tLabel{
+  font-weight:1000;
+  letter-spacing:.2px;
+  opacity:.95;
+}
+.totalBox .tValue{
+  margin-top:4px;
+  font-size:24px;
+  font-weight:600;
+}
+.totalBox .small{
+  font-weight:800;
 }
 
-/* ===== FIX CRÍTICO: selects de sabores no clickeables =====
-   Si un overlay/ícono está por encima, esto lo neutraliza. */
-.sectionIcon,
-.selectIcons,
-.sizeIconGrid,
-.iconGrid,
-.iconBtn,
-.iconPick,
-.iconPicker,
-.iconRow,
-.iconWrap,
-.iconOverlay,
-.overlay,
-.decorIcon,
-.stepper,
-.stepBar,
-.stepDot{
-  pointer-events: none !important;
+/* Rinde del tamaño (debajo del selector) */
+.rindeTamano{
+  margin:10px 12px 0;
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px solid rgba(0,0,0,.08);
+  background: rgba(0,0,0,.04);
+  color: rgba(0,0,0,.75);
+  font-weight:900;
+  font-size:12px;
 }
 
-/* Pero los controles sí deben poder clickease */
-input, select, textarea, button, label, .btn, .chipBtn, .palBtn{
-  pointer-events: auto !important;
+/* Aliases en español (por si usas nuevas clases) */
+.contenedor{ /* alias de .wrapper */ }
+.tarjeta{ /* alias de .card */ }
+.encabezado{ /* alias de .header */ }
+.contenido{ /* alias de .content */ }
+.seccion{ /* alias de .section */ }
+.tituloSeccion{ /* alias de .sectionTitle */ }
+
+
+
+/* =========================
+   .decoCard — Tarjeta de decoración (selección)
+   Se usa dentro de #decoracionCards
+========================= */
+.cardOptions{
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap:10px;
+}
+@media (max-width:520px){
+  .cardOptions{ grid-template-columns: 1fr; }
 }
 
-/* Vista previa sticky bien pegada a la derecha */
-.stickyPreview{
-  position: sticky !important;
-  top: 18px !important;
+/* Botón-card para decoración */
+.decoCard{
+  border:1px solid rgba(0,0,0,.08);
+  background:rgba(255,255,255,.92);
+  border-radius:16px;
+  padding:12px 12px 10px;
+  cursor:pointer;
+  text-align:left;
+  box-shadow: 0 10px 26px rgba(0,0,0,.08);
+  transition:.18s ease;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.decoCard:hover{
+  transform: translateY(-2px);
+  border-color: rgba(212,175,55,.45);
+  box-shadow: 0 18px 40px rgba(0,0,0,.14);
 }
 
-/* Responsive: en móvil 1 columna */
-@media (max-width: 980px){
-  .wrapper{
-    border-radius: 18px !important;
-  }
+/* Etiqueta principal */
+.decoChip{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-weight:1000;
+  color:var(--negro);
+}
+
+/* Texto pequeño */
+.decoHint{
+  font-size:12px;
+  font-weight:900;
+  color:var(--gris);
+}
+
+/* Seleccionado */
+.decoCard.selected{
+  border-color: rgba(212,175,55,.60);
+  background: linear-gradient(135deg, rgba(212,175,55,.18), rgba(11,122,68,.08));
 }

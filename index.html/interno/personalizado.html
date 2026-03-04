@@ -55,76 +55,19 @@ window.CAKEFIT_CONFIG = loadConfig();
 </head>
 <body>
 
-  <div class="wrapper">
-
-  <div class="stepper stepperFull">
-  <div class="stepperLeft">
-    <div class="stepperTop">
-      <div class="brandMini">
-        <img class="brandMiniLogo" src="img/logo.jpg" alt="Cake Fit" onerror="this.style.display='none'">
-        <div class="brandMiniText">
-          <div class="brandMiniName">Cake Fit</div>
-          <div class="brandMiniSub">Arma tu cotización</div>
-        </div>
-      </div>
-
-      <div class="progressWrap" aria-label="Progreso del pedido">
-        <div class="progressMeta">
-          <span class="progressLabel">Progreso</span>
-          <span class="progressPct" id="progressPct">0%</span>
-        </div>
-        <div class="progressBar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-          <div class="progressFill" id="progressFill"></div>
-        </div>
-        <div class="progressHint" id="progressHint">Completa los campos para avanzar.</div>
-      </div>
-    </div>
-
-    <div class="stepBar" id="stepBar" aria-label="Progreso"></div>
+  <div class="wrapper contenedor">
+ <!-- CONTROLES -->
+<div class="card tarjeta">
+  <div class="header encabezado">
+    <h1>COTIZACION DE CAKE PERSONALIZADO</h1>
+    <p>Elige el sabor que más te <b>guste</b>.</p>
   </div>
 
-  <aside class="stepperRight" aria-label="Vista previa rápida">
-    <div class="miniPreview">
-      <div class="miniPreviewHead">
-        <div class="miniTitle">
-          <span class="miniDot" aria-hidden="true"></span>
-          <span>Vista previa</span>
-        </div>
-        <div class="miniTotal">
-          $<span id="miniTotal">0.00</span>
-        </div>
-      </div>
-      <div class="miniMeta" id="miniMeta">—</div>
+  <div class="content contenido">
 
-      <div class="miniGrid">
-        <div class="miniItem">
-          <span class="miniK">Tamaños</span>
-          <span class="miniV" id="miniSizes">—</span>
-        </div>
-        <div class="miniItem">
-          <span class="miniK">Decoración</span>
-          <span class="miniV" id="miniDecor">—</span>
-        </div>
-        <div class="miniItem">
-          <span class="miniK">Entrega</span>
-          <span class="miniV" id="miniEntrega">—</span>
-        </div>
-      </div>
-    </div>
-  </aside>
-</div></div>
-
-  <!-- CONTROLES -->
-  <div class="card mainCard">
-    <div class="header">
-      <h1>COTIZACION DE CAKE PERSONALIZADO</h1>
-      <p>Elige el sabor que más te <b>guste</b>.</p>
-    </div>
-<div class="content">
-
-      <!-- CLIENTE -->
-      <div class="section">
-        <div class="sectionTitle">
+    <!-- CLIENTE -->
+    <div class="section seccion">
+        <div class="sectionTitle tituloSeccion">
           <h2>Datos de Cliente</h2>
           <div class="helper">Aparece en PDF y WhatsApp</div>
         </div>
@@ -139,15 +82,15 @@ window.CAKEFIT_CONFIG = loadConfig();
           </div>
           <div>
             <label for="fechaHora">Fecha y hora de entrega</label>
-            <input id="fechaHora" class="dtInput" type="datetime-local" />
+            <input id="fechaHora" class="dtInput" type="datetime-local" / step="1800">
             <div class="small" id="anticTxt">Anticipación: 1 piso = 24h · 2+ pisos = 48h · Horario: 9:00–20:00 (cada 30 min)</div>
           </div>
         </div>
       </div>
 
       <!-- 1) PISOS -->
-      <div class="section">
-        <div class="sectionTitle">
+      <div class="section seccion">
+        <div class="sectionTitle tituloSeccion">
           <h2>Estructura</h2>
           <div class="helper">Pisos + tamaños</div>
         </div>
@@ -176,6 +119,37 @@ window.CAKEFIT_CONFIG = loadConfig();
 
 
         <div class="grid2" style="margin-top:12px;">
+        <!-- Selector visual de tamaños (imágenes) -->
+        <div class="sizePickerWrap" id="sizePickerWrap">
+          <div class="sizePickerTop">
+            <div class="sizePickerTitle">Selecciona tamaño</div>
+            <div class="sizePickerSub">Aplica al piso que elijas (toca Piso 1/2/3)</div>
+          </div>
+          <div class="sizePicker" id="sizePicker">
+            <button type="button" class="sizePickBtn" data-size="12" aria-pressed="false" title='12"'>
+              <img class="sizePickImg" src="img/iconos-seleccion/tamano12.png" data-alt="img/iconos-seleccion/tamaño12.png" alt='Tamaño 12"'/>
+              <span class="sizePickLbl">12"</span>
+            </button>
+            <button type="button" class="sizePickBtn" data-size="9" aria-pressed="false" title='9"'>
+              <img class="sizePickImg" src="img/iconos-seleccion/tamano9.png" data-alt="img/iconos-seleccion/tamaño9.png" alt='Tamaño 9"'/>
+              <span class="sizePickLbl">9"</span>
+            </button>
+            <button type="button" class="sizePickBtn" data-size="8" aria-pressed="false" title='8"'>
+              <img class="sizePickImg" src="img/iconos-seleccion/tamano8.png" data-alt="img/iconos-seleccion/tamaño8.png" alt='Tamaño 8"'/>
+              <span class="sizePickLbl">8"</span>
+            </button>
+            <button type="button" class="sizePickBtn" data-size="7" aria-pressed="false" title='7"'>
+              <img class="sizePickImg" src="img/iconos-seleccion/tamano7.png" data-alt="img/iconos-seleccion/tamaño7.png" alt='Tamaño 7"'/>
+              <span class="sizePickLbl">7"</span>
+            </button>
+            <button type="button" class="sizePickBtn" data-size="6" aria-pressed="false" title='6"'>
+              <img class="sizePickImg" src="img/iconos-seleccion/tamano6.png" data-alt="img/iconos-seleccion/tamaño6.png" alt='Tamaño 6"'/>
+              <span class="sizePickLbl">6"</span>
+            </button>
+          </div>
+            <div class="rindeTamano" id="rindeTamano">Toca un tamaño para ver el rinde.</div>
+        </div>
+
           <div id="tier1Wrap">
             <label for="t1">Piso 1 (abajo)</label>
             <select id="t1"></select>
@@ -206,8 +180,8 @@ window.CAKEFIT_CONFIG = loadConfig();
       </div>
 
       <!-- 2) ALTURA -->
-      <div class="section">
-        <div class="sectionTitle">
+      <div class="section seccion">
+        <div class="sectionTitle tituloSeccion">
           <h2>Altura</h2>
           <div class="helper">Normal / Alto</div>
         </div>
@@ -241,8 +215,8 @@ window.CAKEFIT_CONFIG = loadConfig();
       </div>
 
       <!-- 3) HARINA -->
-      <div class="section">
-        <div class="sectionTitle">
+      <div class="section seccion">
+        <div class="sectionTitle tituloSeccion">
           <h2>Harina</h2>
           <div class="helper">Avena / Almendra</div>
         </div>
@@ -264,8 +238,8 @@ window.CAKEFIT_CONFIG = loadConfig();
       </div>
 
       <!-- 4) SABORES (BIZCOCHO) -->
-      <div class="section" id="saboresSection">
-        <div class="sectionTitle">
+      <div class="section seccion" id="saboresSection">
+        <div class="sectionTitle tituloSeccion">
           <h2>Sabores de bizcocho</h2>
           <div class="helper">Por piso (2–3 pisos)</div>
         </div>
@@ -296,8 +270,8 @@ window.CAKEFIT_CONFIG = loadConfig();
       </div>
 
       <!-- SABOR ÚNICO (1 piso) -->
-      <div class="section" id="saborUnicoSection" style="display:none;">
-        <div class="sectionTitle">
+      <div class="section seccion" id="saborUnicoSection" style="display:none;">
+        <div class="sectionTitle tituloSeccion">
           <h2>Sabor de bizcocho</h2>
           <div class="helper">1 piso</div>
         </div>
@@ -314,8 +288,8 @@ window.CAKEFIT_CONFIG = loadConfig();
       </div>
 
       <!-- 5) RELLENOS (ahora también por piso si 2–3) -->
-      <div class="section" id="rellenosSection">
-        <div class="sectionTitle">
+      <div class="section seccion" id="rellenosSection">
+        <div class="sectionTitle tituloSeccion">
           <h2>Rellenos</h2>
           <div class="helper">Variedad por piso</div>
         </div>
@@ -348,8 +322,8 @@ window.CAKEFIT_CONFIG = loadConfig();
       </div>
 
       <!-- 6) COBERTURA (COLOR 3D) -->
-      <div class="section">
-        <div class="sectionTitle">
+      <div class="section seccion">
+        <div class="sectionTitle tituloSeccion">
           <h2>Cobertura</h2>
           <div class="helper">Define el color del cake</div>
         </div>
@@ -394,16 +368,12 @@ window.CAKEFIT_CONFIG = loadConfig();
 
           <div>
             <label for="decoracion">Decoración</label>
-            <select id="decoracion">
-              <option value="" selected>— Sin decoración —</option>
-              <option value="flores">🌸 Flores</option>
-              <option value="frutas">🍓 Frutas</option>
-              <option value="frutasflores">🌸🍓 Frutas y flores</option>
-              <option value="frutosrojos">🫐 Frutos rojos</option>
-              <option value="drip">🍫 Drip chocolate / caramelo</option>
-              <option value="tematica">🎨 Personalización temática</option>
-            </select>
-            <div class="small" id="decoracionHint">Costo según tamaño del piso MÁS GRANDE. Temática es un estimado (depende del diseño).</div>
+            <div class="cardOptions" id="decoracionCards">
+</div>
+
+<input type="hidden" id="decoracion" value="">
+            <div class="small">Costo según tamaño del piso MÁS GRANDE.</div>
+          </div>
         </div>
 
         
@@ -412,11 +382,7 @@ window.CAKEFIT_CONFIG = loadConfig();
               <label for="notaGeneral">Nota general (opcional)</label>
               <input id="notaGeneral" type="text" placeholder="Ej: entrega 3pm / sin frutos rojos" />
             </div>
-            <div>
-              <label for="fresas">Fresas medianas bañadas en chocolate</label>
-              <input id="fresas" type="number" min="0" value="0" />
-              <div class="small">$2 por unidad</div>
-            </div>
+            <div></div>
           </div>
 
 
@@ -428,8 +394,8 @@ window.CAKEFIT_CONFIG = loadConfig();
       </div>
 
       <!-- 7) FOTO REFERENCIA -->
-      <div class="section">
-        <div class="sectionTitle">
+      <div class="section seccion">
+        <div class="sectionTitle tituloSeccion">
           <h2>Foto de referencia</h2>
           <div class="helper">Se verá en PDF y preview</div>
         </div>
@@ -450,28 +416,25 @@ window.CAKEFIT_CONFIG = loadConfig();
       </div>
 
       <!-- 8) DELIVERY (solo monto asesor + total general) -->
-      <div class="section">
-        <div class="sectionTitle">
+      <div class="section seccion">
+        <div class="sectionTitle tituloSeccion">
           <h2>Delivery</h2>
           <div class="helper">Solo monto asesor</div>
         </div>
 
         <div class="grid2">
-          <div class="switchRow" style="margin-top:0;">
-            <input type="checkbox" id="delivery" />
-            <span>Incluir delivery</span>
-          </div>
+          <div class="switchRow" style="margin-top:0; justify-content:flex-start;"><span style="font-weight:1000;color:var(--verde-oscuro);">Delivery</span><span class="small" style="margin-left:auto;">Monto asesor (se suma si es mayor a 0)</span></div>
           <div>
             <label for="deliveryMonto">Monto delivery</label>
             <input id="deliveryMonto" type="number" min="0" step="0.01" placeholder="0.00" />
-            <div class="small">Si delivery está activo, este monto se suma al total general.</div>
+            <div class="small">Este monto se suma al total general cuando sea mayor a 0.</div>
           </div>
         </div>
       </div>
 
       <!-- 9) TOTALES (sin desglose de montos) -->
-      <div class="section">
-        <div class="sectionTitle">
+      <div class="section seccion">
+        <div class="sectionTitle tituloSeccion">
           <h2>Totales</h2>
           <div class="helper">Solo totales</div>
         </div>
@@ -509,8 +472,8 @@ window.CAKEFIT_CONFIG = loadConfig();
         </div>
       </div>
       <!-- 10) MÉTODO DE PAGO -->
-      <div class="section" id="paySection">
-        <div class="sectionTitle">
+      <div class="section seccion" id="paySection">
+        <div class="sectionTitle tituloSeccion">
           <h2>Método de pago</h2>
           <div class="helper">Se mostrará en PDF</div>
         </div>
@@ -548,7 +511,8 @@ window.CAKEFIT_CONFIG = loadConfig();
         <button class="btn btnGhost" id="btnPDF80" type="button">Factura PDF</button>
           <button class="btn btnPrimary" id="btnEnviar">Enviar a asesor</button>
           <button class="btn btnPrimary" id="btnEnviarCliente">CLIENTE</button>
-</div>
+        <button class="btn btnGhost" onclick="location.href='../index.html'">Volver</button>
+      </div>
 
       <div class="small" style="margin-top:10px;">
         Si el PDF no baja: abre la web desde un servidor (Live Server / hosting), no desde <b>file://</b>.
@@ -571,9 +535,10 @@ window.CAKEFIT_CONFIG = loadConfig();
             <strong>$<span id="kpiTotal">0.00</span></strong>
           </div>
         </div>
-</div>
-
-        <div class="previewStage">
+          <button class="btn btnGhost btnVolverPreview" type="button" onclick="location.href='../index.html'">Volver</button>
+        </div>
+        <div Class="fondodecake">
+        <div class="cajaCake3d"><div class="previewStage">
           <div class="shadowFloor"></div>
 
           <div class="cake">
@@ -597,8 +562,10 @@ window.CAKEFIT_CONFIG = loadConfig();
 
             <div class="basePlate"></div>
           </div>
+        
         </div>
-
+        </div>
+     </div>
         <div class="legend" id="legend">—</div>
 
         <div class="legend" style="margin-top:10px;">
@@ -648,14 +615,51 @@ const costos = {
 };
 
 const decoracionCostos = {
-  flores:{6:5,7:7,8:9,9:11},
-  frutas:{6:5,7:7,8:9,9:11},
-  frutasflores:{6:5,7:7,8:9,9:11},
-  frutosrojos:{6:7,7:9,8:12,9:15},
-  drip:{6:3,7:5,8:7,9:9},
-  // Personalización temática: se toma el mínimo estimado según tamaño (el rango se comunica al cliente)
-  tematica:{6:10,7:20,8:30,9:40}
+  flores:{6:5,7:7,8:9,9:11,12:16},
+  frutas:{6:5,7:7,8:9,9:11,12:16},
+  frutasflores:{6:5,7:7,8:9,9:11,12:16},
+  frutosrojos:{6:7,7:9,8:12,9:15,12:22}
 };
+
+
+// Decoración (cards) — opciones y labels para vista previa
+const decoracionLabels = {
+  flores: "Flores",
+  frutas: "Frutas",
+  frutasflores: "Frutas y Flores",
+  frutosrojos: "Frutos Rojos"
+};
+
+// Render de tarjetas de decoración (se guarda valor en #decoracion)
+function initDecoracionCards(){
+  if(!decoracionCards || !decoracion) return;
+
+  const opts = Object.keys(decoracionLabels).map(k=>({key:k, label:decoracionLabels[k]}));
+
+  // agrega opción "sin decoración"
+  const all = [{key:"", label:"Sin decoración"}, ...opts];
+
+  decoracionCards.innerHTML = "";
+  all.forEach(({key,label})=>{
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "decoCard" + (decoracion.value===key ? " selected":"");
+    b.dataset.value = key;
+    b.innerHTML = `
+      <span class="decoChip">${label}</span>
+      <span class="decoHint">${key ? "Se suma según tamaño" : "Sin costo extra"}</span>
+    `;
+    b.addEventListener("click", ()=>{
+      decoracion.value = key;
+      // marcar seleccionado
+      decoracionCards.querySelectorAll(".decoCard").forEach(x=>x.classList.remove("selected"));
+      b.classList.add("selected");
+      updatePreview();
+    });
+    decoracionCards.appendChild(b);
+  });
+}
+
 
 const porciones = {
   6:[6,8],
@@ -705,6 +709,86 @@ const tier1Wrap = $("tier1Wrap");
 const tier2Wrap = $("tier2Wrap");
 const tier3Wrap = $("tier3Wrap");
 
+// ---------- Selector visual de tamaños (imágenes) ----------
+function setupSizePicker(){
+  const picker = document.getElementById("sizePicker");
+  if(!picker) return;
+
+  // fallback por si el sistema de archivos no soporta "ñ"
+  picker.querySelectorAll("img[data-alt]").forEach(img=>{
+    img.addEventListener("error", ()=>{
+      const alt = img.getAttribute("data-alt");
+      if(alt && img.src.indexOf("tamano") !== -1){
+        img.src = alt;
+      }
+    }, {once:true});
+  });
+
+  let activeTier = "t1"; // por defecto piso 1
+
+  function setActiveTier(id){
+    activeTier = id;
+    [tier1Wrap, tier2Wrap, tier3Wrap].forEach(w=>w && w.classList.remove("tierActive"));
+    const wrap = document.getElementById(id==="t1" ? "tier1Wrap" : id==="t2" ? "tier2Wrap" : "tier3Wrap");
+    if(wrap) wrap.classList.add("tierActive");
+  }
+
+  // cuando el usuario toque un piso, ese piso queda activo
+  tier1Wrap?.addEventListener("click", ()=>setActiveTier("t1"));
+  tier2Wrap?.addEventListener("click", ()=>setActiveTier("t2"));
+  tier3Wrap?.addEventListener("click", ()=>setActiveTier("t3"));
+
+  // si el usuario enfoca el select (tab), también lo marca
+  t1?.addEventListener("focus", ()=>setActiveTier("t1"));
+  t2?.addEventListener("focus", ()=>setActiveTier("t2"));
+  t3?.addEventListener("focus", ()=>setActiveTier("t3"));
+
+  function applySize(size){
+    const el = activeTier==="t1" ? t1 : activeTier==="t2" ? t2 : t3;
+    if(!el) return;
+
+    // Buscar option que contenga 6/7/8/9/12 (porque el value puede ser "6" o '6"' o "6”")
+    const opt = Array.from(el.options).find(o=>{
+      const v = (o.value||"").toString();
+      const t = (o.textContent||"").toString();
+      const s = String(size);
+      return v===s || v===s+'"'
+        || t.includes(s+'"') || t.includes(s+"”") || t.includes(s+"''") || t.trim()===s;
+    });
+
+    if(opt){
+      el.value = opt.value;
+      el.dispatchEvent(new Event("change", {bubbles:true}));
+    }else{
+      // fallback: intentar poner el value directo
+      el.value = String(size);
+      el.dispatchEvent(new Event("change", {bubbles:true}));
+    }
+
+    // marcar activo en UI
+    picker.querySelectorAll(".sizePickBtn").forEach(b=>b.setAttribute("aria-pressed","false"));
+    const btn = picker.querySelector(`.sizePickBtn[data-size="${size}"]`);
+    if(btn) btn.setAttribute("aria-pressed","true");
+
+    // Mostrar rinde estimado para este tamaño
+    const r = (porciones && porciones[size]) ? porciones[size] : null;
+    const rindeEl = document.getElementById("rindeTamano");
+    if(rindeEl){
+      rindeEl.textContent = r ? `Tamaño ${size}\" · Rinde aprox: ${r[0]}–${r[1]} personas` : `Tamaño ${size}\" seleccionado`;
+    }
+  }
+
+  picker.addEventListener("click", (e)=>{
+    const btn = e.target.closest(".sizePickBtn");
+    if(!btn) return;
+    applySize(btn.getAttribute("data-size"));
+  });
+
+  // inicial
+  setActiveTier("t1");
+}
+
+
 const altura = $("altura");
 const acabadoCake = $("acabadoCake");
 const capasTxt = $("capasTxt");
@@ -742,8 +826,8 @@ const rell3Wrap = $("rell3Wrap");
 const notaRelleno = $("notaRelleno");
 
 const cobertura = $("cobertura");
-const decoracion = $("decoracion");
-const fresas = $("fresas");
+  const decoracion = $("decoracion");
+  const decoracionCards = $("decoracionCards");
 const tema = $("tema");
 const notaGeneral = $("notaGeneral");
 const paletteEl = $("palette");
@@ -794,6 +878,14 @@ function updateToneUI(){
   if(toneTxt) toneTxt.innerHTML = `Seleccionado: <b>${hex}</b>. Recuerda: el color solo aplica sobre crema blanca (<b>Yogurt griego</b> o <b>Dulce de leche de coco</b>) y queda <b>POR CONFIRMAR</b>.`;
   // Guardamos como "Personalizado #XXXXXX"
   setPastelValue(`Personalizado ${hex}`);
+  // Rellenar automáticamente "Tema (texto)" con el color seleccionado (sin borrar lo que el cliente escribió)
+  try{
+    if(tema){
+      const auto = `Color seleccionado: ${hex}`;
+      const cur = (tema.value||"").trim();
+      if(!cur || cur.startsWith("Color seleccionado:")) tema.value = auto;
+    }
+  }catch(e){}
 }
 
 if(hueBar){
@@ -848,6 +940,23 @@ const previewMeta = $("previewMeta");
 const legend = $("legend");
 
 
+// Forzar minutos a intervalos de 30 min (00 o 30)
+if(fechaHora){
+  fechaHora.addEventListener("change", ()=>{
+    const v = fechaHora.value;
+    if(!v) return;
+    const d = new Date(v);
+    if(isNaN(d.getTime())) return;
+    const m = d.getMinutes();
+    const snapped = (m < 15) ? 0 : (m < 45 ? 30 : 0);
+    if(m >= 45) d.setHours(d.getHours()+1);
+    d.setMinutes(snapped, 0, 0);
+    // volver a formato datetime-local: YYYY-MM-DDTHH:MM
+    const pad = (n)=>String(n).padStart(2,"0");
+    const out = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    fechaHora.value = out;
+  });
+}
 
 const metodoPago = $("metodoPago");
 const linkPago = $("linkPago");
@@ -1425,18 +1534,15 @@ function calcularTotales(){
     extraDecor = Number((decoracionCostos[decoracion.value] || {})[largest] || 0);
   }
 
-  // Extras: fresas bañadas en chocolate ($2 c/u)
-  const extraFresas = (Number(fresas?.value || 0) || 0) * 2;
-
   const manoObra = manoDeObraPorPisos(n);
   const adicional = Number(montoAdicional.value || 0);
 
-  const cakeBaseTotal = totalBase + extraHarina + extraRelleno + extraCobertura + extraDecor + extraFresas + manoObra + adicional;
+  const cakeBaseTotal = totalBase + extraHarina + extraRelleno + extraCobertura + extraDecor + manoObra + adicional;
 
   // altura factor
   const totalCake = cakeBaseTotal * alturaPriceFactor();
 
-  const del = delivery.checked ? Number(deliveryMonto.value || 0) : 0;
+  const del = Math.max(0, Number(deliveryMonto.value || 0));
   const totalGeneral = totalCake + del;
 
   return { totalCake, delivery: del, totalGeneral };
@@ -1590,32 +1696,8 @@ function updatePreview(){
     (acabadoCake.value === "naked") ? "Naked" : "Semi-Naked";
 
   previewMeta.textContent = `${nPisos} piso${nPisos>1?"s":""} · Evento: ${evento.value} · Capas: ${capasPorPiso()} · Estilo: ${styleTxt} · Entrega: ${fmtEntrega(fechaHora && fechaHora.value)}`;
-  // Mini vista previa (en la barra superior)
-  try{
-    const miniTotalEl = document.getElementById("miniTotal");
-    const miniMetaEl = document.getElementById("miniMeta");
-    const miniSizesEl = document.getElementById("miniSizes");
-    const miniDecorEl = document.getElementById("miniDecor");
-    const miniEntregaEl = document.getElementById("miniEntrega");
-
-    if(miniTotalEl) miniTotalEl.textContent = money(totals.totalGeneral);
-    if(miniMetaEl)  miniMetaEl.textContent  = previewMeta.textContent;
-
-    if(miniSizesEl) miniSizesEl.textContent = sizesTxt;
-
-    let decorLabel = "—";
-    const decorSel = (typeof decoracion !== "undefined") ? decoracion : document.getElementById("decoracion");
-    if(decorSel){
-      const opt = decorSel.options[decorSel.selectedIndex];
-      decorLabel = opt ? opt.textContent.trim() : "—";
-    }
-    if(miniDecorEl) miniDecorEl.textContent = decorLabel;
-
-    if(miniEntregaEl) miniEntregaEl.textContent = fmtEntrega(fechaHora && fechaHora.value);
-  }catch(e){ /* silent */ }
-
   // Vista previa debajo del 3D (sin texto largo)
-const decoTxt = decoracion.value ? decoracion.options[decoracion.selectedIndex].text : "Sin decoración";
+const decoTxt = decoracion.value ? (decoracionLabels[decoracion.value]||decoracion.value) : "Sin decoración";
 
 const rows = [];
 rows.push(["Entrega: ", fmtEntrega(fechaHora && fechaHora.value)]);
@@ -1639,8 +1721,6 @@ const pago = getPagoData();
 rows.push(["Pago: ", pago.metodo || "—"]);
 if(pago.metodo === "Pago con tarjeta") rows.push(["Link de pago", pago.link || "Pendiente"]); 
 rows.push(["Decoración: ", decoTxt]);
-  const fresasTxt = (Number(fresas?.value||0)>0) ? `${Number(fresas.value)} x $2` : "—";
-  rows.push(["Fresas choco: ", fresasTxt]);
 rows.push(["Estilo: ", styleTxt]);
 
 if(tema.value.trim()) rows.push(["Tema", tema.value.trim()]);
@@ -1703,6 +1783,9 @@ function initRellenosCobertura(){
   relleno3.value = "Sin relleno";
   cobertura.value = "Sencilla";
 }
+
+// Inicializa cards de decoración
+initDecoracionCards();
 
 refImg.addEventListener("change", ()=>{
   const file = refImg.files && refImg.files[0];
@@ -2129,7 +2212,7 @@ document.getElementById("btnPDF").addEventListener("click", async ()=>{
     ["Estilo", estiloTxt()],
     ["Harina", safeText(harina.value)],
     ["Bizcocho", safeText(getBaseSabor())],
-    ["Decoración", decoracion.value ? decoracion.options[decoracion.selectedIndex].text : "Sin decoración"],
+    ["Decoración", decoracion.value ? (decoracionLabels[decoracion.value]||decoracion.value) : "Sin decoración"],
     ["Tema", safeText(tema.value, "—")],
     ["Nota general", safeText(notaGeneral.value, "—")]
   ];
@@ -2214,56 +2297,35 @@ document.getElementById("btnPDF").addEventListener("click", async ()=>{
   doc.text(`- Sin Azúcar`, margen, yCar); yCar += 6;
   doc.text(`- ${sinLact} Lácteos: `, margen, yCar); yCar += 6;
 
-  
-  // Totales (bloque limpio y bien posicionado)
-  // Reservamos espacio para el pie de página (método de pago / importante)
-  const yPay = pageH - 42;
-
-  // Si el contenido viene muy abajo, subimos la caja de totales para que no choque con el pie
-  let yTot = yCar + 10;
-  const totBlockH = 52; // banner + caja + total general
-  if(yTot + totBlockH > yPay - 10){
-    yTot = Math.max(92, yPay - 10 - totBlockH); // 92 aprox debajo de la zona superior
-  }
-
-  // Banner fino (dorado->verde visual simple)
-  doc.setFillColor(...dorado);
-  doc.roundedRect(margen, yTot, (pageW-margen*2)*0.35, 4, 2, 2, "F");
+  // Totales (SOLO)
+  let yTot = yCar + 8;
   doc.setFillColor(...verde);
-  doc.roundedRect(margen + (pageW-margen*2)*0.35 + 2, yTot, (pageW-margen*2)*0.65 - 2, 4, 2, 2, "F");
-
-  yTot += 8;
-
-  // Caja de subtotales (cake + delivery)
-  doc.setFillColor(...verde);
-  doc.roundedRect(margen, yTot, pageW-margen*2, 22, 4, 4, "F");
+  doc.roundedRect(margen, yTot, pageW-margen*2, 28, 4, 4, "F");
   doc.setTextColor(255,255,255);
 
   doc.setFont("helvetica","bold");
   doc.setFontSize(11);
-  doc.text("TOTAL DEL CAKE", margen+8, yTot+9);
-  doc.text(`$${money(totals.totalCake)}`, pageW-margen-8, yTot+9, {align:"right"});
+  doc.text("TOTAL DEL CAKE", margen+8, yTot+10);
+  doc.text(`$${money(totals.totalCake)}`, pageW-margen-8, yTot+10, {align:"right"});
 
-  doc.setFontSize(10.5);
-  doc.text("DELIVERY", margen+8, yTot+17);
-  doc.text(`$${money(totals.delivery)}`, pageW-margen-8, yTot+17, {align:"right"});
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(11);
+  doc.text("DELIVERY", margen+8, yTot+18);
+  doc.text(`$${money(totals.delivery)}`, pageW-margen-8, yTot+18, {align:"right"});
 
-  yTot += 26;
-
-  // Total general (protagonista)
+  // Total general grande
   doc.setFillColor(...dorado);
-  doc.roundedRect(margen, yTot, pageW-margen*2, 18, 4, 4, "F");
-  doc.setTextColor(30,25,16);
+  doc.roundedRect(margen, yTot, pageW-margen*2, 22, 4, 4, "F");
+  doc.setTextColor(30,25,16);+34
   doc.setFont("helvetica","bold");
   doc.setFontSize(12);
-  doc.text("TOTAL GENERAL", margen+8, yTot+7);
-
-  doc.setFontSize(18);
-  doc.text(`$${money(totals.totalGeneral)}`, pageW-margen-8, yTot+13, {align:"right"});
+  doc.text("TOTAL GENERAL", margen+8, yTot+48);
+  doc.setFontSize(16);
+  doc.text(`$${money(totals.totalGeneral)}`, pageW-margen-8, yTot+49, {align:"right"});
 
   // Pago (según selección)
   const pago = getPagoData();
-
+  const yPay = pageH - 42;
   doc.setDrawColor(220,220,220);
   doc.line(margen, yPay-10, pageW-margen, yPay-10);
 
@@ -2358,9 +2420,9 @@ document.getElementById("btnPDF80").addEventListener("click", async ()=>{
   line("Estilo", estiloTxt());
   line("Harina", safeText(harina.value,"—"));
   line("Cobertura", safeText(cobertura.value,"Sencilla"));
-  line("Decoración", decoracion.value ? decoracion.options[decoracion.selectedIndex].text : "Sin decoración");
-  line("Fresas choco", (Number(fresas?.value||0)>0) ? `${Number(fresas.value)} x $2` : "—");
-// Sabores / rellenos (compacto)
+  line("Decoración", decoracion.value ? (decoracionLabels[decoracion.value]||decoracion.value) : "Sin decoración");
+
+  // Sabores / rellenos (compacto)
   y += 1;
   doc.line(margenX, y, 80-margenX, y); y += 4;
   doc.setFont("helvetica","bold"); doc.text("Sabores y rellenos", margenX, y); y += 4.5;
@@ -2490,6 +2552,7 @@ function initBlankSelections(){
   if(fechaHora) fechaHora.value = "";
 }
 // Inicializa en blanco al cargar
+  setupSizePicker();
 try{ initBlankSelections(); }catch(e){}
 
 // ENVIAR CLIENTE: WhatsApp al número del cliente
@@ -2505,7 +2568,7 @@ document.getElementById("btnEnviarCliente").addEventListener("click", ()=>{
   const entregaTxt = fmtEntrega(fechaHora && fechaHora.value);
   const alturaTxt = altura.options[altura.selectedIndex].text;
   const styleTxt = estiloTxt();
-  const decoTxt = decoracion.value ? decoracion.options[decoracion.selectedIndex].text : "Sin decoración";
+  const decoTxt = decoracion.value ? (decoracionLabels[decoracion.value]||decoracion.value) : "Sin decoración";
   const notaSab = (n===1 ? (notaSabores2.value||"") : (notaSabores.value||"")).trim();
   const notaR = (notaRelleno.value||"").trim();
   const notaG = (notaGeneral.value||"").trim();
@@ -2537,7 +2600,6 @@ document.getElementById("btnEnviarCliente").addEventListener("click", ()=>{
     `*Estilo:* ${encodeURIComponent(styleTxt)}%0A` +
     `*Cobertura:* ${encodeURIComponent(cobertura.value || "Sencilla")}%0A` +
     `*Decoración:* ${encodeURIComponent(decoTxt)}%0A` +
-    `*Fresas choco:* ${encodeURIComponent((Number(fresas?.value||0)>0)? (Number(fresas.value)+" x $2") : "—")}%0A` +
     (tema.value.trim() ? `*Tema:* ${encodeURIComponent(tema.value.trim())}%0A` : ``) +
     `%0A` +
     `*Sabores y rellenos*%0A` +
@@ -2587,7 +2649,7 @@ document.getElementById("btnEnviar").addEventListener("click", ()=>{
 
   const alturaTxt = altura.options[altura.selectedIndex].text;
   const styleTxt = estiloTxt();
-  const decoTxt = decoracion.value ? decoracion.options[decoracion.selectedIndex].text : "Sin decoración";
+  const decoTxt = decoracion.value ? (decoracionLabels[decoracion.value]||decoracion.value) : "Sin decoración";
 
   const notaSab = (n===1 ? (notaSabores2.value||"") : (notaSabores.value||"")).trim();
   const notaR = (notaRelleno.value||"").trim();
@@ -2623,7 +2685,6 @@ const msg =
   `*Estilo:* ${encodeURIComponent(styleTxt)}%0A` +
   `*Cobertura:* ${encodeURIComponent(cobertura.value || "Sencilla")}%0A` +
   `*Decoración:* ${encodeURIComponent(decoTxt)}%0A` +
-    `*Fresas choco:* ${encodeURIComponent((Number(fresas?.value||0)>0)? (Number(fresas.value)+" x $2") : "—")}%0A` +
   (tema.value.trim() ? `*Tema:* ${encodeURIComponent(tema.value.trim())}%0A` : ``) +
   `%0A` +
   `*Sabores y rellenos*%0A` +
@@ -2678,142 +2739,79 @@ document.querySelectorAll('.optionCard').forEach(card=>{
   });
 });
 
-/* ====== STEPPER UI (scroll + progreso) ====== */
+/* ====== STEPPER UI (progreso + secciones por orden) ====== */
 (function(){
-  const content = document.querySelector('.content');
+  const sections = Array.from(document.querySelectorAll('.content .stepSection'));
   const stepBar = document.getElementById('stepBar');
-  const fill = document.getElementById('progressFill');
-  const pct = document.getElementById('progressPct');
-  const hint = document.getElementById('progressHint');
-  const pb = document.querySelector('.progressBar[role="progressbar"]');
+  const btnPrev = document.getElementById('btnPrevStep');
+  const btnNext = document.getElementById('btnNextStep');
+  if(!sections.length || !stepBar || !btnPrev || !btnNext) return;
 
-  if(!content || !stepBar) return;
-
-  // Tomar secciones reales del formulario
-  const sections = Array.from(content.querySelectorAll('.section'));
-  if(!sections.length) return;
-
-  // Crear IDs estables y pasos (evita duplicados visuales)
-  const slug = (s)=> (s||"").toLowerCase()
-    .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
-    .replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");
-
-  const steps = sections.map((sec, idx)=>{
+  // Construir barra de pasos desde los títulos
+  const steps = sections.map((sec, idx) => {
     const h2 = sec.querySelector('.sectionTitle h2');
-    const title = (h2 ? h2.textContent.trim() : `Paso ${idx+1}`) || `Paso ${idx+1}`;
-    const id = `step-${idx+1}-${slug(title) || "seccion"}`;
-    sec.dataset.stepIndex = String(idx);
-    if(!sec.id) sec.id = id;
-    return { sec, title, idx };
+    const title = h2 ? h2.textContent.trim() : `Paso ${idx+1}`;
+    return {sec, title};
   });
 
-  stepBar.innerHTML = steps.map((s)=>`
-    <button type="button" class="stepDot" data-step="${s.idx}" aria-label="${s.title}">
+  stepBar.innerHTML = steps.map((s,i)=>`
+    <button type="button" class="stepDot" data-step="${i}" aria-label="${s.title}">
       <span class="dot"></span>
-      <span class="label">${s.idx+1}. ${s.title}</span>
+      <span class="label">${s.title}</span>
     </button>
   `).join('');
 
-  const dots = Array.from(stepBar.querySelectorAll('.stepDot'));
+  let current = 0;
 
-  function scrollToSection(i){
-    const s = steps[i];
-    if(!s) return;
-    const top = s.sec.getBoundingClientRect().top + window.pageYOffset - 120; // espacio por sticky
-    window.scrollTo({ top, behavior:'smooth' });
+  function setActive(i){
+    current = Math.max(0, Math.min(i, steps.length-1));
+
+    steps.forEach((s, idx)=>{
+      s.sec.classList.toggle('isActive', idx===current);
+      s.sec.classList.toggle('isHidden', idx!==current);
+      if(idx===current){
+        // trigger entrance animation
+        s.sec.classList.remove('enter');
+        void s.sec.offsetWidth;
+        s.sec.classList.add('enter');
+      }
+    });
+
+    const dots = Array.from(stepBar.querySelectorAll('.stepDot'));
+    dots.forEach((d, idx)=>{
+      d.classList.toggle('active', idx===current);
+      d.classList.toggle('done', idx<current);
+    });
+
+    btnPrev.disabled = current===0;
+    btnNext.textContent = (current===steps.length-1) ? 'Finalizar' : 'Siguiente';
+
+    // autoscroll suave al inicio del card en móvil
+    const card = document.querySelector('.card');
+    if(card) card.scrollIntoView({behavior:'smooth', block:'start'});
   }
 
-  // Click: ir a la sección
   stepBar.addEventListener('click', (e)=>{
     const btn = e.target.closest('.stepDot');
     if(!btn) return;
     const idx = parseInt(btn.dataset.step,10);
-    if(Number.isFinite(idx)) scrollToSection(idx);
+    if(Number.isFinite(idx)) setActive(idx);
   });
 
-  // Activo según scroll
-  function setActive(i){
-    dots.forEach((d, idx)=>{
-      d.classList.toggle('active', idx===i);
-      d.classList.toggle('done', idx<i);
-    });
-  }
-
-  // Observer para marcar el paso visible
-  const obs = new IntersectionObserver((entries)=>{
-    const visible = entries
-      .filter(e=>e.isIntersecting)
-      .sort((a,b)=>b.intersectionRatio - a.intersectionRatio)[0];
-    if(!visible) return;
-    const idx = parseInt(visible.target.dataset.stepIndex || "0", 10);
-    if(Number.isFinite(idx)) setActive(idx);
-  }, { root:null, threshold:[0.25, 0.4, 0.55, 0.7] });
-
-  sections.forEach(sec=>obs.observe(sec));
-
-  /* ===== Progreso del pedido (simple y robusto) ===== */
-  const required = [
-    ['cliente', v=>v.trim().length>=2, 'Nombre del cliente'],
-    ['clienteTel', v=>v.trim().length>=6, 'Teléfono'],
-    ['fechaHora', v=>!!v, 'Fecha y hora'],
-    ['pisos', v=>!!v, 'Pisos'],
-    ['t1', v=>!!v, 'Tamaño piso 1'],
-    ['harina', v=>!!v, 'Harina'],
-    ['bizcocho1', v=>!!v, 'Bizcocho'],
-    ['relleno1', v=>!!v, 'Relleno'],
-    ['cobertura', v=>!!v, 'Cobertura'],
-    ['decoracion', v=>!!v, 'Decoración']
-  ];
-
-  function getVal(id){
-    const el = document.getElementById(id);
-    return el ? (el.value ?? '') : '';
-  }
-
-  function computeProgress(){
-    const pisos = parseInt(getVal('pisos') || "1", 10);
-    let list = required.slice();
-
-    if(pisos >= 2) list.push(['t2', v=>!!v, 'Tamaño piso 2']);
-    if(pisos >= 3) list.push(['t3', v=>!!v, 'Tamaño piso 3']);
-
-    for(let i=2;i<=pisos;i++){
-      const bId = `bizcocho${i}`;
-      const rId = `relleno${i}`;
-      if(document.getElementById(bId)) list.push([bId, v=>!!v, `Bizcocho piso ${i}`]);
-      if(document.getElementById(rId)) list.push([rId, v=>!!v, `Relleno piso ${i}`]);
+  btnPrev.addEventListener('click', ()=> setActive(current-1));
+  btnNext.addEventListener('click', ()=> {
+    if(current < steps.length-1) setActive(current+1);
+    else {
+      // En el último paso, bajamos a los botones finales
+      const finalBtns = document.getElementById('accionesFinales');
+      if(finalBtns) finalBtns.scrollIntoView({behavior:'smooth', block:'center'});
     }
+  });
 
-    list = list.filter(([id])=>document.getElementById(id));
-
-    const missing = [];
-    let ok = 0;
-    list.forEach(([id, test, label])=>{
-      const v = String(getVal(id));
-      if(test(v)) ok++;
-      else missing.push(label);
-    });
-
-    const total = Math.max(1, list.length);
-    const percent = Math.round((ok/total)*100);
-
-    if(fill) fill.style.width = percent + '%';
-    if(pct) pct.textContent = percent + '%';
-    if(pb) pb.setAttribute('aria-valuenow', String(percent));
-
-    if(hint){
-      hint.textContent = (missing.length===0)
-        ? '¡Listo! Puedes generar tu cotización.'
-        : `Te falta: ${missing.slice(0,3).join(', ')}${missing.length>3?'…':''}`;
-    }
-  }
-
-  content.addEventListener('input', computeProgress, {passive:true});
-  content.addEventListener('change', computeProgress, {passive:true});
-
+  // Inicial
   setActive(0);
-  computeProgress();
 })();
+
 </script>
 
   <button class="btn btnGhost floatingBack" type="button" onclick="location.href='../index.html'">Volver</button>

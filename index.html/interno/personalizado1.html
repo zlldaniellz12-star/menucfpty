@@ -55,18 +55,19 @@ window.CAKEFIT_CONFIG = loadConfig();
 </head>
 <body>
 
-  <div class="wrapper">
-  <!-- CONTROLES -->
-  <div class="card">
-    <div class="header">
-      <h1 class="titleH1"><img class="titleLogo" src="img/logos/logo.png" alt="Cake Fit" onerror="this.style.display='none'">COTIZACION DE CAKE PERSONALIZADO</h1>
-      <p>Elige el sabor que más te <b>guste</b>.</p>
-    </div>
-<div class="content">
+  <div class="wrapper contenedor">
+ <!-- CONTROLES -->
+<div class="card tarjeta">
+  <div class="header encabezado">
+    <h1>COTIZACION DE CAKE PERSONALIZADO</h1>
+    <p>Elige el sabor que más te <b>guste</b>.</p>
+  </div>
 
-      <!-- CLIENTE -->
-      <div class="section">
-        <div class="sectionTitle">
+  <div class="content contenido">
+
+    <!-- CLIENTE -->
+    <div class="section seccion">
+        <div class="sectionTitle tituloSeccion">
           <h2>Datos de Cliente</h2>
           <div class="helper">Aparece en PDF y WhatsApp</div>
         </div>
@@ -81,15 +82,15 @@ window.CAKEFIT_CONFIG = loadConfig();
           </div>
           <div>
             <label for="fechaHora">Fecha y hora de entrega</label>
-            <input id="fechaHora" class="dtInput" type="datetime-local" />
+            <input id="fechaHora" class="dtInput" type="datetime-local" / step="1800">
             <div class="small" id="anticTxt">Anticipación: 1 piso = 24h · 2+ pisos = 48h · Horario: 9:00–20:00 (cada 30 min)</div>
           </div>
         </div>
       </div>
 
       <!-- 1) PISOS -->
-      <div class="section">
-        <div class="sectionTitle">
+      <div class="section seccion">
+        <div class="sectionTitle tituloSeccion">
           <h2>Estructura</h2>
           <div class="helper">Pisos + tamaños</div>
         </div>
@@ -118,21 +119,49 @@ window.CAKEFIT_CONFIG = loadConfig();
 
 
         <div class="grid2" style="margin-top:12px;">
+        <!-- Selector visual de tamaños (imágenes) -->
+        <div class="sizePickerWrap" id="sizePickerWrap">
+          <div class="sizePickerTop">
+            <div class="sizePickerTitle">Selecciona tamaño</div>
+            <div class="sizePickerSub">Aplica al piso que elijas (toca Piso 1/2/3)</div>
+          </div>
+          <div class="sizePicker" id="sizePicker">
+            <button type="button" class="sizePickBtn" data-size="12" aria-pressed="false" title='12"'>
+              <img class="sizePickImg" src="img/iconos-seleccion/tamano12.png" data-alt="img/iconos-seleccion/tamaño12.png" alt='Tamaño 12"'/>
+              <span class="sizePickLbl">12"</span>
+            </button>
+            <button type="button" class="sizePickBtn" data-size="9" aria-pressed="false" title='9"'>
+              <img class="sizePickImg" src="img/iconos-seleccion/tamano9.png" data-alt="img/iconos-seleccion/tamaño9.png" alt='Tamaño 9"'/>
+              <span class="sizePickLbl">9"</span>
+            </button>
+            <button type="button" class="sizePickBtn" data-size="8" aria-pressed="false" title='8"'>
+              <img class="sizePickImg" src="img/iconos-seleccion/tamano8.png" data-alt="img/iconos-seleccion/tamaño8.png" alt='Tamaño 8"'/>
+              <span class="sizePickLbl">8"</span>
+            </button>
+            <button type="button" class="sizePickBtn" data-size="7" aria-pressed="false" title='7"'>
+              <img class="sizePickImg" src="img/iconos-seleccion/tamano7.png" data-alt="img/iconos-seleccion/tamaño7.png" alt='Tamaño 7"'/>
+              <span class="sizePickLbl">7"</span>
+            </button>
+            <button type="button" class="sizePickBtn" data-size="6" aria-pressed="false" title='6"'>
+              <img class="sizePickImg" src="img/iconos-seleccion/tamano6.png" data-alt="img/iconos-seleccion/tamaño6.png" alt='Tamaño 6"'/>
+              <span class="sizePickLbl">6"</span>
+            </button>
+          </div>
+            <div class="rindeTamano" id="rindeTamano">Toca un tamaño para ver el rinde.</div>
+        </div>
+
           <div id="tier1Wrap">
             <label for="t1">Piso 1 (abajo)</label>
-            <div class="sizePicker" data-for="t1"></div>
             <select id="t1"></select>
           </div>
 
           <div id="tier2Wrap">
             <label for="t2">Piso 2 (medio)</label>
-            <div class="sizePicker" data-for="t2"></div>
             <select id="t2"></select>
           </div>
 
           <div id="tier3Wrap" style="display:none;">
             <label for="t3">Piso 3 (arriba)</label>
-            <div class="sizePicker" data-for="t3"></div>
             <select id="t3"></select>
           </div>
         </div>
@@ -151,8 +180,8 @@ window.CAKEFIT_CONFIG = loadConfig();
       </div>
 
       <!-- 2) ALTURA -->
-      <div class="section">
-        <div class="sectionTitle">
+      <div class="section seccion">
+        <div class="sectionTitle tituloSeccion">
           <h2>Altura</h2>
           <div class="helper">Normal / Alto</div>
         </div>
@@ -186,8 +215,8 @@ window.CAKEFIT_CONFIG = loadConfig();
       </div>
 
       <!-- 3) HARINA -->
-      <div class="section">
-        <div class="sectionTitle">
+      <div class="section seccion">
+        <div class="sectionTitle tituloSeccion">
           <h2>Harina</h2>
           <div class="helper">Avena / Almendra</div>
         </div>
@@ -209,8 +238,8 @@ window.CAKEFIT_CONFIG = loadConfig();
       </div>
 
       <!-- 4) SABORES (BIZCOCHO) -->
-      <div class="section" id="saboresSection">
-        <div class="sectionTitle">
+      <div class="section seccion" id="saboresSection">
+        <div class="sectionTitle tituloSeccion">
           <h2>Sabores de bizcocho</h2>
           <div class="helper">Por piso (2–3 pisos)</div>
         </div>
@@ -241,8 +270,8 @@ window.CAKEFIT_CONFIG = loadConfig();
       </div>
 
       <!-- SABOR ÚNICO (1 piso) -->
-      <div class="section" id="saborUnicoSection" style="display:none;">
-        <div class="sectionTitle">
+      <div class="section seccion" id="saborUnicoSection" style="display:none;">
+        <div class="sectionTitle tituloSeccion">
           <h2>Sabor de bizcocho</h2>
           <div class="helper">1 piso</div>
         </div>
@@ -259,8 +288,8 @@ window.CAKEFIT_CONFIG = loadConfig();
       </div>
 
       <!-- 5) RELLENOS (ahora también por piso si 2–3) -->
-      <div class="section" id="rellenosSection">
-        <div class="sectionTitle">
+      <div class="section seccion" id="rellenosSection">
+        <div class="sectionTitle tituloSeccion">
           <h2>Rellenos</h2>
           <div class="helper">Variedad por piso</div>
         </div>
@@ -293,8 +322,8 @@ window.CAKEFIT_CONFIG = loadConfig();
       </div>
 
       <!-- 6) COBERTURA (COLOR 3D) -->
-      <div class="section">
-        <div class="sectionTitle">
+      <div class="section seccion">
+        <div class="sectionTitle tituloSeccion">
           <h2>Cobertura</h2>
           <div class="helper">Define el color del cake</div>
         </div>
@@ -365,8 +394,8 @@ window.CAKEFIT_CONFIG = loadConfig();
       </div>
 
       <!-- 7) FOTO REFERENCIA -->
-      <div class="section">
-        <div class="sectionTitle">
+      <div class="section seccion">
+        <div class="sectionTitle tituloSeccion">
           <h2>Foto de referencia</h2>
           <div class="helper">Se verá en PDF y preview</div>
         </div>
@@ -387,28 +416,25 @@ window.CAKEFIT_CONFIG = loadConfig();
       </div>
 
       <!-- 8) DELIVERY (solo monto asesor + total general) -->
-      <div class="section">
-        <div class="sectionTitle">
+      <div class="section seccion">
+        <div class="sectionTitle tituloSeccion">
           <h2>Delivery</h2>
           <div class="helper">Solo monto asesor</div>
         </div>
 
         <div class="grid2">
-          <div class="switchRow" style="margin-top:0;">
-            <input type="checkbox" id="delivery" />
-            <span>Incluir delivery</span>
-          </div>
+          <div class="switchRow" style="margin-top:0; justify-content:flex-start;"><span style="font-weight:1000;color:var(--verde-oscuro);">Delivery</span><span class="small" style="margin-left:auto;">Monto asesor (se suma si es mayor a 0)</span></div>
           <div>
             <label for="deliveryMonto">Monto delivery</label>
             <input id="deliveryMonto" type="number" min="0" step="0.01" placeholder="0.00" />
-            <div class="small">Si delivery está activo, este monto se suma al total general.</div>
+            <div class="small">Este monto se suma al total general cuando sea mayor a 0.</div>
           </div>
         </div>
       </div>
 
       <!-- 9) TOTALES (sin desglose de montos) -->
-      <div class="section">
-        <div class="sectionTitle">
+      <div class="section seccion">
+        <div class="sectionTitle tituloSeccion">
           <h2>Totales</h2>
           <div class="helper">Solo totales</div>
         </div>
@@ -446,8 +472,8 @@ window.CAKEFIT_CONFIG = loadConfig();
         </div>
       </div>
       <!-- 10) MÉTODO DE PAGO -->
-      <div class="section" id="paySection">
-        <div class="sectionTitle">
+      <div class="section seccion" id="paySection">
+        <div class="sectionTitle tituloSeccion">
           <h2>Método de pago</h2>
           <div class="helper">Se mostrará en PDF</div>
         </div>
@@ -482,7 +508,7 @@ window.CAKEFIT_CONFIG = loadConfig();
 
       <div class="actions">
         <button class="btn btnPrimary" id="btnPDF"> Cotizacion PDF</button>
-        <button class="btn btnPrimary" id="btnPDF80" type="button">Factura PDF</button>
+        <button class="btn btnGhost" id="btnPDF80" type="button">Factura PDF</button>
           <button class="btn btnPrimary" id="btnEnviar">Enviar a asesor</button>
           <button class="btn btnPrimary" id="btnEnviarCliente">CLIENTE</button>
         <button class="btn btnGhost" onclick="location.href='../index.html'">Volver</button>
@@ -501,7 +527,7 @@ window.CAKEFIT_CONFIG = loadConfig();
       <div class="previewCard">
         <div class="previewHead">
           <div>
-            <div class="previewTitle"><img class="previewLogo" src="img/logos/logo.jpg" alt="Cake Fit" onerror="this.style.display='none'"><b>Vista previa</b></div>
+            <div class="previewTitle"><img class="previewLogo" src="img/logo.png" alt="Cake Fit" onerror="this.style.display='none'"><b>Vista previa</b></div>
             <div class="meta" id="previewMeta">—</div>
           </div>
           <div class="kpi">
@@ -511,8 +537,8 @@ window.CAKEFIT_CONFIG = loadConfig();
         </div>
           <button class="btn btnGhost btnVolverPreview" type="button" onclick="location.href='../index.html'">Volver</button>
         </div>
-
-        <div class="previewStage">
+        <div Class="fondodecake">
+        <div class="cajaCake3d"><div class="previewStage">
           <div class="shadowFloor"></div>
 
           <div class="cake">
@@ -536,8 +562,10 @@ window.CAKEFIT_CONFIG = loadConfig();
 
             <div class="basePlate"></div>
           </div>
+        
         </div>
-
+        </div>
+     </div>
         <div class="legend" id="legend">—</div>
 
         <div class="legend" style="margin-top:10px;">
@@ -558,7 +586,7 @@ window.CAKEFIT_CONFIG = loadConfig();
 <div class="modalOverlay" id="refsOverlay" role="dialog" aria-modal="true" aria-label="Imágenes de referencia">
   <div class="modal">
     <div class="modalHead">
-      <b>Imágenes de referencia </b>
+      <b>Imágenes de referencia (img/modelo/)</b>
       <button class="modalClose" id="refsClose" type="button">Cerrar</button>
     </div>
     <div class="modalBody">
@@ -575,7 +603,7 @@ window.CAKEFIT_CONFIG = loadConfig();
    PRECIOS / PORCIONES (TU BASE)
    =========================== */
 const base = {6:37.99,7:50.99,8:63.99,9:75.99};
-const base12Estimado = 114.00;
+const base12Estimado = 115.98;
 
 const harinaAlmendra = {6:6,7:8,8:10,9:12,12:16};
 
@@ -601,7 +629,16 @@ const porciones = {
   12:[28,35]
 };
 
-const sabores = ["Vainilla","Chocolate","Zanahoria","Guineo","Marmoleado","Red Velvet","Piña"];
+const sabores = [
+  "Vainilla",
+  "Chocolate",
+  "Zanahoria",
+  "Guineo",
+  "Marmoleado",
+  "Red Velvet",
+  "Piña"
+];
+
 
 /* ===========================
    RELLENOS / COBERTURAS (LISTAS)
@@ -640,6 +677,86 @@ const t3 = $("t3");
 const tier1Wrap = $("tier1Wrap");
 const tier2Wrap = $("tier2Wrap");
 const tier3Wrap = $("tier3Wrap");
+
+// ---------- Selector visual de tamaños (imágenes) ----------
+function setupSizePicker(){
+  const picker = document.getElementById("sizePicker");
+  if(!picker) return;
+
+  // fallback por si el sistema de archivos no soporta "ñ"
+  picker.querySelectorAll("img[data-alt]").forEach(img=>{
+    img.addEventListener("error", ()=>{
+      const alt = img.getAttribute("data-alt");
+      if(alt && img.src.indexOf("tamano") !== -1){
+        img.src = alt;
+      }
+    }, {once:true});
+  });
+
+  let activeTier = "t1"; // por defecto piso 1
+
+  function setActiveTier(id){
+    activeTier = id;
+    [tier1Wrap, tier2Wrap, tier3Wrap].forEach(w=>w && w.classList.remove("tierActive"));
+    const wrap = document.getElementById(id==="t1" ? "tier1Wrap" : id==="t2" ? "tier2Wrap" : "tier3Wrap");
+    if(wrap) wrap.classList.add("tierActive");
+  }
+
+  // cuando el usuario toque un piso, ese piso queda activo
+  tier1Wrap?.addEventListener("click", ()=>setActiveTier("t1"));
+  tier2Wrap?.addEventListener("click", ()=>setActiveTier("t2"));
+  tier3Wrap?.addEventListener("click", ()=>setActiveTier("t3"));
+
+  // si el usuario enfoca el select (tab), también lo marca
+  t1?.addEventListener("focus", ()=>setActiveTier("t1"));
+  t2?.addEventListener("focus", ()=>setActiveTier("t2"));
+  t3?.addEventListener("focus", ()=>setActiveTier("t3"));
+
+  function applySize(size){
+    const el = activeTier==="t1" ? t1 : activeTier==="t2" ? t2 : t3;
+    if(!el) return;
+
+    // Buscar option que contenga 6/7/8/9/12 (porque el value puede ser "6" o '6"' o "6”")
+    const opt = Array.from(el.options).find(o=>{
+      const v = (o.value||"").toString();
+      const t = (o.textContent||"").toString();
+      const s = String(size);
+      return v===s || v===s+'"'
+        || t.includes(s+'"') || t.includes(s+"”") || t.includes(s+"''") || t.trim()===s;
+    });
+
+    if(opt){
+      el.value = opt.value;
+      el.dispatchEvent(new Event("change", {bubbles:true}));
+    }else{
+      // fallback: intentar poner el value directo
+      el.value = String(size);
+      el.dispatchEvent(new Event("change", {bubbles:true}));
+    }
+
+    // marcar activo en UI
+    picker.querySelectorAll(".sizePickBtn").forEach(b=>b.setAttribute("aria-pressed","false"));
+    const btn = picker.querySelector(`.sizePickBtn[data-size="${size}"]`);
+    if(btn) btn.setAttribute("aria-pressed","true");
+
+    // Mostrar rinde estimado para este tamaño
+    const r = (porciones && porciones[size]) ? porciones[size] : null;
+    const rindeEl = document.getElementById("rindeTamano");
+    if(rindeEl){
+      rindeEl.textContent = r ? `Tamaño ${size}\" · Rinde aprox: ${r[0]}–${r[1]} personas` : `Tamaño ${size}\" seleccionado`;
+    }
+  }
+
+  picker.addEventListener("click", (e)=>{
+    const btn = e.target.closest(".sizePickBtn");
+    if(!btn) return;
+    applySize(btn.getAttribute("data-size"));
+  });
+
+  // inicial
+  setActiveTier("t1");
+}
+
 
 const altura = $("altura");
 const acabadoCake = $("acabadoCake");
@@ -729,6 +846,14 @@ function updateToneUI(){
   if(toneTxt) toneTxt.innerHTML = `Seleccionado: <b>${hex}</b>. Recuerda: el color solo aplica sobre crema blanca (<b>Yogurt griego</b> o <b>Dulce de leche de coco</b>) y queda <b>POR CONFIRMAR</b>.`;
   // Guardamos como "Personalizado #XXXXXX"
   setPastelValue(`Personalizado ${hex}`);
+  // Rellenar automáticamente "Tema (texto)" con el color seleccionado (sin borrar lo que el cliente escribió)
+  try{
+    if(tema){
+      const auto = `Color seleccionado: ${hex}`;
+      const cur = (tema.value||"").trim();
+      if(!cur || cur.startsWith("Color seleccionado:")) tema.value = auto;
+    }
+  }catch(e){}
 }
 
 if(hueBar){
@@ -783,6 +908,23 @@ const previewMeta = $("previewMeta");
 const legend = $("legend");
 
 
+// Forzar minutos a intervalos de 30 min (00 o 30)
+if(fechaHora){
+  fechaHora.addEventListener("change", ()=>{
+    const v = fechaHora.value;
+    if(!v) return;
+    const d = new Date(v);
+    if(isNaN(d.getTime())) return;
+    const m = d.getMinutes();
+    const snapped = (m < 15) ? 0 : (m < 45 ? 30 : 0);
+    if(m >= 45) d.setHours(d.getHours()+1);
+    d.setMinutes(snapped, 0, 0);
+    // volver a formato datetime-local: YYYY-MM-DDTHH:MM
+    const pad = (n)=>String(n).padStart(2,"0");
+    const out = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    fechaHora.value = out;
+  });
+}
 
 const metodoPago = $("metodoPago");
 const linkPago = $("linkPago");
@@ -1046,69 +1188,7 @@ function fillSelectWithSizes(sel, values, selected){
     if(String(v) === String(selected)) o.selected = true;
     sel.appendChild(o);
   });
-
-  try{ buildSizePickerForSelect(sel); }catch(e){}
 }
-
-/* ====== Size Picker con imágenes ====== */
-function guessSizeIconSrc(size){
-  // Preferimos la ruta con ñ como pidió (tamaño12), pero hacemos fallback a "tamano12"
-  return `img/iconos-seleccion/tamaño${size}.png`;
-}
-function guessSizeIconFallback(size){
-  return `img/iconos-seleccion/tamano${size}.png`;
-}
-function buildSizePickerForSelect(sel){
-  if(!sel || !sel.id) return;
-  const wrap = document.querySelector(`.sizePicker[data-for="${sel.id}"]`);
-  if(!wrap) return;
-  const opts = Array.from(sel.querySelectorAll("option")).filter(o=>o.value);
-  if(opts.length === 0){ wrap.innerHTML=""; wrap.style.display="none"; return; }
-  wrap.style.display="grid";
-  wrap.innerHTML = "";
-
-  const current = String(sel.value || "");
-
-  opts.forEach(o=>{
-    const v = String(o.value);
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "sizePickBtn";
-    btn.setAttribute("data-size", v);
-    btn.setAttribute("aria-pressed", v===current ? "true":"false");
-
-    const img = document.createElement("img");
-    img.className = "sizePickImg";
-    img.alt = `Tamaño ${v}”`;
-    img.src = guessSizeIconSrc(v);
-    img.onerror = ()=>{
-      img.onerror = ()=>{
-        img.style.display = "none";
-        btn.classList.add("noImg");
-      };
-      img.src = guessSizeIconFallback(v);
-    };
-
-    const t = document.createElement("span");
-    t.className = "sizePickTxt";
-    t.textContent = `${v}”`;
-
-    btn.appendChild(img);
-    btn.appendChild(t);
-
-    btn.addEventListener("click", ()=>{
-      sel.value = v;
-      sel.dispatchEvent(new Event("change", {bubbles:true}));
-      // marcar activo
-      wrap.querySelectorAll(".sizePickBtn").forEach(b=>b.setAttribute("aria-pressed","false"));
-      btn.setAttribute("aria-pressed","true");
-    });
-
-    wrap.appendChild(btn);
-  });
-}
-
-
 function fillSabores(select){
   select.innerHTML = "";
   sabores.forEach(s=>{
@@ -1430,7 +1510,7 @@ function calcularTotales(){
   // altura factor
   const totalCake = cakeBaseTotal * alturaPriceFactor();
 
-  const del = delivery.checked ? Number(deliveryMonto.value || 0) : 0;
+  const del = Math.max(0, Number(deliveryMonto.value || 0));
   const totalGeneral = totalCake + del;
 
   return { totalCake, delivery: del, totalGeneral };
@@ -1447,7 +1527,7 @@ function getPagoData(){
   if(m === "yappy"){
     return {
       metodo:"Yappy",
-      img:"img/logos/yappy.jpg",
+      img:"img/yappy.jpg",
       lines:[
         "Yappy: 6863-6913",
         "YAPPY PERSONAL – Titular: Ronny Colmenares"
@@ -1458,7 +1538,7 @@ function getPagoData(){
   if(m === "tarjeta"){
     return {
       metodo:"Pago con tarjeta",
-      img:"img/logos/cuanto.png",
+      img:"img/cuanto.png",
       lines:[
         "Pago con tarjeta (link de pago)"
       ],
@@ -2034,7 +2114,7 @@ document.getElementById("btnPDF").addEventListener("click", async ()=>{
 
   try{
     const logoData = await (async ()=>{
-      const tries = ["../img/logos/logo.png","../img/logos/logo.jpg","img/logos/logo.png","img/logos/logo.jpg"];
+      const tries = ["../img/logo.png","../img/logo.jpg","img/logo.png","img/logo.jpg"];
       for(const u of tries){ try{ return await toDataURL(u); }catch(e){} }
       throw new Error("logo");
     })();
@@ -2184,29 +2264,29 @@ document.getElementById("btnPDF").addEventListener("click", async ()=>{
 
   // Totales (SOLO)
   let yTot = yCar + 8;
-  const boxW = pageW - margen*2;
-
-  // Caja verde: Total cake + delivery
   doc.setFillColor(...verde);
-  doc.roundedRect(margen, yTot, boxW, 20, 4, 4, "F");
+  doc.roundedRect(margen, yTot, pageW-margen*2, 28, 4, 4, "F");
   doc.setTextColor(255,255,255);
+
   doc.setFont("helvetica","bold");
   doc.setFontSize(11);
-  doc.text("TOTAL DEL CAKE", margen+8, yTot+8);
-  doc.text(`$${money(totals.totalCake)}`, pageW-margen-8, yTot+8, {align:"right"});
-  doc.text("DELIVERY", margen+8, yTot+15);
-  doc.text(`$${money(totals.delivery)}`, pageW-margen-8, yTot+15, {align:"right"});
+  doc.text("TOTAL DEL CAKE", margen+8, yTot+10);
+  doc.text(`$${money(totals.totalCake)}`, pageW-margen-8, yTot+10, {align:"right"});
 
-  // Caja dorada: Total general (debajo, sin encimar el footer)
-  const yGold = yTot + 24;
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(11);
+  doc.text("DELIVERY", margen+8, yTot+18);
+  doc.text(`$${money(totals.delivery)}`, pageW-margen-8, yTot+18, {align:"right"});
+
+  // Total general grande
   doc.setFillColor(...dorado);
-  doc.roundedRect(margen, yGold, boxW, 18, 4, 4, "F");
-  doc.setTextColor(30,25,16);
+  doc.roundedRect(margen, yTot, pageW-margen*2, 22, 4, 4, "F");
+  doc.setTextColor(30,25,16);+34
   doc.setFont("helvetica","bold");
   doc.setFontSize(12);
-  doc.text("TOTAL GENERAL", margen+8, yGold+8);
+  doc.text("TOTAL GENERAL", margen+8, yTot+48);
   doc.setFontSize(16);
-  doc.text(`$${money(totals.totalGeneral)}`, pageW-margen-8, yGold+13, {align:"right"});
+  doc.text(`$${money(totals.totalGeneral)}`, pageW-margen-8, yTot+49, {align:"right"});
 
   // Pago (según selección)
   const pago = getPagoData();
@@ -2251,8 +2331,7 @@ document.getElementById("btnPDF").addEventListener("click", async ()=>{
   doc.setTextColor(...gris);
   doc.text("Pago completo · Procesamos al recibir comprobante · No realizamos dedicatorias", margen+80, yPay+6, {maxWidth: (pageW-margen) - (margen+80)});
 
-  doc.save(`${encodeURIComponent(nombreCliente)}.pdf`);
-
+  doc.save("Cotizacion_CakeFit_Eventos.pdf");
 });
 // ===== PDF tipo factura 80mm (térmico) =====
 document.getElementById("btnPDF80").addEventListener("click", async ()=>{
@@ -2438,6 +2517,7 @@ function initBlankSelections(){
   if(fechaHora) fechaHora.value = "";
 }
 // Inicializa en blanco al cargar
+  setupSizePicker();
 try{ initBlankSelections(); }catch(e){}
 
 // ENVIAR CLIENTE: WhatsApp al número del cliente
