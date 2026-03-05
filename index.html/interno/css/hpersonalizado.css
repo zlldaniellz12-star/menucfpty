@@ -1,24 +1,25 @@
 /* =========================================================
-   CAKE FIT · PERSONALIZADO (PRO)
+   CAKE FIT · PERSONALIZADO (PRO) — ORDENADO + ANIMADO
    Archivo: css/hpersonalizado.css
-   Hecho para: personalizado.html (tus clases reales)
-   Estilo: Verde + Dorado + Negro + Glass + Burbujas sutiles
+   Paleta: Verde / Verde oscuro / Dorado / Negro / Blanco
+   Fondo: img/fondo/fondo2.png
 ========================================================= */
 
-/* =========================
-   :root — Variables globales (colores / sombras / radios)
-========================= */
+/* =========================================================
+   1) :root — Variables globales (colores / sombras / radios)
+   (Usadas en TODO el CSS)
+========================================================= */
 :root{
   /* Marca */
   --verde:#0b7a44;
-  --verde-oscuro:#075a33;
-  --verde-agua:#19a46b;
+  --verde-oscuro:#064d2c;
+  --verde-agua:#12a66a;
 
   --dorado:#d4af37;
-  --dorado-soft:#f0d27a;
+  --dorado-soft:#f2d88a;
 
   --negro:#0b0b0b;
-  --texto:#121212;
+  --texto:#0f172a;
   --gris:#6b7280;
 
   /* Fondos */
@@ -27,12 +28,12 @@
   --card:rgba(255,255,255,.92);
 
   /* Bordes */
-  --b1:rgba(0,0,0,.08);
-  --b2:rgba(11,122,68,.22);
+  --b1:rgba(0,0,0,.10);
+  --b2:rgba(11,122,68,.25);
 
   /* Sombras */
-  --shadow:0 22px 55px rgba(0,0,0,.12);
-  --shadow2:0 10px 26px rgba(0,0,0,.08);
+  --shadow:0 22px 55px rgba(0,0,0,.16);
+  --shadow2:0 10px 26px rgba(0,0,0,.10);
 
   /* Radios */
   --r1:26px;
@@ -40,38 +41,52 @@
   --r3:12px;
 
   /* Focus */
-  --focus:0 0 0 4px rgba(11,122,68,.20);
+  --focus:0 0 0 4px rgba(11,122,68,.22);
 
-  /* Tamaño del fondo en preview */
+  /* Fondo cake preview */
   --cake-bg-size: clamp(220px, 55%, 420px);
+
+  /* Animaciones */
+  --t:.18s;
+  --t2:.28s;
+  --ease:cubic-bezier(.2,.8,.2,1);
 }
 
-/* =========================
-   Reset — Normalización base
-========================= */
+/* =========================================================
+   2) Reset — Normalización base
+   (Evita comportamientos inconsistentes)
+========================================================= */
 *{ box-sizing:border-box; }
 html,body{ height:100%; }
+a{ color:inherit; text-decoration:none; }
+button:focus, input:focus, select:focus, textarea:focus{ outline:none; }
+
+/* =========================================================
+   3) Body — Fondo global + tipografía
+   (Aquí va tu fondo: img/fondo/fondo2.png)
+========================================================= */
 body{
   margin:0;
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
   color:var(--texto);
 
-  /* Fondo premium con toques verde/dorado */
-  background:
-    radial-gradient(circle at 12% 10%, rgba(212,175,55,.18), transparent 48%),
-    radial-gradient(circle at 85% 12%, rgba(11,122,68,.16), transparent 48%),
-    radial-gradient(circle at 50% 92%, rgba(11,122,68,.10), transparent 55%),
-    linear-gradient(180deg, #f7fcf9, #ffffff);
+  /* Capa 1: imagen */
+  background-image:
+    url("../img/fondo/fondo2.png"),
+    radial-gradient(circle at 18% 12%, rgba(212,175,55,.18), transparent 48%),
+    radial-gradient(circle at 82% 18%, rgba(255,255,255,.10), transparent 52%),
+    linear-gradient(180deg, #0b7a44 0%, #075a33 55%, #064d2c 100%);
+  background-repeat:no-repeat, no-repeat, no-repeat, no-repeat;
+  background-size:cover, auto, auto, auto;
+  background-position:center, center, center, center;
+  background-attachment: fixed, fixed, fixed, fixed;
 
-  /* Si quieres usar tu fondo.jpg (opcional) */
-  /* background-image: url("../img/fondo.jpg");
-     background-size: cover;
-     background-position: center; */
+  /* Para que todo se vea más premium */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
 }
 
-/* =========================
-   Burbujas — Decoración sutil del fondo (pro)
-========================= */
+/* Decoración sutil tipo “burbujas” (fondo) */
 body::before{
   content:"";
   position:fixed;
@@ -84,11 +99,13 @@ body::before{
     radial-gradient(circle at 78% 78%, rgba(11,122,68,.12), transparent 46%),
     radial-gradient(circle at 28% 82%, rgba(212,175,55,.12), transparent 44%);
   filter: blur(2px);
+  opacity:.9;
 }
 
-/* =========================
-   .wrapper — Layout principal (izq controles / der preview)
-========================= */
+/* =========================================================
+   4) Layout — .wrapper (izq controles / der preview)
+   (Contenedor principal de tu HTML)
+========================================================= */
 .wrapper{
   max-width:1280px;
   margin:0 auto;
@@ -98,8 +115,6 @@ body::before{
   gap:18px;
   align-items:start;
 }
-
-/* Responsive — 1 columna en móvil */
 @media (max-width: 980px){
   .wrapper{
     grid-template-columns:1fr;
@@ -107,25 +122,88 @@ body::before{
   }
 }
 
-/* =========================
-   .card — Tarjeta base (contenedores principales)
-========================= */
+/* =========================================================
+   5) Tarjetas base — .card
+   (Cualquier bloque principal con estilo “card”)
+========================================================= */
 .card{
-  background:linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.88));
+  background:linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.86));
   border:1px solid var(--b1);
   border-radius:var(--r1);
   box-shadow:var(--shadow);
   overflow:hidden;
+
+  /* Interacción suave */
+  transition: transform var(--t2) var(--ease), box-shadow var(--t2) var(--ease), border-color var(--t2) var(--ease);
+}
+.card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 26px 70px rgba(0,0,0,.18);
+  border-color: rgba(212,175,55,.25);
 }
 
+/* =========================================================
+   6) Header — .header (panel izquierdo)
+========================================================= */
+/* LOGO EN HEADER */
+.logoBack{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  width: 85px;    /* tamaño del botón */
+  height: 85px;;
+
+  border-radius:15px;
+  overflow:hidden;
+
+  background:rgb(5, 54, 17);
+  border:1px solid rgba(0,0,0,.1);
+
+  box-shadow:0 6px 18px rgba(0,0,0,.15);
+
+  cursor:pointer;
+
+  transition:transform .2s ease, box-shadow .2s ease;
+}
 /* =========================
-   .header — Encabezado del panel izquierdo
+   LOGOS DE METODOS DE PAGO
 ========================= */
+.payImg{
+  width:60px;        /* tamaño del logo */
+  height:auto;
+  object-fit:contain;
+
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,.15));
+
+  transition: transform .2s ease, filter .2s ease;
+}
+
+/* efecto cuando el cursor pasa */
+.payImg:hover{
+  transform:scale(1.08);
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,.25));
+}
+.p
+{padding:0 12px; 
+color:var(--negro)}
+/* Imagen dentro del logo */
+.logoBack img{
+  width:90%;
+  height:90%;
+  object-fit:contain;
+}
+
+/* Hover cool */
+.logoBack:hover{
+  transform:scale(1.08);
+  box-shadow:0 10px 25px rgba(0,0,0,.25);
+}
 .header{
   padding:18px 18px 14px;
   background:
-    linear-gradient(90deg, rgba(11,122,68,.10), transparent 62%),
-    linear-gradient(180deg, rgba(212,175,55,.10), transparent 60%);
+    linear-gradient(90deg, rgba(11,122,68,.14), transparent 62%),
+    linear-gradient(180deg, rgba(212,175,55,.14), transparent 60%);
   border-bottom:1px solid var(--b1);
 }
 .header h1{
@@ -137,21 +215,21 @@ body::before{
 }
 .header p{
   margin:8px 0 0;
-  color:var(--gris);
-  font-weight:700;
+  color:rgba(255,255,255,.85);
+  font-weight:800;
 }
 
-/* =========================
-   .stepper — Contenedor del paso a paso (barra superior + nav)
-========================= */
+/* =========================================================
+   7) Stepper — .stepper / .stepperTop / .stepBar / .stepNav
+   (Tu barra superior + navegación)
+========================================================= */
 .stepper{
   padding:14px 18px 16px;
   border-bottom:1px solid var(--b1);
-  background:rgba(255,255,255,.74);
+  background:rgba(255,255,255,.72);
   backdrop-filter: blur(10px);
 }
 
-/* .stepperTop — fila superior (mini brand + botón volver fijo) */
 .stepperTop{
   display:flex;
   justify-content:space-between;
@@ -160,12 +238,8 @@ body::before{
   margin-bottom:12px;
 }
 
-/* .brandMini — bloque mini de marca dentro del stepper */
-.brandMini{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
+/* Mini brand */
+.brandMini{ display:flex; align-items:center; gap:10px; }
 .brandMiniLogo{
   width:42px;
   height:42px;
@@ -176,48 +250,46 @@ body::before{
 .brandMiniName{ font-weight:950; color:var(--negro); letter-spacing:.2px; }
 .brandMiniSub{ font-weight:800; color:var(--gris); font-size:12px; }
 
-/* =========================
-   .stepBar — Barra de progreso (JS la rellena con steps)
-========================= */
+/* Barra de steps (JS) */
 .stepBar{
   display:flex;
   gap:8px;
   flex-wrap:wrap;
   margin:10px 0 12px;
 }
-
-/* Estilo sugerido para los steps si tu JS crea botones/etiquetas */
 .stepBar .stepDot,
 .stepBar button{
   border:1px solid var(--b1);
-  background:rgba(255,255,255,.9);
+  background:rgba(255,255,255,.92);
   padding:8px 10px;
   border-radius:999px;
-  font-weight:900;
+  font-weight:950;
   font-size:12px;
   color:var(--gris);
   cursor:pointer;
-  transition:.2s ease;
+  transition: transform var(--t) var(--ease), box-shadow var(--t) var(--ease), background var(--t) var(--ease);
+}
+.stepBar .stepDot:hover,
+.stepBar button:hover{
+  transform: translateY(-1px);
+  box-shadow: var(--shadow2);
 }
 .stepBar .active,
 .stepBar button.active{
   border-color: rgba(212,175,55,.55);
-  background: linear-gradient(135deg, rgba(212,175,55,.20), rgba(11,122,68,.10));
+  background: linear-gradient(135deg, rgba(212,175,55,.20), rgba(11,122,68,.12));
   color:var(--negro);
 }
 
-/* =========================
-   .stepNav — Botones anterior / siguiente
-========================= */
 .stepNav{
   display:flex;
   justify-content:space-between;
   gap:10px;
 }
 
-/* =========================
-   .btn — Botón base (todos)
-========================= */
+/* =========================================================
+   8) Botones — .btn / .btnGhost / .btnPrimary
+========================================================= */
 .btn{
   border:none;
   border-radius:16px;
@@ -225,63 +297,74 @@ body::before{
   cursor:pointer;
   font-weight:950;
   letter-spacing:.2px;
-  transition: transform .15s ease, filter .15s ease, box-shadow .15s ease;
+  transition: transform var(--t) var(--ease), filter var(--t) var(--ease), box-shadow var(--t) var(--ease);
+  will-change: transform;
 }
-.btn:active{ transform: translateY(1px); }
+.btn:hover{ transform: translateY(-1px) scale(1.01); }
+.btn:active{ transform: translateY(1px) scale(.99); }
 
-/* .btnGhost — botón tipo “secundario” */
 .btnGhost{
-  background:rgba(255,255,255,.88);
+  background:rgba(255,255,255,.90);
   border:1px solid var(--b1);
   color:var(--negro);
   box-shadow:var(--shadow2);
 }
-.btnGhost:hover{ filter: brightness(1.02); }
+.btnGhost:hover{ filter: brightness(1.03); }
 
-/* .btnPrimary — botón principal verde */
 .btnPrimary{
   background: linear-gradient(135deg, var(--verde), var(--verde-agua));
   color:#fff;
-  box-shadow:0 16px 35px rgba(11,122,68,.24);
+  box-shadow:0 16px 35px rgba(11,122,68,.26);
 }
-.btnPrimary:hover{ filter: brightness(1.03); }
+.btnPrimary:hover{ filter: brightness(1.04); }
 
-/* .btnVolverFixed — “Volver” arriba del panel */
-.btnVolverFixed{
-  white-space:nowrap;
-}
+.btnVolverFixed{ white-space:nowrap; }
 
-/* =========================
-   .content — área de secciones (panel izquierdo)
-========================= */
+/* =========================================================
+   9) Content — .content (panel izquierdo)
+========================================================= */
 .content{
   padding:16px 18px 18px;
 }
 
-/* =========================
-   .section — bloque por cada paso
-========================= */
+/* =========================================================
+   10) Secciones — .section / .sectionTitle / .helper
+   (Cada paso del formulario)
+========================================================= */
 .section{
-  padding:14px 0;
-  border-bottom:1px dashed rgba(0,0,0,.10);
+  /* Fondo “que hace juego” con tu paleta */
+  background:
+    radial-gradient(circle at 20% 0%, rgba(212,175,55,.14), transparent 55%),
+    linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.78));
+  border:1px solid rgba(0,0,0,.10);
+  border-left:6px solid rgba(212,175,55,.70);
+  border-radius:18px;
+  padding:16px;
+  margin-bottom:14px;
+  box-shadow: 0 14px 28px rgba(0,0,0,.10);
+  transition: transform var(--t2) var(--ease), box-shadow var(--t2) var(--ease), border-color var(--t2) var(--ease);
 }
-.section:last-child{ border-bottom:none; }
+.section:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 20px 42px rgba(0,0,0,.14);
+  border-color: rgba(212,175,55,.35);
+}
+.section:active{
+  transform: translateY(0px);
+}
 
-/* =========================
-   .sectionTitle — Título + helper (encabezado de sección)
-========================= */
 .sectionTitle{
   display:flex;
   justify-content:space-between;
   align-items:flex-end;
-  gap:10px;
-  margin-bottom:10px;
+  gap:15px;
+  margin: 0 0 14px;
 }
 .sectionTitle h2{
   margin:0;
-  font-size:16px;
+  font-size:18px;
   font-weight:950;
-  color:var(--verde);
+  color:var(--negro);
 }
 .helper{
   color:var(--gris);
@@ -289,27 +372,27 @@ body::before{
   font-weight:900;
 }
 
-/* =========================
-   .grid2 / .grid3 — Grids de formulario
-========================= */
+/* =========================================================
+   11) Grids — .grid2 / .grid3
+========================================================= */
 .grid2{
   display:grid;
   grid-template-columns: 1fr 1fr;
-  gap:12px;
+  gap:15px;
 }
 .grid3{
   display:grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap:12px;
+  gap:15px;
 }
 @media (max-width: 980px){
   .grid2{ grid-template-columns:1fr; }
   .grid3{ grid-template-columns:1fr; }
 }
 
-/* =========================
-   labels / inputs / selects — Estilo pro de formularios
-========================= */
+/* =========================================================
+   12) Formularios — labels / inputs / selects / textarea
+========================================================= */
 label{
   display:block;
   font-size:12px;
@@ -317,177 +400,196 @@ label{
   color:var(--verde-oscuro);
   margin-bottom:6px;
 }
+
 input, select, textarea{
   width:100%;
-  border:1px solid var(--b1);
+  border:1px solid rgba(0,0,0,.10);
   border-radius:14px;
   padding:10px 12px;
-  background:rgba(255,255,255,.92);
+  background:rgba(255,255,255,.85);
   outline:none;
-  transition: box-shadow .18s ease, border-color .18s ease;
+  transition: box-shadow var(--t2) var(--ease), border-color var(--t2) var(--ease), transform var(--t) var(--ease);
+}
+input:hover, select:hover, textarea:hover{
+  border-color: rgba(212,175,55,.35);
 }
 input:focus, select:focus, textarea:focus{
   border-color: rgba(11,122,68,.45);
   box-shadow: var(--focus);
+  transform: translateY(-1px);
 }
+
 .small{
-  margin-top:6px;
+  margin-top:10px;
   font-size:12px;
   color:var(--gris);
-  font-weight:800;
-}
-
-/* .dtInput — input de fecha/hora */
-.dtInput{
   font-weight:900;
 }
+.dtInput{ font-weight:900; }
 
-/* =========================
-   .switchRow — filas de switches / toggles
-========================= */
+/* =========================================================
+   13) Switches — .switchRow
+========================================================= */
 .switchRow{
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:12px;
   padding:10px 12px;
-  border:1px solid var(--b1);
+  border:1px solid rgba(0,0,0,.10);
   border-radius:14px;
-  background:rgba(255,255,255,.86);
+  background:rgba(255,255,255,.90);
+  transition: box-shadow var(--t2) var(--ease), transform var(--t2) var(--ease);
+}
+.switchRow:hover{
+  box-shadow: var(--shadow2);
+  transform: translateY(-1px);
 }
 
-/* =========================
-   .warn — Caja de advertencia
-========================= */
+/* =========================================================
+   14) Alerts — .warn
+========================================================= */
 .warn{
   padding:12px 14px;
   border-radius:16px;
   border:1px solid rgba(212,175,55,.45);
-  background: linear-gradient(135deg, rgba(212,175,55,.16), rgba(255,255,255,.70));
+  background: linear-gradient(135deg, rgba(212,175,55,.18), rgba(255,255,255,.80));
   color:var(--negro);
-  font-weight:900;
+  font-weight:950;
 }
 
-/* =========================
-   .sizePickerWrap — Contenedor de selección de tamaños
-========================= */
+/* =========================================================
+   15) Selector de tamaños — .sizePickerWrap / .sizePickerTop / .sizePicker / .sizePickBtn
+========================================================= */
 .sizePickerWrap{
   margin-top:10px;
-  border:1px solid var(--b1);
+  border:1px solid rgba(0,0,0,.10);
   border-radius:var(--r2);
   overflow:hidden;
-  background:rgba(255,255,255,.86);
+  background:rgba(255,255,255,.90);
   box-shadow:var(--shadow2);
 }
 
-/* .sizePickerTop — Header del selector de tamaños */
 .sizePickerTop{
   padding:12px 14px;
   display:flex;
   justify-content:space-between;
   align-items:center;
   gap:10px;
-  border-bottom:1px solid var(--b1);
+  border-bottom:1px solid rgba(0,0,0,.10);
   background:
-    linear-gradient(90deg, rgba(11,122,68,.10), transparent 60%),
-    linear-gradient(180deg, rgba(212,175,55,.10), transparent 60%);
+    linear-gradient(90deg, rgba(11,122,68,.12), transparent 60%),
+    linear-gradient(180deg, rgba(212,175,55,.12), transparent 60%);
 }
-.sizePickerTitle{
-  font-weight:950;
-  color:var(--negro);
-}
-.sizePickerSub{
-  font-size:12px;
-  font-weight:900;
-  color:var(--gris);
-}
+.sizePickerTitle{ font-weight:950; color:var(--negro); }
+.sizePickerSub{ font-size:12px; font-weight:900; color:var(--gris); }
 
-/* .sizePicker — Grid interno de botones tamaño (tus .sizePickBtn) */
 .sizePicker{
   padding:12px;
   display:grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap:10px;
 }
-@media (max-width: 980px){
+@media (max-width: 850px){
   .sizePicker{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @media (max-width: 520px){
   .sizePicker{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
-/* .sizePickBtn — Botón de cada tamaño (imagen + label) */
 .sizePickBtn{
-  border:1px solid var(--b1);
+  border:1px solid rgba(0,0,0,.10);
   background:rgba(255,255,255,.95);
   border-radius:16px;
   padding:10px;
   cursor:pointer;
   box-shadow:var(--shadow2);
-  transition:.18s ease;
+  transition: transform var(--t2) var(--ease), box-shadow var(--t2) var(--ease), border-color var(--t2) var(--ease);
   display:flex;
   flex-direction:column;
   gap:8px;
   align-items:center;
+  position:relative;
+  overflow:hidden;
+}
+.sizePickBtn::after{
+  content:"";
+  position:absolute;
+  inset:-20%;
+  background: radial-gradient(circle at 30% 20%, rgba(212,175,55,.18), transparent 45%);
+  opacity:0;
+  transition: opacity var(--t2) var(--ease);
 }
 .sizePickBtn:hover{
-  transform: translateY(-2px);
-  border-color: rgba(212,175,55,.40);
-  box-shadow: 0 18px 40px rgba(0,0,0,.14);
+  transform: translateY(-3px) scale(1.01);
+  border-color: rgba(212,175,55,.45);
+  box-shadow: 0 18px 40px rgba(0,0,0,.16);
 }
+.sizePickBtn:hover::after{ opacity:1; }
+.sizePickBtn:active{ transform: translateY(-1px) scale(.995); }
 
-/* .sizePickImg — imagen del tamaño */
 .sizePickImg{
   width:100%;
   max-width:120px;
   height:auto;
   object-fit:contain;
-  filter: drop-shadow(0 10px 18px rgba(0,0,0,.10));
+  filter: drop-shadow(0 10px 18px rgba(0,0,0,.12));
+  z-index:1;
 }
-
-/* .sizePickLbl — texto del tamaño */
 .sizePickLbl{
   font-weight:950;
   color:var(--negro);
   font-size:12px;
+  z-index:1;
 }
 
-/* =========================
-   .toneWrap / .toneRow — Paleta de colores (si la usas)
-========================= */
+/* Rinde del tamaño (si usas .rindeTamano) */
+.rindeTamano{
+  margin:10px 12px 0;
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px solid rgba(0,0,0,.10);
+  background: rgba(0,0,0,.04);
+  color: rgba(0,0,0,.80);
+  font-weight:900;
+  font-size:12px;
+}
+
+/* =========================================================
+   16) Paleta de tonos — .toneWrap / .toneRow / .toneBtn
+========================================================= */
 .toneWrap{
-  border:1px solid var(--b1);
+  border:1px solid rgba(0,0,0,.10);
   border-radius:var(--r2);
   padding:12px;
-  background:rgba(255,255,255,.86);
+  background:
+    radial-gradient(circle at 10% 10%, rgba(11,122,68,.10), transparent 55%),
+    rgba(255,255,255,.88);
   box-shadow:var(--shadow2);
 }
-.toneRow{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-}
 
-/* .toneBtn — Botón de tono */
+.toneRow{ display:flex; flex-wrap:wrap; gap:10px; }
+
 .toneBtn{
   display:flex;
   align-items:center;
   gap:10px;
-  border:1px solid var(--b1);
-  background:#fff;
+  border:1px solid rgba(11,122,68,.25);
+  background:linear-gradient(135deg, rgba(11,122,68,.12), rgba(212,175,55,.10));
   padding:10px 12px;
   border-radius:999px;
   cursor:pointer;
   font-weight:950;
   color:var(--negro);
-  transition:.18s ease;
+  transition: transform var(--t) var(--ease), box-shadow var(--t2) var(--ease), border-color var(--t2) var(--ease);
 }
 .toneBtn:hover{
-  border-color: rgba(11,122,68,.35);
+  transform: translateY(-1px);
+  border-color: rgba(212,175,55,.55);
   box-shadow:var(--shadow2);
 }
+.toneBtn:active{ transform: translateY(1px); }
 
-/* .toneSwatch — circulito de color */
 .toneSwatch{
   width:18px;
   height:18px;
@@ -497,32 +599,28 @@ input:focus, select:focus, textarea:focus{
 }
 .toneHex{ font-size:12px; color:var(--gris); font-weight:900; }
 
-/* =========================
-   .stickyPreview — Card derecha sticky
-========================= */
-.stickyPreview{
-  position: sticky;
-  top: 14px;
-}
+/* =========================================================
+   17) Preview derecha — .stickyPreview / .previewCard / .totalBox / .previewStage
+========================================================= */
+.stickyPreview{ position: sticky; top: 14px; }
 @media (max-width: 980px){
   .stickyPreview{ position: relative; top:auto; }
 }
 
-/* =========================
-   .previewWrap / .previewCard — Contenedor superior del preview
-========================= */
 .previewWrap{ padding:0; }
+
 .previewCard{
   padding:14px 16px;
-  border-bottom:1px solid var(--b1);
-  background:rgba(255,255,255,.78);
+  border-bottom:1px solid rgba(0,0,0,.10);
+  background:rgba(255,255,255,.72);
   backdrop-filter: blur(10px);
 }
+
 .previewHead{
   display:flex;
   justify-content:space-between;
   align-items:flex-start;
-  gap:12px;
+  gap:10px;
 }
 .previewTitle{
   display:flex;
@@ -544,114 +642,76 @@ input:focus, select:focus, textarea:focus{
   font-weight:900;
 }
 
-/* .kpi — total general */
-/* Caja del total (estilo botón verde grande) */
+/* Total general (sin duplicados) */
 .totalBox{
   width:90%;
-  margin:auto;
-
+  margin:14px auto 0;
   text-align:center;
-
-  background:linear-gradient(135deg,#0b7a44,#0f9a5b);
-  color:#ffffff;
-
+  background: linear-gradient(135deg, #0b7a44, #0f9a5b);
+  color:#fff;
   padding:14px 18px;
-  border-radius:16px;
-
-  font-size:14px;
-  font-weight:600;
-
-  box-shadow:0 10px 22px rgba(11,122,68,.35);
-
+  border-radius:18px;
+  font-weight:950;
+  box-shadow:0 14px 28px rgba(0,0,0,.20);
   position:relative;
   overflow:hidden;
+  transition: transform var(--t2) var(--ease), box-shadow var(--t2) var(--ease);
 }
-
-/* brillo superior elegante */
+.totalBox:hover{
+  transform: translateY(-2px);
+  box-shadow:0 18px 40px rgba(0,0,0,.24);
+}
 .totalBox::before{
   content:"";
   position:absolute;
   inset:0;
-  border-radius:16px;
-
-  background:linear-gradient(
-    180deg,
-    rgba(255,255,255,.35),
-    transparent 60%
-  );
-
-  opacity:.35;
-}
-
-/* número del total */
-.totalBox strong{
-  display:block;
-  font-size:22px;
-  font-weight:600;
-  margin-top:4px;
-}
-
-/* brillo superior para efecto premium */
-.totalBox::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  border-radius:16px;
-
-  background:linear-gradient(
-    180deg,
-    rgba(255,255,255,.35),
-    transparent 60%
-  );
-
-  opacity:.35;
+  background: linear-gradient(180deg, rgba(255,255,255,.35), transparent 60%);
+  opacity:.28;
   pointer-events:none;
 }
-
-/* valor del total */
 .totalBox strong{
   display:block;
   font-size:22px;
-  font-weight:900;
+  font-weight:1000;
   margin-top:4px;
 }
-/* .btnVolverPreview — volver dentro del preview */
-.btnVolverPreview{
-  width:100%;
-  margin-top:12px;
-}
 
-/* =========================
-   .previewStage — Escenario del cake (fondo + cake 3D)
-========================= */
+/* Escenario del cake */
 .previewStage{
   position:relative;
   overflow:hidden;
-  min-height: 320px;
-  border-radius: 5%;
+  min-height: 150px;
+  width:50%;
+  
+        
+  border-radius: 22px;
   display:flex;
   justify-content:center;
   align-items:flex-end;
   padding:14px 14px 10px;
-  background: linear-gradient(180deg, rgba(11,122,68,.06), rgba(255,255,255,.0));
+  background:
+    radial-gradient(circle at 30% 10%, rgba(212,175,55,.12), transparent 55%),
+    linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.30));
+  margin:14px 16px 0;
+  border:1px solid rgba(0,0,0,.10);
+  box-shadow: 0 18px 40px rgba(0,0,0,.14);
 }
 
-/* Fondo REAL detrás del cake (fondocake.png) — NO opaco y más chico */
+/* Imagen fondo detrás del cake (fondocake.png) */
 .previewStage::before{
   content:"";
   position:absolute;
   inset:0;
-  background-image:url("../img/iconos-seleccion/fondocake.png"); /* CSS está en /css */
+  background-image:url("../img/iconos-seleccion/fondocake.png");
   background-repeat:no-repeat;
   background-position:center;
-   background-size:100% 100%;
- /*  background-size: var(--cake-bg-size); más chico y controlable */
-  opacity:1; /* visible */
+  background-size:100% 100%;
+  opacity:1;
   z-index:0;
   pointer-events:none;
 }
 
-/* .shadowFloor — sombra del piso (tu div ya existe) */
+/* Sombra del piso */
 .shadowFloor{
   position:absolute;
   left:50%;
@@ -666,7 +726,7 @@ input:focus, select:focus, textarea:focus{
   z-index:1;
 }
 
-/* .cake — contenedor del cake (tus tiers) */
+/* Cake contenedor */
 .cake{
   position:relative;
   z-index:2;
@@ -674,112 +734,91 @@ input:focus, select:focus, textarea:focus{
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:.5px;
+  gap:-5px;
   padding-bottom:18px;
 }
 
-/* .tier — cada piso del cake */
+/* Cada piso */
 .tier{
   width:100%;
-  border-radius:18px;
-  border:1px solid rgba(0,0,0,.08);
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.95), rgba(245,245,245,.85));
+  border-radius:14px;
+  border:1px solid rgba(0,0,0,.10);
+  background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(245,245,245,.85));
   box-shadow: 0 16px 30px rgba(0,0,0,.12);
   position:relative;
   overflow:hidden;
   padding:14px 14px 12px;
+  transition: transform var(--t2) var(--ease);
 }
+.tier:hover{ transform: translateY(-2px); }
 
-/* .gloss — brillo “pro” encima del cake */
 .gloss{
   position:absolute;
   inset:0;
-  background: linear-gradient(75deg, rgba(73, 71, 71, 0.55), transparent 75%);
-  opacity:.50;
+  background: linear-gradient(80deg, rgba(255, 255, 255, 0.55), transparent 75%);
+  opacity:0.8;
   pointer-events:none;
 }
 
-/* .tierLabel — etiqueta de cada piso */
 .tierLabel{
   font-weight:1000;
   color:var(--negro);
   letter-spacing:.2px;
   font-size:13px;
 }
-
-/* .tierFlavor — sabor de cada piso */
 .tierFlavor{
   margin-top:10px;
   font-weight:900;
   color:var(--negro);
   font-size:12px;
-  
 }
 
-/* .basePlate — plato base del cake */
-/* Base del cake (plato inferior) */
+/* Plato base */
 .basePlate{
   width:90%;
   height:30px;
   border-radius:40px;
-
-  /* degradado metálico */
   background:
-    linear-gradient(
-      180deg,
-      #ddba2e 5%,
-      #897641 35%,
-      #897247 60%,
-      #bc8d48 100%
-    );
-
+    linear-gradient(180deg,#ddba2e 5%, #897641 35%, #897247 60%, #bc8d48 100%);
   border:2px solid rgba(0,0,0,.15);
-
-  /* profundidad */
   box-shadow:
     inset 0 2px 4px rgba(255,255,255,.6),
     inset 0 -3px 6px rgba(0,0,0,.2),
     0 10px 18px rgba(0,0,0,.25);
-
-  position:relative;
 }
 
-/* =========================
-   .legend — texto inferior del preview
-========================= */
+/* Texto inferior preview */
 .legend{
   margin:0;
   padding:12px 16px;
-  border-top:1px solid var(--b1);
+  border-top:1px solid rgba(0,0,0,.10);
   background:rgba(255,255,255,.82);
   color:var(--negro);
-  font-weight:700;
+  font-weight:800;
   font-size:13px;
 }
 
-/* .payInfo — bloque de pago dentro del preview */
+/* Bloque pago */
 .payInfo{
   padding:12px;
   border-radius:16px;
-  border:1px solid var(--b1);
+  border:1px solid rgba(0,0,0,.10);
   background:rgba(255,255,255,.88);
   box-shadow:var(--shadow2);
+  margin:12px 16px 16px;
 }
 
-/* =========================
-   .modalOverlay — Fondo oscuro del modal
-========================= */
+/* =========================================================
+   18) Modal — .modalOverlay / .modal / .modalHead / .modalBody
+========================================================= */
 .modalOverlay{
   position:fixed;
   inset:0;
   background:rgba(0,0,0,.55);
   backdrop-filter: blur(6px);
-  display:none; /* tu JS lo muestra */
+  display:none;
   z-index:50;
 }
-
-/* .modal — Ventana modal */
 .modal{
   position:fixed;
   left:50%;
@@ -791,57 +830,54 @@ input:focus, select:focus, textarea:focus{
   border-radius:var(--r1);
   box-shadow:0 26px 70px rgba(0,0,0,.35);
   overflow:hidden;
-  display:none; /* tu JS lo muestra */
+  display:none;
   z-index:60;
+  animation: popIn .22s var(--ease);
 }
-
-/* .modalHead — Encabezado del modal */
+@keyframes popIn{
+  from{ transform:translate(-50%,-50%) scale(.96); opacity:.0; }
+  to{ transform:translate(-50%,-50%) scale(1); opacity:1; }
+}
 .modalHead{
   padding:14px 16px;
   background:
     linear-gradient(90deg, rgba(11,122,68,.14), transparent 60%),
     linear-gradient(180deg, rgba(212,175,55,.12), transparent 60%);
-  border-bottom:1px solid var(--b1);
+  border-bottom:1px solid rgba(0,0,0,.10);
   display:flex;
   justify-content:space-between;
   align-items:center;
   gap:10px;
 }
-.modalHead b{
-  font-weight:1000;
-  color:var(--negro);
-}
+.modalHead b{ font-weight:1000; color:var(--negro); }
 .modalClose{
   border:none;
   background:rgba(0,0,0,.06);
-  border:1px solid rgba(0,0,0,.08);
+  border:1px solid rgba(0,0,0,.10);
   border-radius:12px;
   padding:8px 10px;
   cursor:pointer;
   font-weight:1000;
+  transition: transform var(--t) var(--ease);
 }
+.modalClose:hover{ transform: scale(1.03); }
+.modalBody{ padding:16px; }
 
-/* .modalBody — Contenido del modal */
-.modalBody{
-  padding:16px;
-}
-
-/* =========================
-   Pequeñas utilidades de tu HTML
-========================= */
+/* =========================================================
+   19) Utilidades y extras — .rowInfo / .badge / refsGallery / decoCard
+========================================================= */
 .rowInfo{
   display:flex;
   gap:10px;
   align-items:center;
   padding:10px 12px;
-  border:1px solid var(--b1);
+  border:1px solid rgba(0,0,0,.10);
   border-radius:14px;
-  background:rgba(255,255,255,.86);
+  background:rgba(255,255,255,.90);
 }
 .k{ font-weight:1000; color:var(--verde-oscuro); }
 .v{ font-weight:950; color:var(--negro); }
 
-/* .badge — insignia pequeña */
 .badge{
   display:inline-flex;
   align-items:center;
@@ -855,127 +891,7 @@ input:focus, select:focus, textarea:focus{
   font-size:12px;
 }
 
-/* =========================
-   Accesibilidad/Toques pro
-========================= */
-a{ color:inherit; }
-button:focus, input:focus, select:focus, textarea:focus{ outline:none; }
-
-/* =========================================================
-   AJUSTES EXTRA (Marzo 2026) - Pedido Daniel
-   - Fondo general verde
-   - TotalBox 90%
-   - Preview labels en negrita
-   - Caja extra para el cake 3D
-   - Selector de tamaños con rinde visible
-========================================================= */
-
-/* Fondo verde principal (premium) */
-body{
-  background:
-    radial-gradient(circle at 18% 12%, rgba(212,175,55,.18), transparent 48%),
-    radial-gradient(circle at 82% 18%, rgba(255,255,255,.10), transparent 52%),
-    linear-gradient(180deg, #0b7a44 0%, #075a33 55%, #064d2c 100%);
-  color:#0b0b0b;
-}
-
-/* Si necesitas tarjetas más legibles sobre verde */
-.card{
-  background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.88));
-}
-
-/* Caja extra alrededor del 3D para que no quede pegado */
-.cakeBox,
-.cajaCake3d{
-  margin:14px 16px 0;
-  padding:14px 14px 18px;
-  border-radius:22px;
-  border:1px solid rgba(0,0,0,.08);
-  background:
-    radial-gradient(circle at 30% 10%, rgba(212,175,55,.12), transparent 55%),
-    linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.72));
-  box-shadow: 0 18px 40px rgba(0,0,0,.14);
-}
-
-/* Mantener el fondo decorativo detrás del cake */
-.cakeBox .previewStage::before,
-.cajaCake3d .previewStage::before{
-  background-size: 105%;
-}
-
-/* Preview: etiquetas (Entrega/Tamaño/Piso...) en negrita */
-.previewTable .k,
-.rowInfo .k{
-  font-weight:1000 !important;
-  color:rgba(0,0,0,.75);
-}
-
-/* Total general encerrado elegante y ancho 90% */
-.totalBox{
-  width:90%;
-  margin:14px auto 0;
-  text-align:center;
-
-  background: linear-gradient(135deg, #0b7a44, #0f9a5b);
-  color:#fff;
-
-  padding:14px 18px;
-  border-radius:18px;
-
-  font-weight:900;
-  box-shadow:0 14px 28px rgba(0,0,0,.20);
-
-  position:relative;
-  overflow:hidden;
-}
-.totalBox::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background: linear-gradient(180deg, rgba(255,255,255,.35), transparent 60%);
-  opacity:.28;
-  pointer-events:none;
-}
-.totalBox .tLabel{
-  font-weight:1000;
-  letter-spacing:.2px;
-  opacity:.95;
-}
-.totalBox .tValue{
-  margin-top:4px;
-  font-size:24px;
-  font-weight:600;
-}
-.totalBox .small{
-  font-weight:800;
-}
-
-/* Rinde del tamaño (debajo del selector) */
-.rindeTamano{
-  margin:10px 12px 0;
-  padding:10px 12px;
-  border-radius:14px;
-  border:1px solid rgba(0,0,0,.08);
-  background: rgba(0,0,0,.04);
-  color: rgba(0,0,0,.75);
-  font-weight:900;
-  font-size:12px;
-}
-
-/* Aliases en español (por si usas nuevas clases) */
-.contenedor{ /* alias de .wrapper */ }
-.tarjeta{ /* alias de .card */ }
-.encabezado{ /* alias de .header */ }
-.contenido{ /* alias de .content */ }
-.seccion{ /* alias de .section */ }
-.tituloSeccion{ /* alias de .sectionTitle */ }
-
-
-
-/* =========================
-   .decoCard — Tarjeta de decoración (selección)
-   Se usa dentro de #decoracionCards
-========================= */
+/* Decoración cards */
 .cardOptions{
   display:grid;
   grid-template-columns: repeat(2, minmax(0,1fr));
@@ -984,28 +900,29 @@ body{
 @media (max-width:520px){
   .cardOptions{ grid-template-columns: 1fr; }
 }
-
-/* Botón-card para decoración */
 .decoCard{
-  border:1px solid rgba(0,0,0,.08);
+  border:1px solid rgba(0,0,0,.10);
   background:rgba(255,255,255,.92);
   border-radius:16px;
   padding:12px 12px 10px;
   cursor:pointer;
   text-align:left;
-  box-shadow: 0 10px 26px rgba(0,0,0,.08);
-  transition:.18s ease;
+  box-shadow: 0 10px 26px rgba(0,0,0,.10);
+  transition: transform var(--t2) var(--ease), box-shadow var(--t2) var(--ease), border-color var(--t2) var(--ease);
   display:flex;
   flex-direction:column;
   gap:6px;
 }
 .decoCard:hover{
   transform: translateY(-2px);
-  border-color: rgba(212,175,55,.45);
-  box-shadow: 0 18px 40px rgba(0,0,0,.14);
+  border-color: rgba(212,175,55,.55);
+  box-shadow: 0 18px 40px rgba(0,0,0,.16);
+}
+.decoCard.selected{
+  border-color: rgba(212,175,55,.70);
+  background: linear-gradient(135deg, rgba(212,175,55,.18), rgba(11,122,68,.10));
 }
 
-/* Etiqueta principal */
 .decoChip{
   display:inline-flex;
   align-items:center;
@@ -1013,16 +930,159 @@ body{
   font-weight:1000;
   color:var(--negro);
 }
-
-/* Texto pequeño */
 .decoHint{
   font-size:12px;
   font-weight:900;
   color:var(--gris);
 }
 
-/* Seleccionado */
-.decoCard.selected{
-  border-color: rgba(212,175,55,.60);
-  background: linear-gradient(135deg, rgba(212,175,55,.18), rgba(11,122,68,.08));
+/* Referencias (modal) */
+#refsGallery{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
+  gap:12px;
+}
+#refsGallery .thumb{ border-radius:14px; overflow:hidden; }
+#refsGallery .thumb img{
+  width:100%;
+  height:110px;
+  object-fit:cover;
+  border-radius:12px;
+  transition: transform var(--t2) var(--ease);
+}
+#refsGallery .thumb:hover img{ transform: scale(1.04); }
+
+#refPreview img{
+  max-width: 260px;
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  display:block;
+}
+
+/* Estado activo (si lo usas en cards) */
+.optionCard.active{
+  outline:3px solid var(--verde);
+  box-shadow:0 0 0 4px rgba(11,122,68,.18);
+}
+
+/* =========================================================
+   20) Accesibilidad — reduce motion
+========================================================= */
+@media (prefers-reduced-motion: reduce){
+  *{
+    animation:none !important;
+    transition:none !important;
+    scroll-behavior:auto !important;
+  }
+}
+
+
+/* =========================================================
+   AJUSTES NUEVOS (Marzo 2026) - Preview Cake 3D + Fondo + Tipografía
+   - Fondo body con imagen: img/fondo/fondo2.png
+   - Encabezado de vista previa más pro
+   - Cake 3D un poco más pequeño y centrado
+   - Sombra/estilo del bloque del cake
+   - En resumen: negrita SOLO para títulos (si vienen en <b>)
+========================================================= */
+
+/** BODY: Fondo con imagen + gradiente (paleta verde/dorado) **/
+body{
+  background:
+    radial-gradient(circle at 18% 12%, rgba(212,175,55,.18), transparent 48%),
+    radial-gradient(circle at 82% 18%, rgba(255,255,255,.10), transparent 52%),
+    linear-gradient(180deg, rgba(11,122,68,.92) 0%, rgba(7,90,51,.94) 55%, rgba(6,77,44,.96) 100%),
+    url("../img/fondo/fondo2.png");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+/** LOGO HEADER: más pequeño tipo “logo” **/
+.logoBack{
+  width:55px;
+  height:55px;
+  border-radius:14px;
+}
+.logoBack img{
+  width:85%;
+  height:85%;
+}
+
+/** PREVIEW (derecha): encabezado premium **/
+.previewCard{
+  background:
+    linear-gradient(90deg, rgba(11,122,68,.14), transparent 65%),
+    linear-gradient(180deg, rgba(212,175,55,.14), rgba(255,255,255,.82));
+  box-shadow: inset 0 -1px 0 rgba(0,0,0,.04);
+}
+.previewHead{ align-items:center; }
+.previewTitle{ letter-spacing:.2px; }
+.previewLogo{
+  width:30px;
+  height:30px;
+  filter: drop-shadow(0 10px 16px rgba(0,0,0,.18));
+}
+
+/** TOTAL BOX: más profundidad **/
+.totalBox{
+  box-shadow: 0 18px 45px rgba(0,0,0,.26);
+  border: 1px solid rgba(255,255,255,.18);
+  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+}
+.totalBox:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 22px 55px rgba(0,0,0,.30);
+  filter: brightness(1.02);
+}
+
+/** BLOQUE CAKE 3D: centrado, con sombra y “marco” dorado sutil **/
+.cakeBox,
+.cajaCake3d{
+  box-shadow: 0 22px 55px rgba(0,0,0,.18);
+  border:1px solid rgba(0,0,0,.10);
+}
+.previewStage{
+  width: calc(100% - 32px);
+  max-width: 520px;
+  margin: 14px auto 0;
+  min-height: 320px;
+  border-radius: 22px;
+  border: 1px solid rgba(0,0,0,.12);
+  box-shadow: 0 22px 55px rgba(0,0,0,.18);
+}
+.previewStage::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:22px;
+  box-shadow: inset 0 0 0 1px rgba(212,175,55,.20);
+  pointer-events:none;
+}
+
+/** CAKE: un poquito más pequeño **/
+.cake{
+  width: min(290px, 78%);
+  margin: 0 auto;
+}
+.tier{
+  border-radius:14px;
+  box-shadow: 0 18px 40px rgba(0,0,0,.14);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.tier:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 22px 55px rgba(0,0,0,.18);
+}
+
+/** RESUMEN: negrita SOLO en títulos (si están envueltos en <b>) **/
+.legend{
+  font-weight: 600;
+  line-height: 1.35;
+}
+.legend b{
+  font-weight: 1000;
+  color: rgba(0,0,0,.92);
 }

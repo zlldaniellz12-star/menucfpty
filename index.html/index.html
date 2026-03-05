@@ -40,7 +40,7 @@
     </div>
 
     <div class="options">
-      <div class="action menu" onclick="location.href='interno/menu.html'">
+      <div class="action menu" role="button" tabindex="0" onclick="location.href='interno/menu.html'">
         <div class="left">
           <div class="icon" aria-hidden="true">
             <!-- icon cake -->
@@ -62,7 +62,7 @@
         </div>
       </div>
 
-      <div class="action mas" onclick="location.href='interno/personalizado.html'">
+      <div class="action mas" role="button" tabindex="0" onclick="location.href='interno/personalizado.html'">
         <div class="left">
           <div class="icon" aria-hidden="true">
             <!-- icon settings -->
@@ -84,7 +84,7 @@
       </div>
 
       
-<div class="action delivery" onclick="location.href='interno/delivery-cotizacion.html'">
+<div class="action delivery" role="button" tabindex="0" onclick="location.href='interno/delivery-cotizacion.html'">
         <div class="left">
           <div class="icon" aria-hidden="true">
             <!-- icon delivery -->
@@ -96,7 +96,7 @@
             </svg>
           </div>
           <div class="texts">
-            <p class="title">COTIZAR DELIVEY
+            <p class="title">COTIZAR DELIVERY
             </p>
             <p class="desc">Haz tu pedido y solicita cotización de entrega.</p>
           </div>
@@ -116,6 +116,18 @@
 
   </div>
 </div>
+
+<script>
+  // Permite usar Enter/Espacio en las tarjetas (mejor UX)
+  document.querySelectorAll('.action[role="button"]').forEach(el => {
+    el.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        el.click();
+      }
+    });
+  });
+</script>
 
 </body>
 </html>

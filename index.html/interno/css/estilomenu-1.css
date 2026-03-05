@@ -636,4 +636,14 @@
       font-weight:800;
     }
 
+    #evento{
+      border:1px solid var(--borde);
+      background:#fff;
+      border-radius:14px;
+      padding:10px 12px;
+      font-size:14px;
+      font-weight:700;
+      color:var(--texto);
+      cursor:pointer;
+    }
   
